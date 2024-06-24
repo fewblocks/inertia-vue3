@@ -22,6 +22,6 @@ class SampleController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register2');
+        return Inertia::render('Auth/Register"');
     }
 }
