@@ -16,7 +16,7 @@ Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
     // sampleのルーティング
-    Route::get('register', [SampleController::class, 'create'])
+    Route::get('register2', [SampleController::class, 'create'])
                 ->name('register2');
 
     Route::post('register', [RegisteredUserController::class, 'store']);

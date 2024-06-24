@@ -5,6 +5,8 @@ import UpdatePasswordForm from "./Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm.vue";
 import { Head } from "@inertiajs/vue3";
 
+// defineOptions({ layout: AuthenticatedLayout }); // ここでレイアウトファイルを指定する
+
 defineProps({
     mustVerifyEmail: Boolean,
     status: String,
