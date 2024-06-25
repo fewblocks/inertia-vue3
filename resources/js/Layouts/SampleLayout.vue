@@ -1,11 +1,5 @@
-<script setup>
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import { Link } from "@inertiajs/vue3";
-</script>
+<script setup></script>
 
 <template>
-    <div>
-        新しいテンプレート
-        <slot />
-    </div>
+    <slot />
 </template>

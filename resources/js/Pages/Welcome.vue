@@ -306,15 +306,12 @@ defineProps({
                                     class="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
                                     >Telescope</a
                                 >, and more.
-                                <button type="button" class="btn btn-dark">
-                                    <a
-                                        href="learnispirits"
-                                        class="underline hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                                    >
-                                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                                    </a>
-                                </button>
                             </p>
+                            <button type="button" class="btn btn-dark">
+                                <a href="learnispirits">
+                                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                                </a>
+                            </button>
                         </div>
                     </div>
                 </div>
