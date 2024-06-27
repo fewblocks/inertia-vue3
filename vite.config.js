@@ -10,4 +10,9 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    compilerOptions: {
+        paths: {
+            bootstrap: ["./node_modules/types/bootstrap"],
+        },
+    },
 });

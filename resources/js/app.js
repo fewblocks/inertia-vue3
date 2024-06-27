@@ -1,4 +1,5 @@
 import "./bootstrap";
+import "bootstrap";
 import "../css/app.css";
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -33,7 +34,7 @@ createInertiaApp({
             createApp({ render: () => h(App, props) })
                 .use(plugin)
                 .use(ZiggyVue, Ziggy)
-                //           .use(bootstrap)
+                // .use(bootstrap)
                 .mount(el)
         );
     },
