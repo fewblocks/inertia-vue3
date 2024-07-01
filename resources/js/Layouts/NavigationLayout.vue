@@ -1,9 +1,8 @@
 <script setup>
-import Navbar from "@/Components/organisms/Navbar.vue";
+import Navbar from "@/Components/Learnispirits/organisms/Navbar.vue";
 </script>
 
 <template>
-    <div>aaaaaaaa</div>
     <Navbar />
     <slot />
 </template>

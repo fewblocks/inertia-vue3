@@ -3,6 +3,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import { Link } from "@inertiajs/vue3";
 import { onMounted } from "vue";
 import { Toast } from "bootstrap";
+import testImageSrc from "~/test-image.png";
 
 onMounted(() => {
     // トースト
@@ -39,7 +40,7 @@ onMounted(() => {
                 aria-atomic="true"
             >
                 <div class="toast-header">
-                    <img src="..." class="rounded me-2" alt="..." />
+                    <img :src="testImageSrc" class="rounded me-2" alt="..." />
                     <strong class="me-auto">Bootstrap</strong>
                     <small>11 mins ago</small>
                     <button

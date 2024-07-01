@@ -57,7 +57,9 @@ defineProps({
             </div>
 
             <div class="tw-mt-16">
-                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6 lg:tw-gap-8">
+                <div
+                    class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6 lg:tw-gap-8"
+                >
                     <a
                         href="https://laravel.com/docs"
                         class="tw-scale-100 tw-p-6 tw-bg-white dark:bg-gray-800/50 dark:tw-bg-gradient-to-bl from-gray-700/50 tw-via-transparent dark:tw-ring-1 dark:tw-ring-inset dark:ring-white/5 tw-rounded-lg tw-shadow-2xl shadow-gray-500/20 dark:tw-shadow-none tw-flex motion-safe:hover:scale-[1.01] tw-transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
@@ -314,6 +316,60 @@ defineProps({
                             </button>
                         </div>
                     </div>
+
+                    <a
+                        href="learnispirits"
+                        class="tw-scale-100 tw-p-6 tw-bg-white dark:bg-gray-800/50 dark:tw-bg-gradient-to-bl from-gray-700/50 tw-via-transparent dark:tw-ring-1 dark:tw-ring-inset dark:ring-white/5 tw-rounded-lg tw-shadow-2xl shadow-gray-500/20 dark:tw-shadow-none tw-flex motion-safe:hover:scale-[1.01] tw-transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
+                    >
+                        <div>
+                            <div
+                                class="tw-h-16 tw-w-16 tw-bg-red-50 dark:bg-red-800/20 tw-flex tw-items-center tw-justify-center tw-rounded-full"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    class="tw-w-7 tw-h-7 stroke-red-500"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
+                                    />
+                                </svg>
+                            </div>
+
+                            <h2
+                                class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white"
+                            >
+                                Laravel News ここにテキスト
+                            </h2>
+
+                            <p
+                                class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed"
+                            >
+                                Laravel News is a community driven portal and
+                                newsletter aggregating all of the latest and
+                                most important news in the Laravel ecosystem,
+                                including new package releases and tutorials.
+                            </p>
+                        </div>
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            class="tw-self-center shrink-0 stroke-red-500 tw-w-6 tw-h-6 tw-mx-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
+                            />
+                        </svg>
+                    </a>
                 </div>
             </div>
 
