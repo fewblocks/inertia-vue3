@@ -18,6 +18,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
+            // 画像インポートalias
             "~": path.resolve(__dirname, "resources/images"),
         },
     },

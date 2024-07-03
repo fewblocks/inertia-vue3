@@ -1,5 +1,5 @@
 <script setup>
-// import WordCloudVisual from "@/components/organisms/WordCloudVisual.vue";
+import WordCloudVisual from "@/components/Learnispirits/organisms/WordCloudVisual.vue";
 // import NewsContent from "@/components/organisms/NewsContent.vue";
 // import RelatedSite from "@/components/organisms/RelatedSite.vue";
 // import FlipCardDemo from "@/components/flip-card/FlipCardDemo.vue";
@@ -11,7 +11,7 @@
     <main class="col-sm-12 col-md-9">
         <!-- ワードクラウド -->
         <section>
-            <!-- <WordCloudVisual /> -->
+            <WordCloudVisual />
         </section>
         <!-- フリップカードのデモヴィジュアル -->
         <section>
