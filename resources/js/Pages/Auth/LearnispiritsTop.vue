@@ -1,8 +1,8 @@
 <script setup>
-import WordCloudVisual from "@/components/Learnispirits/organisms/WordCloudVisual.vue";
+import WordCloudVisual from "@/Components/Learnispirits/organisms/WordCloudVisual.vue";
 // import NewsContent from "@/components/organisms/NewsContent.vue";
 // import RelatedSite from "@/components/organisms/RelatedSite.vue";
-// import FlipCardDemo from "@/components/flip-card/FlipCardDemo.vue";
+import FlipCardDemo from "@/Components/flip-card/FlipCardDemo.vue";
 </script>
 
 <!-- トップページ -->
@@ -15,7 +15,7 @@ import WordCloudVisual from "@/components/Learnispirits/organisms/WordCloudVisua
         </section>
         <!-- フリップカードのデモヴィジュアル -->
         <section>
-            <!-- <FlipCardDemo /> -->
+            <FlipCardDemo />
         </section>
         <!-- ニュースコンテンツ -->
         <section>
