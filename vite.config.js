@@ -20,6 +20,8 @@ export default defineConfig({
         alias: {
             // 画像インポートalias
             "~": path.resolve(__dirname, "resources/images"),
+            // jsonインポートalias
+            "^": path.resolve(__dirname, "resources/json"),
         },
     },
 });

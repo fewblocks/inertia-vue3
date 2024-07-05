@@ -1,7 +1,7 @@
 <script setup>
 import WordCloudVisual from "@/Components/Learnispirits/organisms/WordCloudVisual.vue";
-// import NewsContent from "@/components/organisms/NewsContent.vue";
-// import RelatedSite from "@/components/organisms/RelatedSite.vue";
+import NewsContent from "@/Components/Learnispirits/organisms/NewsContent.vue";
+import RelatedSite from "@/Components/Learnispirits/organisms/RelatedSite.vue";
 import FlipCardDemo from "@/Components/flip-card/FlipCardDemo.vue";
 </script>
 
@@ -19,11 +19,11 @@ import FlipCardDemo from "@/Components/flip-card/FlipCardDemo.vue";
         </section>
         <!-- ニュースコンテンツ -->
         <section>
-            <!-- <NewsContent /> -->
+            <NewsContent />
         </section>
         <!-- 姉妹サイト情報 -->
         <section>
-            <!-- <RelatedSite /> -->
+            <RelatedSite />
         </section>
     </main>
     <!-- 広告コンテンツ -->
