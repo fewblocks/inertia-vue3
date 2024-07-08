@@ -24,9 +24,11 @@ createInertiaApp({
             //     ? SampleLayout
             //     : undefined;
             console.log(name);
-            page.default.layout = name.startsWith("Auth/LearnispiritsTop")
-                ? NavigationLayout
-                : undefined;
+            page.default.layout =
+                name.startsWith("Auth/LearnispiritsTop") ||
+                name.startsWith("Auth/LearnispiritsAphorism")
+                    ? NavigationLayout
+                    : undefined;
             return page;
         }),
     setup({ el, App, props, plugin }) {

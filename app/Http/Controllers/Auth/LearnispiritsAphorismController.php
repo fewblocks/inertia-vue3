@@ -4,20 +4,20 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illumina\Http\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class LearnispiritsTopController extends Controller
+class LearnispiritsAphorismController extends Controller
 {
     /**
-     * LanispiritsTop画面
+     * LanispiritsAphorism画面
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/LearnispiritsTop', [
+        return Inertia::render('Auth/LearnispiritsAphorism', [
             'status' => session('status'),
         ]);
     }

@@ -52,7 +52,9 @@ onUnmounted(() => mediaQuery.removeEventListener("change", update));
                             <a class="nav-link" href="#">クイズ</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="/aphorism">名言石碑</a>
+                            <a class="nav-link" href="/learnispirits/aphorism"
+                                >名言石碑</a
+                            >
                         </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="#">コレクション</a>
