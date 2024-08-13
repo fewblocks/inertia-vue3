@@ -26,7 +26,8 @@ createInertiaApp({
             console.log(name);
             page.default.layout =
                 name.startsWith("Auth/LearnispiritsTop") ||
-                name.startsWith("Auth/LearnispiritsAphorism")
+                name.startsWith("Auth/LearnispiritsAphorism") ||
+                name.startsWith("Auth/LearnispiritsQuiz")
                     ? NavigationLayout
                     : undefined;
             return page;

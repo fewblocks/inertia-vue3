@@ -49,7 +49,9 @@ onUnmounted(() => mediaQuery.removeEventListener("change", update));
                         class="navbar-nav me-auto w-50 nav-justified text-align"
                     >
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">クイズ</a>
+                            <a class="nav-link" href="/learnispirits/quiz"
+                                >クイズ</a
+                            >
                         </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="/learnispirits/aphorism"

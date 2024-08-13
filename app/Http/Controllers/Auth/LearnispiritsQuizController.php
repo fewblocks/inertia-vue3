@@ -9,18 +9,19 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Line;
 
-class LearnispiritsTopController extends Controller
+
+class LearnispiritsQuizController extends Controller
 {
-    /**
-     * LanispiritsTop画面
-     */
-    public function create(): Response
+
+    public function index ()
     {
-        return Inertia::render('Auth/LearnispiritsTop', [
-            'status' => session('status'),
-        ]);
+        // ランダムに10件取得し、関連するキャラクターをロード
+        $lines = Line::with('character')->inRandomOrder()->limit(10)->get();
+        return Inertia::render('Auth/LearnispiritsQuiz', ['lines' => $lines]);
     }
+
 
     /**
      * Handle an incoming password reset link request.

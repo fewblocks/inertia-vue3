@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\LearnispiritsTopController;
 use App\Http\Controllers\Auth\LearnispiritsAphorismController;
+use App\Http\Controllers\Auth\LearnispiritsQuizController;
 use App\Http\Controllers\Auth\SampleController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
@@ -40,10 +41,17 @@ Route::middleware('guest')->group(function () {
     Route::post('reset-password', [NewPasswordController::class, 'store'])
                 ->name('password.store');
 
+    // LearnispiritstTopページ(トップ)
     Route::get('learnispirits', [LearnispiritsTopController::class, 'create'])
                 ->name('learnispirits.top');
+
+    // LearnispiritstAphorismページ(名言石碑)
     Route::get('learnispirits/aphorism', [LearnispiritsAphorismController::class, 'create'])
                 ->name('learnispirits.aphorism');
+
+    // LearnispiritstQuizページ(クイズ)
+    Route::get('learnispirits/quiz', [LearnispiritsQuizController::class, 'index'])
+                ->name('learnispirits.quiz');
 });
 
 Route::middleware('auth')->group(function () {

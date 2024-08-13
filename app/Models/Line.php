@@ -6,10 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\Feeling;
 use App\Enums\Difficulty;
+use App\Models\Characters;
 
 class Line extends Model
 {
     use HasFactory;
+
+    // リレーションの定義
+    public function character()
+    {
+        return $this->belongsTo(Characters::class, 'character_id', 'id');
+    }
 
     // 参照させたいSQLのテーブル名を指定してあげる
     protected $table = 'line';
