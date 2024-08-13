@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('line', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('character_id');
-            $table->string('japanese_line');
-            $table->string('english_line');
-            $table->enum('feeling',['angry','sad','happy']);
-            $table->enum('difficulty',['hard','normal','easy']);
-            $table->integer('volume');
+        Schema::create('characters', function (Blueprint $table) {
+            $table->id();
+            $table->string('japanese_name')->nullable();;
+            $table->string('english_name')->nullable();;
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('line');
+        Schema::dropIfExists('characters');
     }
 };
