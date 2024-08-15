@@ -1,29 +1,25 @@
 <!-- ナビゲーションバー -->
 <script setup lang="ts">
-import { breakpoints } from "@/utils/breakpoints";
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { breakpoints } from '@/utils/breakpoints'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 // TODO: タイプファイル別切り出し
-type Breakpoints = keyof typeof breakpoints; // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+type Breakpoints = keyof typeof breakpoints // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 // メディアクエリーの判別値(windowオブジェクト)
-const mediaQuery = window.matchMedia(`(max-width : ${breakpoints.md})`);
-const isScreenMiddle = ref(mediaQuery.matches);
+const mediaQuery = window.matchMedia(`(max-width : ${breakpoints.md})`)
+const isScreenMiddle = ref(mediaQuery.matches)
 
 // テキスト寄せ判定
-const textAlign = computed(() => (isScreenMiddle.value ? "left" : "center"));
+const textAlign = computed(() => (isScreenMiddle.value ? 'left' : 'center'))
 
 // windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新）
-const update = (event: { matches: boolean }) =>
-    (isScreenMiddle.value = event.matches);
-onMounted(() => mediaQuery.addEventListener("change", update));
-onUnmounted(() => mediaQuery.removeEventListener("change", update));
+const update = (event: { matches: boolean }) => (isScreenMiddle.value = event.matches)
+onMounted(() => mediaQuery.addEventListener('change', update))
+onUnmounted(() => mediaQuery.removeEventListener('change', update))
 </script>
 
 <template>
     <!-- 「navbar-expand-md」 md以下のサイズのみトグルボタン表示 -->
-    <nav
-        class="navbar fixed-top navbar-expand-md navbar-light"
-        role="navigation"
-    >
+    <nav class="navbar fixed-top navbar-expand-md navbar-light" role="navigation">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Learnispirits</a>
             <!-- 「data-bs-target」="#切り替え表示されるコンテンツ名" -->
@@ -39,24 +35,15 @@ onUnmounted(() => mediaQuery.removeEventListener("change", update));
             >
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div
-                class="collapse navbar-collapse justify-content-between px-3"
-                id="learnispirits-menu"
-            >
+            <div class="collapse navbar-collapse justify-content-between px-3" id="learnispirits-menu">
                 <div class="navbar-nav navbar-collapse justify-content-between">
                     <!-- 等間隔でない場合は w-100 nav-justified 除去-->
-                    <ul
-                        class="navbar-nav me-auto w-50 nav-justified text-align"
-                    >
+                    <ul class="navbar-nav me-auto w-50 nav-justified text-align">
                         <li class="nav-item active">
-                            <a class="nav-link" href="/learnispirits/quiz"
-                                >クイズ</a
-                            >
+                            <a class="nav-link" href="/learnispirits/line-quiz">クイズ</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="/learnispirits/aphorism"
-                                >名言石碑</a
-                            >
+                            <a class="nav-link" href="/learnispirits/aphorism">名言石碑</a>
                         </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="#">コレクション</a>
@@ -66,16 +53,9 @@ onUnmounted(() => mediaQuery.removeEventListener("change", update));
 
                 <div class="col-auto">
                     <!-- 等間隔でない場合は w-100 nav-justified 除去-->
-                    <ul
-                        class="navbar-nav me-auto w-100 nav-justified text-align"
-                    >
+                    <ul class="navbar-nav me-auto w-100 nav-justified text-align">
                         <li class="nav-item active">
-                            <button
-                                class="btn btn-primary my-2 my-sm-0 w"
-                                type="submit"
-                            >
-                                ログイン
-                            </button>
+                            <button class="btn btn-primary my-2 my-sm-0 w" type="submit">ログイン</button>
                         </li>
                     </ul>
                 </div>

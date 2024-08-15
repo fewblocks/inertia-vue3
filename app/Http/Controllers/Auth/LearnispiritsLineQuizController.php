@@ -12,14 +12,14 @@ use Inertia\Response;
 use App\Models\Line;
 
 
-class LearnispiritsQuizController extends Controller
+class LearnispiritsLineQuizController extends Controller
 {
 
     public function index ()
     {
         // ランダムに10件取得し、関連するキャラクターをロード
         $lines = Line::with('character')->inRandomOrder()->limit(10)->get();
-        return Inertia::render('Auth/LearnispiritsQuiz', ['lines' => $lines]);
+        return Inertia::render('Auth/LearnispiritsLineQuiz', ['lines' => $lines]);
     }
 
 

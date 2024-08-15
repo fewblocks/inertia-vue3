@@ -1,10 +1,6 @@
 <script setup>
-import SpeechBalloons from '@/Components/speech-balloon/organisms/SpeechBallons.vue'
-import AphorismMenu from '@/Components/Learnispirits/molecules/AphorismMenu.vue'
-import AphorismVisual from '@/Components/Learnispirits/organisms/AphorismVisual.vue'
-import AphorismText from '@/Components/Learnispirits/molecules/AphorismText.vue'
-import CountDownTimerBase from '@/Components/countdown-timer/organisms/CountDownTimers/CountDownTimerBase.vue'
-
+import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
+//Components\line-quiz-contdown-timer\organisms\LineQuizCountDownTimers\LineQuizCountDownTimerBase.vue
 import { ref } from 'vue'
 const hover = ref(false)
 
@@ -44,8 +40,9 @@ const changeGet = (text) => {
             <!-- クイズ前 -->
             <template v-if="pageState == 'beforeQuiz'">
                 <!-- タイマー -->
-                <CountDownTimerBase @change="changeGet" />
+                <LineQuizCountDownTimerBase @change="changeGet" />
             </template>
+
             <!-- クイズ中 -->
             <template v-else-if="pageState == 'duringQuiz'">
                 <div>クイズ中</div>
