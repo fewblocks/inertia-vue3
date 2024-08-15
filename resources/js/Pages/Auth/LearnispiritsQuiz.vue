@@ -1,12 +1,12 @@
 <script setup>
-import SpeechBalloons from "@/Components/speech-balloon/organisms/SpeechBallons.vue";
-import AphorismMenu from "@/Components/Learnispirits/molecules/AphorismMenu.vue";
-import AphorismVisual from "@/Components/Learnispirits/organisms/AphorismVisual.vue";
-import AphorismText from "@/Components/Learnispirits/molecules/AphorismText.vue";
-import CountDownTimerBase from "@/Components/countdown-timer/organisms/CountDownTimers/CountDownTimerBase.vue";
+import SpeechBalloons from '@/Components/speech-balloon/organisms/SpeechBallons.vue'
+import AphorismMenu from '@/Components/Learnispirits/molecules/AphorismMenu.vue'
+import AphorismVisual from '@/Components/Learnispirits/organisms/AphorismVisual.vue'
+import AphorismText from '@/Components/Learnispirits/molecules/AphorismText.vue'
+import CountDownTimerBase from '@/Components/countdown-timer/organisms/CountDownTimers/CountDownTimerBase.vue'
 
-import { ref } from "vue";
-const hover = ref(false);
+import { ref } from 'vue'
+const hover = ref(false)
 
 // ページの状態
 // 'beforeQuiz(クイズ前) -> duringQuiz（クイズ中） -> afterQuiz（クイズ後）'
@@ -15,13 +15,13 @@ const pageState = ref('beforeQuiz')
 
 // サーバーからのセリフ（クイズデータ取得）
 const props = defineProps({
-    lines: Array,
-});
+    lines: Array
+})
 
 //　アクセサー
 {
     /* <ul v-for="line in lines" :key="line.id">
-                <li>{{ line.some_line_field }}</li>
+            <li>{{ line.some_line_field }}</li>
                 <li>{{ line.character.japanese_name }}</li>
                 <li>{{ line.character.english_name }}</li>
                 <li>{{ line.japanese_line }}</li>
@@ -33,7 +33,6 @@ const changeGet = (text) => {
     console.log(text)
     pageState.value = 'duringQuiz'
 }
-
 </script>
 
 <!-- トップページ -->
@@ -43,12 +42,12 @@ const changeGet = (text) => {
         <!-- 動的コンテンツなので、セマンティックなスタイルにしない -->
         <div style="margin-top: 56px; width: 90%; height: 100dvh">
             <!-- クイズ前 -->
-            <template v-if="pageState=='beforeQuiz'">
-            <!-- タイマー -->
-            <CountDownTimerBase @change="changeGet" />
+            <template v-if="pageState == 'beforeQuiz'">
+                <!-- タイマー -->
+                <CountDownTimerBase @change="changeGet" />
             </template>
             <!-- クイズ中 -->
-            <template v-else-if="pageState=='duringQuiz'">
+            <template v-else-if="pageState == 'duringQuiz'">
                 <div>クイズ中</div>
             </template>
         </div>
