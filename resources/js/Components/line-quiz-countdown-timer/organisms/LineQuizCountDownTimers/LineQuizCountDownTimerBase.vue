@@ -2,6 +2,11 @@
 import { ref, onMounted } from 'vue'
 import LineQuizCountDownTimerNumber from './LineQuizCountDownTimerNumber.vue'
 
+const props = defineProps({
+    // カウントダウン数
+    max: Number
+})
+
 // 起動装置クラス名
 const launcherClassName = ref('launcher show')
 // カウンタークラス名
@@ -9,7 +14,7 @@ const counterClassName = ref('counter hide')
 // 経過時間
 const elapsedSecond = ref(0)
 // 上限
-const max = ref(10)
+const max = ref(props.max)
 /**
  * カウンターアイテムリストの初期化
  * @param {number} maxNum 上限数
@@ -32,9 +37,10 @@ onMounted(() => {
     countDownStart()
 })
 
-const emit = defineEmits(['change'])
-const sample = () => {
-    emit('change', 'abc')
+// ページの状態変化
+const emit = defineEmits(['changePageState'])
+const changePageState = () => {
+    emit('changePageState', 'duringQuiz')
 }
 
 /**
@@ -88,7 +94,7 @@ const countDownStart = () => {
     </div>
     <div :class="launcherClassName">
         <h1>GO</h1>
-        <button class="launch" v-on:click="sample">Launch</button>
+        <button class="launch" v-on:click="changePageState">Launch</button>
     </div>
 </template>
 

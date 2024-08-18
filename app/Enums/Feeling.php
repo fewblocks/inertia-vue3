@@ -4,11 +4,20 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
-final class Feeling extends Enum
+enum Feeling: String
 {
-    const Angry = 1;
-    const Sad = 2;
-    const Happy = 3;
+    case ANGRY = 'angry';
+    case SAD = 'sad';
+    case HAPPY = 'happy';
+
+    public function label(): string
+    {
+        return match ($this) {
+            Feeling::ANGRY  => '怒り',
+            Feeling::SAD  => '悲しい',
+            Feeling::HAPPY  => '楽しい',
+        };
+    }
 
     public static function getKeyFromValue($value)
     {

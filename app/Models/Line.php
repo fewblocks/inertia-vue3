@@ -24,7 +24,7 @@ class Line extends Model
     protected $fillable = ['character_id','japanese_line','english_line', 'feeling', 'difficulty', 'volume'];
 
     protected $casts = [
-        'feeling' => 'integer',
+        'feeling' => Feeling::class,
         'difficulty' => 'integer',
     ];
 

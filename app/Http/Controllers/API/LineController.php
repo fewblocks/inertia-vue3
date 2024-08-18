@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Line;
+use App\Enums\Feeling;
 use Illuminate\Http\Request;
 
 class LineController extends Controller
@@ -30,11 +31,13 @@ class LineController extends Controller
             'character_id' => 'required|integer',
             'japanese_line' => 'required|string|max:255',
             'english_line' => 'required|string|max:255',
-            'feeling' => 'required|integer|in:1,2,3',
+            'feeling' => 'required|string|in:angry,sad,happy',
             'difficulty' => 'required|integer|in:1,2,3',
             'volume' => 'required|integer',
 
         ]);
+
+        $validated['feeling'] = Feeling::from($validated['feeling']);
 
         $line = Line::create($validated);
 

@@ -1,6 +1,6 @@
 <script setup>
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
-//Components\line-quiz-contdown-timer\organisms\LineQuizCountDownTimers\LineQuizCountDownTimerBase.vue
+import QuizApplication from '@/Components/quiz-application/QuizApplication.vue'
 import { ref } from 'vue'
 const hover = ref(false)
 
@@ -9,11 +9,15 @@ const hover = ref(false)
 // の順番に変化していく
 const pageState = ref('beforeQuiz')
 
+// クイズの出題番号、
+const quizCounter = ref(0)
+
 // サーバーからのセリフ（クイズデータ取得）
 const props = defineProps({
     lines: Array
 })
 
+console.log(props.lines)
 //　アクセサー
 {
     /* <ul v-for="line in lines" :key="line.id">
@@ -25,27 +29,42 @@ const props = defineProps({
             </ul> */
 }
 
-const changeGet = (text) => {
-    console.log(text)
-    pageState.value = 'duringQuiz'
+const changePageState = (state) => {
+    pageState.value = state
 }
 </script>
 
 <!-- トップページ -->
 
+<!-- 動的コンテンツなので、セマンティックなスタイルにしない -->
 <template>
-    <main class="col-sm-12 col-md-9">
-        <!-- 動的コンテンツなので、セマンティックなスタイルにしない -->
-        <div style="margin-top: 56px; width: 90%; height: 100dvh">
+    <main class="col-sm-12 col-md-12">
+        <div style="margin-top: 56px; width: 100%; height: 100dvh">
             <!-- クイズ前 -->
             <template v-if="pageState == 'beforeQuiz'">
-                <!-- タイマー -->
-                <LineQuizCountDownTimerBase @change="changeGet" />
+                <div style="width: 100%; display: flex; justify-content: center">
+                    <!-- 説明文 -->
+                    <div style="position: fixed; top: 30%; width: 100%; display: flex; justify-content: center">
+                        <h2>クイズが開始するまであと...</h2>
+                    </div>
+
+                    <!-- カウントダウンタイマー -->
+                    <LineQuizCountDownTimerBase :max="5" @changePageState="changePageState" />
+
+                    <!-- 煽り文 -->
+                    <div style="position: fixed; top: 65%; width: 100%; display: flex; justify-content: center">
+                        <h2>最高にハイって奴だーー！！</h2>
+                    </div>
+                </div>
             </template>
 
             <!-- クイズ中 -->
             <template v-else-if="pageState == 'duringQuiz'">
-                <div>クイズ中</div>
+                <div>{{ lines[quizCounter].japanese_line }}</div>
+                <QuizApplication
+                    :japaneseLine="lines[quizCounter].japanese_line"
+                    :feeling="lines[quizCounter].feeling"
+                />
             </template>
         </div>
     </main>
