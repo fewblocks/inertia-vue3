@@ -29,16 +29,6 @@ class Line extends Model
     ];
 
 
-    public function setFeelingAttribute($value)
-    {
-        $this->attributes['feeling'] = Feeling::getKeyFromValue($value);
-    }
-
-    public function getFeelingAttribute($value)
-    {
-        return Feeling::getKeyFromValue($value);
-    }
-
     public function setDifficultyAttribute($value)
     {
         $this->attributes['difficulty'] = Difficulty::getKeyFromValue($value);

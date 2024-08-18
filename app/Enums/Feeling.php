@@ -19,14 +19,4 @@ enum Feeling: String
         };
     }
 
-    public static function getKeyFromValue($value)
-    {
-        return array_search($value, self::getConstants());
-    }
-
-    protected static function getConstants(): array
-    {
-        $reflection = new \ReflectionClass(self::class);
-        return $reflection->getConstants();
-    }
 }
