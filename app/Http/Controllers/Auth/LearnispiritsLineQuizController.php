@@ -29,7 +29,8 @@ class LearnispiritsLineQuizController extends Controller
                 'id' => $line->id,
                 'character' => $line->character,
                 'line' => $line,
-                'feeling' => $line->feeling->label()
+                // 'feeling' => $line->feeling->label(),
+                'feeling' => $line->feeling
             ];
         });
 
