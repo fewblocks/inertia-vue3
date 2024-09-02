@@ -10,10 +10,11 @@ import characterIcon from '~/sample_character_icon.png'
 
 <style lang="scss" scoped>
 .character-icon-wrapper {
-    display: flex;
-    justify-content: center;
     max-width: 1280px;
-    margin: 0 auto;
+
+    margin-top: auto;
+    min-width: 200px;
+    min-height: 200px;
     .character-icon {
         background-color: red;
         max-width: 100%;

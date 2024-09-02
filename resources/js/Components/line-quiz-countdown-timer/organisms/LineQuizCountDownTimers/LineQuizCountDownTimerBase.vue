@@ -4,7 +4,9 @@ import LineQuizCountDownTimerNumber from './LineQuizCountDownTimerNumber.vue'
 
 const props = defineProps({
     // カウントダウン数
-    max: Number
+    max: Number,
+    // カウントダウンタイマー開閉
+    countDownState: Boolean
 })
 
 // 起動装置クラス名
@@ -38,9 +40,9 @@ onMounted(() => {
 })
 
 // ページの状態変化
-const emit = defineEmits(['changePageState'])
-const changePageState = () => {
-    emit('changePageState', 'duringQuiz')
+const emit = defineEmits(['changeCountDownState'])
+const changeCountDownState = () => {
+    emit('changeCountDownState', 'countDownEnd')
 }
 
 /**
@@ -94,7 +96,7 @@ const countDownStart = () => {
     </div>
     <div :class="launcherClassName">
         <h1>GO</h1>
-        <button class="launch" v-on:click="changePageState">Launch</button>
+        <button class="launch" v-on:click="changeCountDownState">Launch</button>
     </div>
 </template>
 
@@ -118,7 +120,7 @@ h4 {
 }
 
 .counter {
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -131,13 +133,14 @@ h4 {
 }
 
 .launcher {
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0);
 }
 
 .launcher.show {
+    position: absolute;
     transform: translate(-50%, -50%) scale(1);
     animation: show 0.2s ease-out;
 }

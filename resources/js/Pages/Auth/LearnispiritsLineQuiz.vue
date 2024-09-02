@@ -9,6 +9,11 @@ const hover = ref(false)
 // の順番に変化していく
 const pageState = ref('beforeQuiz')
 
+// ページの状態
+// countdownStart(カウントダウンスタート前)  -> countDownEnd（カウントダウンスタート後）'
+// の順番に変化していく
+const countDownState = ref('countdownStart')
+
 // クイズの出題番号、
 const quizCounter = ref(0)
 
@@ -29,8 +34,8 @@ console.log(props.lines)
             </ul> */
 }
 
-const changePageState = (state) => {
-    pageState.value = state
+const changeCountDownState = (state) => {
+    if (state === 'countDownEnd') pageState.value = 'duringQuiz'
 }
 </script>
 
@@ -49,7 +54,11 @@ const changePageState = (state) => {
                     </div>
 
                     <!-- カウントダウンタイマー -->
-                    <LineQuizCountDownTimerBase :max="5" @changePageState="changePageState" />
+                    <LineQuizCountDownTimerBase
+                        :max="5"
+                        :countDownState="countDownState"
+                        @changeCountDownState="changeCountDownState"
+                    />
 
                     <!-- 煽り文 -->
                     <div style="position: fixed; top: 65%; width: 100%; display: flex; justify-content: center">
@@ -60,9 +69,12 @@ const changePageState = (state) => {
 
             <!-- クイズ中 -->
             <template v-else-if="pageState == 'duringQuiz'">
-                <div>{{ lines[quizCounter].japanese_line }}</div>
+                <!-- アクセサ -->
+                <!-- <div>{{ lines[quizCounter].line.japanese_line }}</div>
+                <div>{{ lines[quizCounter].line }}</div> -->
                 <QuizApplication
-                    :japaneseLine="lines[quizCounter].japanese_line"
+                    :japaneseLine="lines[quizCounter].line.japanese_line"
+                    :englishLine="lines[quizCounter].line.english_line"
                     :feeling="lines[quizCounter].feeling"
                 />
             </template>
