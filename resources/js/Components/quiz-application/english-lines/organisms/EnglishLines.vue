@@ -5,29 +5,30 @@ import StaticTextBox from '@/Components/quiz-application/english-lines/organisms
 import PlaceholderTextBox from '@/Components/quiz-application/english-lines/organisms/PlaceholderTextBox.vue'
 
 const props = defineProps<{
-    // 英文
+    // TODO: ちゃんとアプリケーションに則した名前にする
     englishLine?: string
+    textObjects: Array<{
+        type: 'static' | 'placeholder'
+        word: string
+        index: number
+        status: 'filled' | 'selected' | 'unselected'
+        selectedWord: string
+    }>
 }>()
-
-// 仮の値（英文テキスト）
-const sentence = 'This is a sample sentence for the quiz'
-// 難易度
-const difficulty = 'medium' // "high", "medium", "low" のいずれか
-
-const { resultArray: textObjects } = useSentenceSplitter(sentence, difficulty)
 </script>
 
 <template>
-    <div clsss="wrapper d-flex">
+    <div class="wrapper d-flex">
         <template v-for="(textObject, index) in textObjects" :key="index">
             <template v-if="textObject.type === 'static'">
                 <StaticTextBox :text="textObject.word" class="me-2" />
             </template>
+            &nbsp;
             <template v-if="textObject.type === 'placeholder'">
                 <PlaceholderTextBox
                     :index="textObject.index"
-                    :word="textObject.word"
                     :status="textObject.status"
+                    :selectedWord="textObject.selectedWord"
                     class="me-2"
                 />
             </template>
@@ -37,12 +38,14 @@ const { resultArray: textObjects } = useSentenceSplitter(sentence, difficulty)
 
 <style lang="scss" scoped>
 .wrapper {
+    width: 100%;
     max-width: 1280px;
     margin-top: auto;
     min-width: 200px;
     min-height: 200px;
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
     .character-icon {
         background-color: red;
         max-width: 100%;

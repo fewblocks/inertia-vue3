@@ -7,6 +7,7 @@ import EnglishLines from '@/Components/quiz-application/english-lines/organisms/
 import EnglishBoxese from '@/Components/quiz-application/english-lines/organisms/EnglishBoxese.vue'
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
 import type { Feeling } from '@/types/Feeling'
+import { useSentenceSplitter } from '@/Composable/useSentenceSplitter'
 
 type Breakpoints = keyof typeof breakpoints // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 // メディアクエリーの判別値(windowオブジェクト)
@@ -21,18 +22,54 @@ onMounted(() => mediaQuery.addEventListener('change', update))
 onUnmounted(() => mediaQuery.removeEventListener('change', update))
 
 const props = defineProps<{
-    // 日本語文
+    /** 日本語 */
     japaneseLine?: string
-    // 英語文
+    /** 英語 */
     englishLine?: string
-    // 感情
+    /** 英語 */
     feeling?: Feeling
 }>()
 
-const pageState = ref('beforeCount')
+// 仮の値（英文テキスト）
+const sentence = props.englishLine // 英文
+// 難易度
+const difficulty = 'medium' // "high", "medium", "low" のいずれか
 
+// TODO: 仮の値（日本語文）
+// 文章分割処理 「文章全部」「プレースホルダー」
+const { resultArray, createPlaceholderIndexArray } = useSentenceSplitter(sentence, difficulty)
+resultArray.value
+
+const placeholderIndexArray = ref(createPlaceholderIndexArray())
+const textObjects = ref(resultArray)
+const pageState = ref('beforeCount')
 const changeCountDownState = (state: string) => {
     pageState.value = state
+}
+const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord, shuffleIndex }) => {
+    console.log('buttonIndex', buttonIndex)
+    console.log('nextPlaceholderIndex', nextPlaceholderIndex)
+
+    // プレースホルダーのボタンを選択した際の処理
+
+    // ボタンを非活性にする
+    textObjects.value = textObjects.value.map((item) =>
+        item.index === buttonIndex ? { ...item, disabled: true } : item
+    )
+
+    // ボタンの選択された単語を設定
+    textObjects.value = textObjects.value.map((textObject) =>
+        textObject.status === 'selected' ? { ...textObject, selectedWord: buttonWord } : textObject
+    )
+    // ボタンのステータス（入力済み）に変更
+    textObjects.value = textObjects.value.map((textObject) =>
+        textObject.status === 'selected' ? { ...textObject, status: 'filled' } : textObject
+    )
+
+    // 次のプレースホルダーのボタンを選択状態にする
+    textObjects.value = textObjects.value.map((button) =>
+        button.index === nextPlaceholderIndex ? { ...button, status: 'selected' } : button
+    )
 }
 </script>
 
@@ -56,10 +93,11 @@ const changeCountDownState = (state: string) => {
         </div>
         <!-- 英語 -->
         <div class="content english-lines row">
-            <EnglishLines :englishLine="props.englishLine" />
+            <EnglishLines :englishLine="props.englishLine" :textObjects="textObjects" />
         </div>
+        <!-- 日本語 -->
         <div class="content english-lines row">
-            <EnglishBoxese />
+            <EnglishBoxese :textObjects="textObjects" @select-text="handleSelectText" />
         </div>
     </div>
 </template>

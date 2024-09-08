@@ -23,17 +23,17 @@ const shapeUrl3 = `url(${Untitled2})`
 
 <template>
     <template v-if="props.feeling === 'angry'">
-        <div class="japanese-line-back col-12 col-l-md-9">
+        <div class="japanese-line-back col-12 col-md-8 col-lg-8">
             <div class="japanese-line-text">{{ props.japaneseLine }}</div>
         </div>
     </template>
     <template v-else-if="props.feeling === 'happy'">
-        <div class="japanese-line-back col-12 col-md-9">
+        <div class="japanese-line-back col-12 col-md-8 col-lg-8">
             <div class="japanese-line2-text">{{ props.japaneseLine }}</div>
         </div>
     </template>
     <template v-else="props.feeling === 'sad'">
-        <div class="japanese-line-back col-12 col-md-9">
+        <div class="japanese-line-back col-12 col-md-8 col-lg-8">
             <div class="japanese-line-text3">{{ props.japaneseLine }}</div>
         </div>
     </template>

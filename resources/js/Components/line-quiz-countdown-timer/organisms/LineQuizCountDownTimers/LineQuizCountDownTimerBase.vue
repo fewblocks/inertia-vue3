@@ -6,7 +6,7 @@ const props = defineProps({
     // カウントダウン数
     max: Number,
     // カウントダウンタイマー開閉
-    countDownState: Boolean
+    countDownState: String
 })
 
 // 起動装置クラス名

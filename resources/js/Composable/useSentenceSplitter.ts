@@ -32,20 +32,42 @@ export function useSentenceSplitter(sentence, difficulty) {
                 throw new Error('Invalid difficulty level')
         }
 
+        let firstPlaceholderSet = false
+
         words.forEach((word, index) => {
+            const type = isStatic[index] ? 'static' : 'placeholder'
+            const status = type === 'placeholder' && !firstPlaceholderSet ? 'selected' : 'unselected'
+            const selectedWord = ''
+            const disabled = false
+
+            if (type === 'placeholder' && !firstPlaceholderSet) {
+                firstPlaceholderSet = true
+            }
+
             const wordObject = {
                 index,
                 word,
-                type: isStatic[index] ? 'static' : 'placeholder',
-                status: index === 0 ? 'selected' : 'unselected'
+                type,
+                status,
+                selectedWord,
+                disabled
             }
+
             resultArray.value.push(wordObject)
         })
     }
 
     splitSentence()
 
+    // 新しい配列を作成するメソッド
+    const createPlaceholderIndexArray = () => {
+        return resultArray.value
+            .filter((item) => item.type === 'placeholder')
+            .map((item) => ({ disabled: false, index: item.index }))
+    }
+
     return {
-        resultArray
+        resultArray,
+        createPlaceholderIndexArray
     }
 }
