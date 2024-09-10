@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 const props = defineProps<{
-    // 英文
-    // コメント
+    /** 不要かも */
     index: Number
+    /** 文字列ステータス　入力済み | 選択中 | 未選択 */
     status: 'filled' | 'selected' | 'unselected'
+    /** 選択された文字列 */
     selectedWord: String
 }>()
 

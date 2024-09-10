@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 
 const props = defineProps<{
-    // TODO: ちゃんとアプリケーションに則した名前にする
+    //
     textObjects: Array<{
         type: 'static' | 'placeholder'
         word: string
@@ -81,23 +81,31 @@ const isButtonExist = (textIndex: number) => {
     <div class="d-flex justify-content-start">
         <template v-for="textObject in textObjects" :key="textObject.index">
             <template v-if="isButtonExist(textObject.index)">
-                <button
-                    :disabled="isButtonDisabled(textObject.index)"
-                    @click="handleClick(textObject.index, textObject.word, textObject.shuffleIndex)"
-                    class="btn btn-primary me-2"
-                >
-                    {{ textObject.word }}
-                </button>
-                <button
-                    v-if="isButtonDisabled(textObject.index)"
-                    @click="handleReset(textObject.index)"
-                    class="btn btn-danger"
-                ></button>
+                <div class="content-box">
+                    <button
+                        :disabled="isButtonDisabled(textObject.index)"
+                        @click="handleClick(textObject.index, textObject.word, textObject.shuffleIndex)"
+                        class="btn btn-primary me-2"
+                    >
+                        {{ textObject.word }}
+                    </button>
+                    <button
+                        v-if="isButtonDisabled(textObject.index)"
+                        @click="handleReset(textObject.index)"
+                        class="btn btn-danger"
+                        style="position: absolute; top: 10px; right: 5px"
+                    ></button>
+                </div>
             </template>
         </template>
     </div>
 </template>
 
 <style scoped>
+.content-box {
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+}
 /* 必要に応じてスタイルを追加してください */
 </style>

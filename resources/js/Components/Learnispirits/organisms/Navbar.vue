@@ -2,16 +2,16 @@
 <script setup lang="ts">
 import { breakpoints } from '@/utils/breakpoints'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-// TODO: タイプファイル別切り出し
+/** TODO: タイプファイル別切り出し */
 type Breakpoints = keyof typeof breakpoints // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-// メディアクエリーの判別値(windowオブジェクト)
+/** メディアクエリーの判別値(windowオブジェクト) */
 const mediaQuery = window.matchMedia(`(max-width : ${breakpoints.md})`)
 const isScreenMiddle = ref(mediaQuery.matches)
 
-// テキスト寄せ判定
+/** テキスト寄せ判定 */
 const textAlign = computed(() => (isScreenMiddle.value ? 'left' : 'center'))
 
-// windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新）
+/** windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新） */
 const update = (event: { matches: boolean }) => (isScreenMiddle.value = event.matches)
 onMounted(() => mediaQuery.addEventListener('change', update))
 onUnmounted(() => mediaQuery.removeEventListener('change', update))

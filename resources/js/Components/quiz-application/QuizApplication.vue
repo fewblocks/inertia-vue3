@@ -4,19 +4,20 @@ import { breakpoints } from '@/utils/breakpoints'
 import CharacterIcon from '@/Components/quiz-application/japanese-lines/atoms/CharacterIcon.vue'
 import JapaneseLines from '@/Components/quiz-application/japanese-lines/organisms/JapaneseLines.vue'
 import EnglishLines from '@/Components/quiz-application/english-lines/organisms/EnglishLines.vue'
-import EnglishBoxese from '@/Components/quiz-application/english-lines/organisms/EnglishBoxese.vue'
+import EnglishBoxese from '@/Components/quiz-application/english-boxes/organisms/EnglishBoxese.vue'
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
 import type { Feeling } from '@/types/Feeling'
 import { useSentenceSplitter } from '@/Composable/useSentenceSplitter'
 
-type Breakpoints = keyof typeof breakpoints // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-// メディアクエリーの判別値(windowオブジェクト)
+/** 'xs' | 'sm' | 'md' | 'lg' | 'xl' */
+type Breakpoints = keyof typeof breakpoints
+
+/** メディアクエリーの判別値(windowオブジェクト) */
 const mediaQuery = window.matchMedia(`(max-width : ${breakpoints.md})`)
+/** スクリーンmiddle 以下判定 */
 const isScreenMiddle = ref(mediaQuery.matches)
 
-// テキスト寄せ判定
-
-// windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新）
+/** windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新）*/
 const update = (event: { matches: boolean }) => (isScreenMiddle.value = event.matches)
 onMounted(() => mediaQuery.addEventListener('change', update))
 onUnmounted(() => mediaQuery.removeEventListener('change', update))
@@ -30,28 +31,31 @@ const props = defineProps<{
     feeling?: Feeling
 }>()
 
-// 仮の値（英文テキスト）
-const sentence = props.englishLine // 英文
-// 難易度
+/** 難易度 */
 const difficulty = 'medium' // "high", "medium", "low" のいずれか
 
-// TODO: 仮の値（日本語文）
-// 文章分割処理 「文章全部」「プレースホルダー」
-const { resultArray, createPlaceholderIndexArray } = useSentenceSplitter(sentence, difficulty)
+/**  TODO: 仮の値（日本語文）*/
+/**  文章分割処理結果取得 「文章全部」「難易度」 */
+const { resultArray } = useSentenceSplitter(props.englishLine, difficulty)
 resultArray.value
 
-const placeholderIndexArray = ref(createPlaceholderIndexArray())
+/** テキストオブジェクツ */
 const textObjects = ref(resultArray)
+/** ページステート */
 const pageState = ref('beforeCount')
+
+/** カウントダウンステート変更 */
 const changeCountDownState = (state: string) => {
     pageState.value = state
 }
-const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord, shuffleIndex }) => {
-    console.log('buttonIndex', buttonIndex)
-    console.log('nextPlaceholderIndex', nextPlaceholderIndex)
 
-    // プレースホルダーのボタンを選択した際の処理
-
+/** プレースホルダーのボタンを選択した際の処理
+ * ボタンの選択された単語を設定
+ * ボタンのステータス（入力済み）に変更
+ * 次のプレースホルダーのボタンを選択状態にする
+ *
+ */
+const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord }) => {
     // ボタンを非活性にする
     textObjects.value = textObjects.value.map((item) =>
         item.index === buttonIndex ? { ...item, disabled: true } : item
@@ -61,6 +65,7 @@ const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord, shuff
     textObjects.value = textObjects.value.map((textObject) =>
         textObject.status === 'selected' ? { ...textObject, selectedWord: buttonWord } : textObject
     )
+
     // ボタンのステータス（入力済み）に変更
     textObjects.value = textObjects.value.map((textObject) =>
         textObject.status === 'selected' ? { ...textObject, status: 'filled' } : textObject

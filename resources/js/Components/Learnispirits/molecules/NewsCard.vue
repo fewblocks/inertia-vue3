@@ -1,9 +1,9 @@
 <!-- 新着情報カード -->
 <script setup lang="ts">
 defineProps<{
-    // 背景色
-    color?: string;
-}>();
+    /** 背景色 */
+    color?: string
+}>()
 </script>
 
 <template>

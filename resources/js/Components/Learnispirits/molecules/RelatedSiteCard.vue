@@ -1,10 +1,10 @@
 <!-- 姉妹サイト情報カード -->
 <script setup lang="ts">
-import relatedSiteImage from "~/related-site-image.png";
+import relatedSiteImage from '~/related-site-image.png'
 defineProps<{
-    // 背景色
-    color?: string;
-}>();
+    /** 背景色 */
+    color?: string
+}>()
 </script>
 
 <template>
