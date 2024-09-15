@@ -38,9 +38,53 @@ const difficulty = 'medium' // "high", "medium", "low" のいずれか
 /**  文章分割処理結果取得 「文章全部」「難易度」 */
 const { resultArray } = useSentenceSplitter(props.englishLine, difficulty)
 resultArray.value
-
 /** テキストオブジェクツ */
 const textObjects = ref(resultArray)
+
+const colors = [
+    { color: 'red', index: 0 },
+    { color: 'blue', index: 1 },
+    { color: 'green', index: 2 },
+    { color: 'yellow', index: 3 },
+    { color: 'purple', index: 4 },
+    { color: 'orange', index: 5 },
+    { color: 'pink', index: 6 },
+    { color: 'brown', index: 7 },
+    { color: 'black', index: 8 },
+    { color: 'white', index: 9 },
+    { color: 'cyan', index: 10 },
+    { color: 'magenta', index: 11 },
+    { color: 'lime', index: 12 },
+    { color: 'maroon', index: 13 },
+    { color: 'navy', index: 14 },
+    { color: 'olive', index: 15 },
+    { color: 'teal', index: 16 },
+    { color: 'violet', index: 17 },
+    { color: 'indigo', index: 18 },
+    { color: 'gold', index: 19 },
+    { color: 'silver', index: 20 },
+    { color: 'bronze', index: 21 },
+    { color: 'coral', index: 22 },
+    { color: 'salmon', index: 23 },
+    { color: 'khaki', index: 24 },
+    { color: 'lavender', index: 25 },
+    { color: 'peach', index: 26 },
+    { color: 'plum', index: 27 },
+    { color: 'orchid', index: 28 },
+    { color: 'mint', index: 29 }
+]
+
+const shuffleColorsArray = (array: any[]) => {
+    const newArray = array.slice() // 配列のコピーを作成
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[newArray[i], newArray[j]] = [newArray[j], newArray[i]]
+    }
+    return newArray
+}
+
+const colorsObjects = ref(shuffleColorsArray(colors))
+
 /** ページステート */
 const pageState = ref('beforeCount')
 
@@ -61,6 +105,11 @@ const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord }) => 
         item.index === buttonIndex ? { ...item, disabled: true } : item
     )
 
+    // ボタンの色を指定
+    textObjects.value = textObjects.value.map((textObject) =>
+        textObject.status === 'selected' ? { ...textObject, selectedColorIndex: buttonIndex } : textObject
+    )
+
     // ボタンの選択された単語を設定
     textObjects.value = textObjects.value.map((textObject) =>
         textObject.status === 'selected' ? { ...textObject, selectedWord: buttonWord } : textObject
@@ -69,6 +118,11 @@ const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord }) => 
     // ボタンのステータス（入力済み）に変更
     textObjects.value = textObjects.value.map((textObject) =>
         textObject.status === 'selected' ? { ...textObject, status: 'filled' } : textObject
+    )
+
+    // 次のプレースホルダーのボタンを選択状態にする
+    textObjects.value = textObjects.value.map((button) =>
+        button.index === nextPlaceholderIndex ? { ...button, status: 'selected' } : button
     )
 
     // 次のプレースホルダーのボタンを選択状態にする
@@ -98,11 +152,11 @@ const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord }) => 
         </div>
         <!-- 英語 -->
         <div class="content english-lines row">
-            <EnglishLines :englishLine="props.englishLine" :textObjects="textObjects" />
+            <EnglishLines :englishLine="props.englishLine" :colorsObjects="colorsObjects" :textObjects="textObjects" />
         </div>
-        <!-- 日本語 -->
+        <!-- 英語ブロック -->
         <div class="content english-lines row">
-            <EnglishBoxese :textObjects="textObjects" @select-text="handleSelectText" />
+            <EnglishBoxese :textObjects="textObjects" :colorsObjects="colorsObjects" @select-text="handleSelectText" />
         </div>
     </div>
 </template>

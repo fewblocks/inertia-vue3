@@ -39,6 +39,7 @@ export function useSentenceSplitter(sentence, difficulty) {
             const status = type === 'placeholder' && !firstPlaceholderSet ? 'selected' : 'unselected'
             const selectedWord = ''
             const disabled = false
+            const selectedColorIndex = null
 
             if (type === 'placeholder' && !firstPlaceholderSet) {
                 firstPlaceholderSet = true
@@ -50,7 +51,8 @@ export function useSentenceSplitter(sentence, difficulty) {
                 type,
                 status,
                 selectedWord,
-                disabled
+                disabled,
+                selectedColorIndex
             }
 
             resultArray.value.push(wordObject)
