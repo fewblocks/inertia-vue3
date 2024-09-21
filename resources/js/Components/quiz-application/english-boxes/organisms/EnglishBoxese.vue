@@ -13,9 +13,11 @@ const props = defineProps<{
         selectedColorIndex: number | null
     }>
     colorsObjects: Array<{ color: string; index: number }>
+    selectedWordIndexes: Array<number>
 }>()
 
 const colorsObjects = ref(props.colorsObjects)
+const selectedWordIndexes = ref(props.selectedWordIndexes)
 
 // Fisher-Yates シャッフルアルゴリズムを使用して配列をランダムに並べ替える関数
 // const textObjects = ref(shuffleArray(props.textObjects)) でpropsの値を移し、
@@ -48,30 +50,37 @@ const textObjects = ref(shuffleTextObjectArray(props.textObjects))
 // const textObjects = ref(props.textObjects)
 
 /** 呼び出し元へ伝播イベント */
-const emit = defineEmits(['select-text'])
+const emit = defineEmits(['select-text', 'reset-text'])
 
 // ボタンクリック時の処理
-const handleClick = (buttonIndex: number, word: string) => {
+const handleClick = (boxIndex: number, word: string) => {
     const currentItem = props.textObjects?.find((item) => item.status === 'selected')
     const neXtItem = props.textObjects?.find(
         (item) => currentItem.index < item.index && item.type === 'placeholder' && item.status === 'unselected'
     )
+
     emit('select-text', {
-        buttonIndex: buttonIndex,
+        boxIndex: boxIndex,
         nextPlaceholderIndex: neXtItem ? neXtItem.index : null,
         buttonWord: word
     })
 }
 
-const handleReset = (buttonIndex) => {
-    textObjects.value = textObjects.value.map((button) =>
-        button.index === buttonIndex ? { ...button, disabled: false } : button
+const handleReset = (boxIndex: number) => {
+    const currentItem = props.textObjects?.find((item) => item.status === 'selected')
+    const prevItem = props.textObjects?.find(
+        (item) => currentItem.index > item.index && item.type === 'placeholder' && item.status === 'filled'
     )
+    emit('reset-text', {
+        boxIndex: boxIndex,
+        currentItemIndex: currentItem ? currentItem.index : null,
+        prevPlaceholderIndex: prevItem ? prevItem.index : null
+    })
 }
 
 /**  ボタン非活性判定 */
-const isButtonDisabled = computed(() => (buttonIndex: number) => {
-    const item = props.textObjects?.find((item) => item.index === buttonIndex)
+const isButtonDisabled = computed(() => (boxIndex: number) => {
+    const item = props.textObjects?.find((item) => item.index === boxIndex)
     return item ? item.disabled : false
 })
 
@@ -99,22 +108,24 @@ const isButtonExist = (textIndex: number) => {
                     >
                         {{ textObject.word }}
                     </div>
-                    <button
-                        v-if="isButtonDisabled(textObject.index)"
-                        @click="handleReset(textObject.index)"
-                        class="btn btn-danger"
-                        style="
-                            position: absolute;
-                            top: 10px;
-                            right: 5px;
-                            width: 25px;
-                            height: 25px;
-                            line-height: 10px;
-                            padding: 0px;
-                        "
-                    >
-                        X
-                    </button>
+                    <template v-if="selectedWordIndexes[selectedWordIndexes.length - 1] === textObject.index">
+                        <button
+                            v-if="isButtonDisabled(textObject.index)"
+                            @click="handleReset(textObject.index)"
+                            class="btn btn-danger"
+                            style="
+                                position: absolute;
+                                top: 10px;
+                                right: 5px;
+                                width: 25px;
+                                height: 25px;
+                                line-height: 10px;
+                                padding: 0px;
+                            "
+                        >
+                            X
+                        </button>
+                    </template>
                 </div>
             </template>
         </template>

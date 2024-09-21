@@ -7,6 +7,8 @@ import EnglishLines from '@/Components/quiz-application/english-lines/organisms/
 import EnglishBoxese from '@/Components/quiz-application/english-boxes/organisms/EnglishBoxese.vue'
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
 import type { Feeling } from '@/types/Feeling'
+import Correct from '~/correct.png'
+import Incorrect from '~/incorrect.png'
 import { useSentenceSplitter } from '@/Composable/useSentenceSplitter'
 
 /** 'xs' | 'sm' | 'md' | 'lg' | 'xl' */
@@ -40,6 +42,7 @@ const { resultArray } = useSentenceSplitter(props.englishLine, difficulty)
 resultArray.value
 /** テキストオブジェクツ */
 const textObjects = ref(resultArray)
+const reversedTextObjects = ref([])
 
 const colors = [
     { color: 'red', index: 0 },
@@ -88,10 +91,15 @@ const colorsObjects = ref(shuffleColorsArray(colors))
 /** ページステート */
 const pageState = ref('beforeCount')
 
+/** 選択中した単語のindex配列 */
+const selectedWordIndexes = ref([])
+
 /** カウントダウンステート変更 */
 const changeCountDownState = (state: string) => {
     pageState.value = state
 }
+
+const stampClass = ref('wp-block-image size-large is-resized my-stamp')
 
 /** プレースホルダーのボタンを選択した際の処理
  * ボタンの選択された単語を設定
@@ -99,15 +107,13 @@ const changeCountDownState = (state: string) => {
  * 次のプレースホルダーのボタンを選択状態にする
  *
  */
-const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord }) => {
+const handleSelectText = ({ boxIndex, nextPlaceholderIndex, buttonWord }) => {
     // ボタンを非活性にする
-    textObjects.value = textObjects.value.map((item) =>
-        item.index === buttonIndex ? { ...item, disabled: true } : item
-    )
+    textObjects.value = textObjects.value.map((item) => (item.index === boxIndex ? { ...item, disabled: true } : item))
 
     // ボタンの色を指定
     textObjects.value = textObjects.value.map((textObject) =>
-        textObject.status === 'selected' ? { ...textObject, selectedColorIndex: buttonIndex } : textObject
+        textObject.status === 'selected' ? { ...textObject, selectedColorIndex: boxIndex } : textObject
     )
 
     // ボタンの選択された単語を設定
@@ -124,11 +130,83 @@ const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord }) => 
     textObjects.value = textObjects.value.map((button) =>
         button.index === nextPlaceholderIndex ? { ...button, status: 'selected' } : button
     )
+    selectedWordIndexes.value.push(boxIndex)
 
-    // 次のプレースホルダーのボタンを選択状態にする
-    textObjects.value = textObjects.value.map((button) =>
-        button.index === nextPlaceholderIndex ? { ...button, status: 'selected' } : button
+    // textObjects の中で一つも textObject.selectedWord が true であり、かつ textObject.type が 'placeholder' であるものがないことを判定
+    if (!textObjects.value.some((textObject) => textObject.selectedWord === '' && textObject.type === 'placeholder')) {
+        stampClass.value = 'wp-block-image size-large is-resized my-stamp my-stamp-on'
+    }
+}
+
+const handleReset = ({ boxIndex, nextPlaceholderIndex, prevPlaceholderIndex }) => {
+    // ボタンを活性にする
+    textObjects.value = textObjects.value.map((item) => (item.index === boxIndex ? { ...item, disabled: false } : item))
+
+    // 現在のアイテムを取得
+    reversedTextObjects.value = [...textObjects.value].reverse()
+    const currentItem = reversedTextObjects.value.find((item) => item.status === 'filled')
+
+    // 次の選択肢（プレースホルダー）を取得
+    const neXtItem = textObjects.value.find((item) => currentItem.index < item.index && item.type === 'placeholder')
+
+    // 取り消しボタン押下した単語の箇所を再選択状態にする
+    textObjects.value = textObjects.value.map((item) =>
+        item.index === currentItem.index ? { ...item, selectedWord: '', status: 'selected' } : item
     )
+
+    // 取り消しボタン押下した次の単語の箇所を未選択状態にする
+    textObjects.value = textObjects.value.map((item) =>
+        item.index === neXtItem.index ? { ...item, status: 'unselected' } : item
+    )
+
+    // selectedWordIndexes.value の最後の値を取得
+    const lastIndex = selectedWordIndexes.value[selectedWordIndexes.value.length - 1]
+    textObjects.value = textObjects.value.map((item) =>
+        item.index === lastIndex.index ? { ...item, disabled: 'true' } : item
+    )
+
+    // selectedWordIndexes.value の最後の値を除去
+    selectedWordIndexes.value.pop()
+
+    // selectedWordIndexes.value の最後の値（除去したので一つ前）の値を活性化させる
+    textObjects.value = textObjects.value.map((item) =>
+        item.index === lastIndex.index ? { ...item, disabled: 'false' } : item
+    )
+
+    // selectedWordIndexes.value の最後の値を除去
+
+    // // 選択個所をもとに戻す
+    // textObjects.value = textObjects.value.map((item) =>
+    //     item.index === prevPlaceholderIndex ? { ...item, states: 'selected' } : item
+    // )
+
+    // textObjects.value = textObjects.value.map((item) =>
+    //     item.index === prevPlaceholderIndex ? { ...item, selectedWord: null } : item
+    // )
+
+    // // ボタンの選択された単語を設定
+    // textObjects.value = textObjects.value.map((item) =>
+    //     item.index === boxIndex ? { ...item, selectedColorIndex: null } : item
+    // )
+    // // // ボタンの選択された単語を設定
+    // textObjects.value = textObjects.value.map((item) =>
+    //     item.index === boxIndex ? { ...item, selectedWord: null } : item
+    // )
+
+    // // ボタンのステータス（未入力）に変更
+    // textObjects.value = textObjects.value.map((item) =>
+    //     item.index === boxIndex ? { ...item, status: 'selected' } : item
+    // )
+}
+
+const checkAnswers = () => {
+    let allMatch = true
+    textObjects.value.forEach((textObject) => {
+        if (textObject.type === 'placeholder' && textObject.selectedWord !== textObject.word) {
+            allMatch = false
+        }
+    })
+    return allMatch
 }
 </script>
 
@@ -148,6 +226,29 @@ const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord }) => 
                 <div v-show="!isScreenMiddle" class="col-2 position-relative">
                     <LineQuizCountDownTimerBase :max="5" @changeCountDownState="changeCountDownState" />
                 </div>
+                <figure :class="stampClass">
+                    <template v-if="checkAnswers()">
+                        正解
+                        <img :src="Correct" class="stamp2 wp-image-8151" alt="正解画像" width="150" height="150" />
+                    </template>
+                    <template v-else>
+                        不正解
+                        <img :src="Incorrect" class="stamp2 wp-image-8151" alt="不正解画像" width="150" height="150" />
+                    </template>
+                </figure>
+
+                <!-- <template v-if="checkAnswers()">
+                            <img
+                                :src="Incorrect"
+                                class="stamp2 wp-image-8151"
+                                alt="不正解画像"
+                                width="150"
+                                height="150"
+                            />
+                        </template>
+                        <template v-else>
+                            <img :src="Correct" class="stamp2 wp-image-8151" alt="正解画像" width="150" height="150" />
+                        </template> -->
             </div>
         </div>
         <!-- 英語 -->
@@ -156,7 +257,13 @@ const handleSelectText = ({ buttonIndex, nextPlaceholderIndex, buttonWord }) => 
         </div>
         <!-- 英語ブロック -->
         <div class="content english-lines row">
-            <EnglishBoxese :textObjects="textObjects" :colorsObjects="colorsObjects" @select-text="handleSelectText" />
+            <EnglishBoxese
+                :textObjects="textObjects"
+                :colorsObjects="colorsObjects"
+                @select-text="handleSelectText"
+                @reset-text="handleReset"
+                :selectedWordIndexes="selectedWordIndexes"
+            />
         </div>
     </div>
 </template>
@@ -177,4 +284,53 @@ main-content {
     display: flex;
     justify-content: flex-start;
 }
+
+/* スタンプアニメーションここから */
+
+figure.my-stamp {
+    border: 1px solid #ccc;
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 20px auto 20px;
+    padding: 10px;
+    font-size: 20px;
+    text-align: center;
+}
+.my-stamp img.stamp2 {
+    display: inline-block;
+    color: #c00;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+    border: 1px solid #c00;
+    border-radius: 50%;
+    padding: 20px;
+    /* スタンプアニメーションのための初期値 */
+    visibility: hidden;
+    animation: sample_anime02 2s paused both;
+}
+.my-stamp-on img.stamp2 {
+    animation-play-state: running;
+}
+
+@keyframes sample_anime02 {
+    0% {
+        visibility: visible;
+        opacity: 0;
+        transform: rotate(-30deg) scale(2.5);
+    }
+    30% {
+        visibility: visible;
+        opacity: 0.8;
+        transform: rotate(5deg) scale(1.04);
+    }
+    100% {
+        visibility: visible;
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+}
+
+/* スタンプアニメーションここまで */
 </style>
