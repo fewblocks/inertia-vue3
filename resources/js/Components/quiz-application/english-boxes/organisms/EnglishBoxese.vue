@@ -53,7 +53,8 @@ const textObjects = ref(shuffleTextObjectArray(props.textObjects))
 const emit = defineEmits(['select-text', 'reset-text'])
 
 // ボタンクリック時の処理
-const handleClick = (boxIndex: number, word: string) => {
+const handleClick = (boxIndex: number, word: string, buttonDisabled: boolean) => {
+    if (buttonDisabled) return
     const currentItem = props.textObjects?.find((item) => item.status === 'selected')
     const neXtItem = props.textObjects?.find(
         (item) => currentItem.index < item.index && item.type === 'placeholder' && item.status === 'unselected'
@@ -103,7 +104,7 @@ const isButtonExist = (textIndex: number) => {
                 <div class="content-box mb-4">
                     <div
                         :disabled="isButtonDisabled(textObject.index)"
-                        @click="handleClick(textObject.index, textObject.word)"
+                        @click="handleClick(textObject.index, textObject.word, isButtonDisabled(textObject.index))"
                         :class="boxStyle(textObject.index)"
                     >
                         {{ textObject.word }}

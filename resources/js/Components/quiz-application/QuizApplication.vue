@@ -6,6 +6,7 @@ import JapaneseLines from '@/Components/quiz-application/japanese-lines/organism
 import EnglishLines from '@/Components/quiz-application/english-lines/organisms/EnglishLines.vue'
 import EnglishBoxese from '@/Components/quiz-application/english-boxes/organisms/EnglishBoxese.vue'
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
+import Stamp from '@/Components/quiz-application/japanese-lines/atoms/Stamp.vue'
 import type { Feeling } from '@/types/Feeling'
 import Correct from '~/correct.png'
 import Incorrect from '~/incorrect.png'
@@ -91,6 +92,9 @@ const colorsObjects = ref(shuffleColorsArray(colors))
 /** ページステート */
 const pageState = ref('beforeCount')
 
+/** ページステート */
+const showAnswer = ref(false)
+
 /** 選択中した単語のindex配列 */
 const selectedWordIndexes = ref([])
 
@@ -134,11 +138,12 @@ const handleSelectText = ({ boxIndex, nextPlaceholderIndex, buttonWord }) => {
 
     // textObjects の中で一つも textObject.selectedWord が true であり、かつ textObject.type が 'placeholder' であるものがないことを判定
     if (!textObjects.value.some((textObject) => textObject.selectedWord === '' && textObject.type === 'placeholder')) {
+        showAnswer.value = true
         stampClass.value = 'wp-block-image size-large is-resized my-stamp my-stamp-on'
     }
 }
 
-const handleReset = ({ boxIndex, nextPlaceholderIndex, prevPlaceholderIndex }) => {
+const handleReset = ({ boxIndex }) => {
     // ボタンを活性にする
     textObjects.value = textObjects.value.map((item) => (item.index === boxIndex ? { ...item, disabled: false } : item))
 
@@ -161,6 +166,8 @@ const handleReset = ({ boxIndex, nextPlaceholderIndex, prevPlaceholderIndex }) =
 
     // selectedWordIndexes.value の最後の値を取得
     const lastIndex = selectedWordIndexes.value[selectedWordIndexes.value.length - 1]
+
+    // selectedWordIndexes.value の最後の値を非活性にする
     textObjects.value = textObjects.value.map((item) =>
         item.index === lastIndex.index ? { ...item, disabled: 'true' } : item
     )
@@ -172,34 +179,10 @@ const handleReset = ({ boxIndex, nextPlaceholderIndex, prevPlaceholderIndex }) =
     textObjects.value = textObjects.value.map((item) =>
         item.index === lastIndex.index ? { ...item, disabled: 'false' } : item
     )
-
-    // selectedWordIndexes.value の最後の値を除去
-
-    // // 選択個所をもとに戻す
-    // textObjects.value = textObjects.value.map((item) =>
-    //     item.index === prevPlaceholderIndex ? { ...item, states: 'selected' } : item
-    // )
-
-    // textObjects.value = textObjects.value.map((item) =>
-    //     item.index === prevPlaceholderIndex ? { ...item, selectedWord: null } : item
-    // )
-
-    // // ボタンの選択された単語を設定
-    // textObjects.value = textObjects.value.map((item) =>
-    //     item.index === boxIndex ? { ...item, selectedColorIndex: null } : item
-    // )
-    // // // ボタンの選択された単語を設定
-    // textObjects.value = textObjects.value.map((item) =>
-    //     item.index === boxIndex ? { ...item, selectedWord: null } : item
-    // )
-
-    // // ボタンのステータス（未入力）に変更
-    // textObjects.value = textObjects.value.map((item) =>
-    //     item.index === boxIndex ? { ...item, status: 'selected' } : item
-    // )
 }
 
-const checkAnswers = () => {
+const checkAnswers = computed(() => {
+    if (!showAnswer.value) return null
     let allMatch = true
     textObjects.value.forEach((textObject) => {
         if (textObject.type === 'placeholder' && textObject.selectedWord !== textObject.word) {
@@ -207,7 +190,7 @@ const checkAnswers = () => {
         }
     })
     return allMatch
-}
+})
 </script>
 
 <template>
@@ -221,34 +204,14 @@ const checkAnswers = () => {
                 <LineQuizCountDownTimerBase :max="5" @changeCountDownState="changeCountDownState" />
             </div>
             <div class="japanese-line row col-12 col-md-8 position-relative">
+                <div class="stamp-wrapper">
+                    <Stamp :showAnswer="showAnswer" :answer="checkAnswers" />
+                </div>
                 <JapaneseLines :feeling="props.feeling" :japaneseLine="props.japaneseLine" />
                 <!-- カウントダウンタイマー -->
                 <div v-show="!isScreenMiddle" class="col-2 position-relative">
                     <LineQuizCountDownTimerBase :max="5" @changeCountDownState="changeCountDownState" />
                 </div>
-                <figure :class="stampClass">
-                    <template v-if="checkAnswers()">
-                        正解
-                        <img :src="Correct" class="stamp2 wp-image-8151" alt="正解画像" width="150" height="150" />
-                    </template>
-                    <template v-else>
-                        不正解
-                        <img :src="Incorrect" class="stamp2 wp-image-8151" alt="不正解画像" width="150" height="150" />
-                    </template>
-                </figure>
-
-                <!-- <template v-if="checkAnswers()">
-                            <img
-                                :src="Incorrect"
-                                class="stamp2 wp-image-8151"
-                                alt="不正解画像"
-                                width="150"
-                                height="150"
-                            />
-                        </template>
-                        <template v-else>
-                            <img :src="Correct" class="stamp2 wp-image-8151" alt="正解画像" width="150" height="150" />
-                        </template> -->
             </div>
         </div>
         <!-- 英語 -->
@@ -285,52 +248,9 @@ main-content {
     justify-content: flex-start;
 }
 
-/* スタンプアニメーションここから */
-
-figure.my-stamp {
-    border: 1px solid #ccc;
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 20px auto 20px;
-    padding: 10px;
-    font-size: 20px;
-    text-align: center;
+.stamp-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
-.my-stamp img.stamp2 {
-    display: inline-block;
-    color: #c00;
-    font-size: 28px;
-    font-weight: bold;
-    line-height: 1;
-    border: 1px solid #c00;
-    border-radius: 50%;
-    padding: 20px;
-    /* スタンプアニメーションのための初期値 */
-    visibility: hidden;
-    animation: sample_anime02 2s paused both;
-}
-.my-stamp-on img.stamp2 {
-    animation-play-state: running;
-}
-
-@keyframes sample_anime02 {
-    0% {
-        visibility: visible;
-        opacity: 0;
-        transform: rotate(-30deg) scale(2.5);
-    }
-    30% {
-        visibility: visible;
-        opacity: 0.8;
-        transform: rotate(5deg) scale(1.04);
-    }
-    100% {
-        visibility: visible;
-        opacity: 1;
-        transform: rotate(0deg);
-    }
-}
-
-/* スタンプアニメーションここまで */
 </style>
