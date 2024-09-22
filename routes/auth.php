@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\ColorsController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -40,6 +41,10 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
                 ->name('password.store');
+
+    // Colorsページ(トップ)
+    Route::get('learnispirits/colors', [ColorsController::class, 'create'])
+                ->name('learnispirits.colors');
 
     // LearnispiritstTopページ(トップ)
     Route::get('learnispirits', [LearnispiritsTopController::class, 'create'])
