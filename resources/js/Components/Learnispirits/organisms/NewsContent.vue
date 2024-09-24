@@ -18,22 +18,19 @@ const newsData = ref<NewsData[]>([
         id: 1,
         new: 'CommingSoon!',
         time: '2024年6月25日！！',
-        message: 'NewCollection追加！！',
-        color: '#1144aa'
+        message: 'NewCollection追加！！'
     },
     {
         id: 2,
         new: 'CommingSoon!',
         time: '2024年6月24日！！',
-        message: 'NewCollection追加！！',
-        color: '#44aacc'
+        message: 'NewCollection追加！！'
     },
     {
         id: 3,
         new: 'CommingSoon!',
         time: '2024年6月23日！！',
-        message: 'NewCollection追加！！',
-        color: '#99bb22'
+        message: 'NewCollection追加！！'
     }
 ])
 </script>
@@ -41,7 +38,7 @@ const newsData = ref<NewsData[]>([
     <!-- ニュースコンテンツ -->
     <div class="news">
         <template v-for="news in newsData">
-            <NewsCard v-bind:color="news.color">
+            <NewsCard>
                 <!-- 新着情報テキスト -->
                 <template #new>{{ news.new }}</template>
                 <!-- 予定日時 -->

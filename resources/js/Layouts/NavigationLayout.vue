@@ -1,7 +1,7 @@
 <script setup>
-import Navbar from "@/Components/Learnispirits/organisms/Navbar.vue";
-import MainVisual from "@/Components/Learnispirits/organisms/MainVisual.vue";
-import FooterBar from "@/Components/Learnispirits/organisms/FooterBar.vue";
+import Navbar from '@/Components/Learnispirits/organisms/Navbar.vue'
+import MainVisual from '@/Components/Learnispirits/organisms/MainVisual.vue'
+import FooterBar from '@/Components/Learnispirits/organisms/FooterBar.vue'
 </script>
 
 <template>
@@ -13,10 +13,7 @@ import FooterBar from "@/Components/Learnispirits/organisms/FooterBar.vue";
     </header>
     <Navbar />
     <div class="main-content">
-        <div
-            class="row gx-0"
-            style="display: flex; justify-content: flex-start; max-width: 100%"
-        >
+        <div class="row gx-0" style="display: flex; justify-content: flex-start; max-width: 100%">
             <slot />
         </div>
     </div>
@@ -25,7 +22,7 @@ import FooterBar from "@/Components/Learnispirits/organisms/FooterBar.vue";
         <FooterBar />
     </footer>
 </template>
-<style scoped>
+<style lang="scss" scoped>
 .footer {
     max-width: 100%;
     position: relative;
@@ -34,7 +31,7 @@ import FooterBar from "@/Components/Learnispirits/organisms/FooterBar.vue";
     left: 0;
     width: 100vw;
     height: 300px;
-    background-color: dimgrey;
+    background-color: $emperor;
     display: flex;
     justify-content: center;
 }

@@ -30,7 +30,7 @@ const show = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-figure.my-stamp {
+figure .my-stamp {
     position: relative;
     width: 150px;
     height: 150px;

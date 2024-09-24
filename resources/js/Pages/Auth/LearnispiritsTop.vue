@@ -1,8 +1,8 @@
 <script setup>
-import WordCloudVisual from "@/Components/Learnispirits/organisms/WordCloudVisual.vue";
-import NewsContent from "@/Components/Learnispirits/organisms/NewsContent.vue";
-import RelatedSite from "@/Components/Learnispirits/organisms/RelatedSite.vue";
-import FlipCardDemo from "@/Components/flip-card/FlipCardDemo.vue";
+import WordCloudVisual from '@/Components/Learnispirits/organisms/WordCloudVisual.vue'
+import NewsContent from '@/Components/Learnispirits/organisms/NewsContent.vue'
+import RelatedSite from '@/Components/Learnispirits/organisms/RelatedSite.vue'
+import FlipCardDemo from '@/Components/flip-card/FlipCardDemo.vue'
 </script>
 
 <!-- トップページ -->
@@ -30,8 +30,8 @@ import FlipCardDemo from "@/Components/flip-card/FlipCardDemo.vue";
     <aside class="col-sm-12 col-md-3">aside-content</aside>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 aside {
-    background-color: #ffcc27;
+    background-color: $sunglow;
 }
 </style>

@@ -71,7 +71,7 @@ onUnmounted(() => mediaQuery.removeEventListener('change', update))
 
 .fixed-top {
     width: 100vw;
-    background-color: cornsilk;
+    background-color: $scotch-mist;
     position: fixed;
     top: 0;
     right: 0;

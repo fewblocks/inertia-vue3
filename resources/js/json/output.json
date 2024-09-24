@@ -1,0 +1,164 @@
+{
+    "colors": [
+        {
+            "value": "#f8fafc",
+            "name": "body-bg"
+        },
+        {
+            "value": "#ffcc00",
+            "name": "sunglow"
+        },
+        {
+            "value": "#bee9e9",
+            "name": "jagged-ice"
+        },
+        {
+            "value": "#decae1",
+            "name": "snuff"
+        },
+        {
+            "value": "#3b3b3b",
+            "name": "mine-shaft"
+        },
+        {
+            "value": "#e67a7a",
+            "name": "sunglo"
+        },
+        {
+            "value": "#d3f692",
+            "name": "mindaro"
+        },
+        {
+            "value": "#d592f6",
+            "name": "perfume"
+        },
+        {
+            "value": "#555555",
+            "name": "emperor"
+        },
+        {
+            "value": "#fff8dc",
+            "name": "scotch-mist"
+        },
+        {
+            "value": "#ff0000",
+            "name": "red"
+        },
+        {
+            "value": "#7777ee",
+            "name": "cornflower-blue"
+        },
+        {
+            "value": "#796666",
+            "name": "spicy-pink"
+        },
+        {
+            "value": "#ffff00",
+            "name": "yellow"
+        },
+        {
+            "value": "#a402a4",
+            "name": "flirt"
+        },
+        {
+            "value": "#ffa500",
+            "name": "web-orange"
+        },
+        {
+            "value": "#ffc0cb",
+            "name": "pink"
+        },
+        {
+            "value": "#a52a2a",
+            "name": "mexican-red"
+        },
+        {
+            "value": "#999999",
+            "name": "dusty-gray"
+        },
+        {
+            "value": "#ffffff",
+            "name": "white"
+        },
+        {
+            "value": "#00ffff",
+            "name": "cyan-aqua"
+        },
+        {
+            "value": "#ff00ff",
+            "name": "magenta-fuchsia"
+        },
+        {
+            "value": "#00ff00",
+            "name": "green"
+        },
+        {
+            "value": "#bc2424",
+            "name": "tall-poppy"
+        },
+        {
+            "value": "#9e9ecc",
+            "name": "blue-bell"
+        },
+        {
+            "value": "#808000",
+            "name": "olive"
+        },
+        {
+            "value": "#008080",
+            "name": "teal"
+        },
+        {
+            "value": "#ee82ee",
+            "name": "lavender-magentao"
+        },
+        {
+            "value": "#8426c7",
+            "name": "purple-heart"
+        },
+        {
+            "value": "#ffd700",
+            "name": "gold"
+        },
+        {
+            "value": "#c0c0c0",
+            "name": "silver"
+        },
+        {
+            "value": "#cd7f32",
+            "name": "brandy-punch"
+        },
+        {
+            "value": "#ff7f50",
+            "name": "coral"
+        },
+        {
+            "value": "#fa8072",
+            "name": "salmon"
+        },
+        {
+            "value": "#f0e68c",
+            "name": "khaki"
+        },
+        {
+            "value": "#e6e6fa",
+            "name": "moon-raker"
+        },
+        {
+            "value": "#ffe5b4",
+            "name": "peach"
+        },
+        {
+            "value": "#dda0dd",
+            "name": "light-orchi"
+        },
+        {
+            "value": "#da70d6",
+            "name": "orchid"
+        },
+        {
+            "value": "#98ff98",
+            "name": "mint-green"
+        }
+    ]
+}

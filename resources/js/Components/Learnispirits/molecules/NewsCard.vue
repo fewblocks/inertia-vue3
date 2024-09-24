@@ -18,12 +18,13 @@ defineProps<{
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .news-card {
-    background-color: v-bind(color);
+    background-color: $snuff;
     display: flex;
     justify-content: space-around;
     align-items: center;
     height: 80px;
+    border: 1px solid $mine-shaft;
 }
 </style>

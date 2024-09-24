@@ -1,10 +1,23 @@
 <!-- 姉妹サイト情報カード -->
 <script setup lang="ts">
 import relatedSiteImage from '~/related-site-image.png'
-defineProps<{
+import colorsData from '@/json/output.json'
+import { ColorsData } from '@/types/Colors'
+import { ref } from 'vue'
+const props = defineProps<{
     /** 背景色 */
     color?: string
 }>()
+
+// JSONデータを型付きでインポート
+const data: ColorsData = colorsData || { colors: [] }
+
+const color = ref('')
+const sunglow = data.colors.find((color) => color.name === props.color)
+if (sunglow) {
+    color.value = sunglow.value
+    console.log(color.value)
+}
 </script>
 
 <template>

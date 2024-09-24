@@ -62,7 +62,7 @@ const textBoxStyle = computed(() => (selectedColorIndex: number) => {
         </template>
     </div>
 </template>
-<style scoped>
+<style lang="scss" scoped>
 @keyframes blink {
     0%,
     100% {
@@ -90,98 +90,5 @@ const textBoxStyle = computed(() => (selectedColorIndex: number) => {
 .unselected,
 .blinking {
     font-family: monospace;
-}
-
-.red {
-    background-color: red;
-}
-.blue {
-    background-color: blue;
-}
-.green {
-    background-color: green;
-}
-.yellow {
-    background-color: yellow;
-}
-.purple {
-    background-color: purple;
-}
-.orange {
-    background-color: orange;
-}
-.pink {
-    background-color: pink;
-}
-.brown {
-    background-color: brown;
-}
-.black {
-    background-color: black;
-    color: white;
-}
-.white {
-    background-color: gray;
-    color: black;
-}
-.cyan {
-    background-color: cyan;
-}
-.magenta {
-    background-color: magenta;
-}
-.lime {
-    background-color: lime;
-}
-.maroon {
-    background-color: maroon;
-}
-.navy {
-    background-color: navy;
-}
-.olive {
-    background-color: olive;
-}
-.teal {
-    background-color: teal;
-}
-.violet {
-    background-color: violet;
-}
-.indigo {
-    background-color: indigo;
-}
-.gold {
-    background-color: gold;
-}
-.silver {
-    background-color: silver;
-}
-.bronze {
-    background-color: bronze;
-}
-.coral {
-    background-color: coral;
-}
-.salmon {
-    background-color: salmon;
-}
-.khaki {
-    background-color: khaki;
-}
-.lavender {
-    background-color: lavender;
-}
-.peach {
-    background-color: peach;
-}
-.plum {
-    background-color: plum;
-}
-.orchid {
-    background-color: orchid;
-}
-.mint {
-    background-color: mint;
 }
 </style>

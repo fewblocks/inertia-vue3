@@ -2,9 +2,8 @@
  * ニュースデータ
  */
 export type NewsData = {
-    id: number;
-    new: string;
-    time: string;
-    message: string;
-    color: string;
-};
+    id: number
+    new: string
+    time: string
+    message: string
+}
