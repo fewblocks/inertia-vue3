@@ -14,7 +14,7 @@ import characterIcon from '~/sample_character_icon.png'
 
     margin-top: auto;
     min-width: 200px;
-    min-height: 200px;
+    min-height: 150px;
     .character-icon {
         background-color: red;
         max-width: 100%;

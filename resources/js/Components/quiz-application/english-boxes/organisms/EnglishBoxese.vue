@@ -88,7 +88,7 @@ const isButtonDisabled = computed(() => (boxIndex: number) => {
 /** ボタンのスタイルを動的に設定 */
 const boxStyle = computed(() => (index: number) => {
     const color = colorsObjects.value[index]?.color || ''
-    const baseClass = isButtonDisabled.value(index) ? 'placeholder-text-disabled' : 'placeholder-text'
+    const baseClass = isButtonDisabled.value(index) ? 'placeholder-text-disabled text' : 'placeholder-text text'
     return `${baseClass} me-2 ${color}`
 })
 
@@ -133,7 +133,7 @@ const isButtonExist = (textIndex: number) => {
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .content-box {
     width: fit-content;
     height: fit-content;
@@ -141,7 +141,6 @@ const isButtonExist = (textIndex: number) => {
 }
 .placeholder-text {
     display: inline-block;
-    padding: 20px;
     /* border: 1px solid #000; */
     border-radius: 5px;
     cursor: pointer;
@@ -154,5 +153,38 @@ const isButtonExist = (textIndex: number) => {
     border-radius: 5px;
     cursor: pointer;
     opacity: 0.7;
+}
+
+// @media (width < 600px) は正しい構文ではありません。代わりに @media (max-width: 599px) を使用します。
+// @media (600px <= width) も正しい構文ではありません。代わりに @media (min-width: 600px) を使用します。
+
+// @media (width < 600px) {
+//     .placeholder-text-disabled .placeholder-text {
+//         font-size: small;
+//     }
+// }
+
+// @media (600px <= width) {
+//     .placeholder-text-disabled .placeholder-text {
+//         font-size: large;
+//     }
+// }
+
+@media (max-width: 599px) {
+    .text,
+    .btn-danger {
+        font-size: small;
+        padding: 10px;
+        font-weight: bold;
+    }
+}
+
+@media (min-width: 600px) {
+    .text,
+    .btn-danger {
+        font-size: large;
+        padding: 20px;
+        font-weight: bold;
+    }
 }
 </style>

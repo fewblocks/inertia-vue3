@@ -49,7 +49,7 @@ const colorsObjects = ref(props.colorsObjects)
     max-width: 1280px;
     margin-top: auto;
     min-width: 200px;
-    min-height: 200px;
+    min-height: 50px;
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;

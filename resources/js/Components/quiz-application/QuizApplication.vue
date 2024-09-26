@@ -197,7 +197,7 @@ const checkAnswers = computed(() => {
     <div class="wrap">
         <!-- 日本語 -->
         <div class="content japanese-lines row">
-            <div class="character-icon row col-8 col-md-4">
+            <div class="character-icon row col-6 col-md-4">
                 <CharacterIcon />
             </div>
             <div v-show="isScreenMiddle" class="col-4 position-relative">
@@ -219,7 +219,7 @@ const checkAnswers = computed(() => {
             <EnglishLines :englishLine="props.englishLine" :colorsObjects="colorsObjects" :textObjects="textObjects" />
         </div>
         <!-- 英語ブロック -->
-        <div class="content english-lines row">
+        <div class="content english-lines-block row">
             <EnglishBoxese
                 :textObjects="textObjects"
                 :colorsObjects="colorsObjects"
@@ -232,6 +232,10 @@ const checkAnswers = computed(() => {
 </template>
 
 <style scoped>
+.english-lines-block {
+    margin-top: 20px;
+}
+
 main-content {
     background-color: #ffcc27;
 }
@@ -252,5 +256,19 @@ main-content {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+@media (max-width: 599px) {
+    .japanese-lines {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media (min-width: 600px) {
+    .japanese-lines {
+        display: flex;
+        justify-content: flex-start;
+    }
 }
 </style>

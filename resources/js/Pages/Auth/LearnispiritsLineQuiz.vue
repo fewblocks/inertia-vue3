@@ -44,7 +44,7 @@ const changeCountDownState = (state) => {
 <!-- 動的コンテンツなので、セマンティックなスタイルにしない -->
 <template>
     <main class="col-sm-12 col-md-12">
-        <div style="margin-top: 56px; width: 100%; height: 100dvh">
+        <div class="quiz-application-wrapper" style="margin-top: 56px; width: 100%">
             <!-- クイズ前 -->
             <template v-if="pageState == 'beforeQuiz'">
                 <div style="width: 100%; display: flex; justify-content: center">
@@ -69,9 +69,6 @@ const changeCountDownState = (state) => {
 
             <!-- クイズ中 -->
             <template v-else-if="pageState == 'duringQuiz'">
-                <!-- アクセサ -->
-                <!-- <div>{{ lines[quizCounter].line.japanese_line }}</div>
-                <div>{{ lines[quizCounter].line }}</div> -->
                 <QuizApplication
                     :japaneseLine="lines[quizCounter].line.japanese_line"
                     :englishLine="lines[quizCounter].line.english_line"
@@ -86,8 +83,21 @@ const changeCountDownState = (state) => {
     </aside> -->
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 aside {
     background-color: #ffcc27;
+}
+
+@media (max-width: 599px) {
+    // モバイル対応：クイズがはみ出してしまうため
+    .quiz-application-wrapper {
+        height: 115dvh;
+    }
+}
+
+@media (min-width: 600px) {
+    .quiz-application-wrapper {
+        height: 100dvh;
+    }
 }
 </style>

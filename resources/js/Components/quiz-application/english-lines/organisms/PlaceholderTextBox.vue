@@ -45,24 +45,27 @@ const underlinedText = computed(() => (word) => {
 /** ボタンのスタイルを動的に設定 */
 const textBoxStyle = computed(() => (selectedColorIndex: number) => {
     const colorClass = selectedColorIndex !== null ? colorsObjects.value[selectedColorIndex].color : ''
-    const baseClass = 'fw-bold fs-1 w-auto filled'
+    const baseClass = 'fw-bold w-auto filled'
     return `${baseClass} ${colorClass}`
 })
 </script>
 <template>
     <div class="d-inline-block">
         <template v-if="props.status === 'selected'">
-            <p class="fw-bold fs-1 w-auto blinking selected">__________</p>
+            <span class="selected fw-bold w-auto blinking">__________</span>
         </template>
         <template v-if="props.status === 'unselected'">
-            <p class="fw-bold fs-1 w-auto unselected">__________</p>
+            <span class="unselected fw-bold w-auto">__________</span>
         </template>
         <template v-if="props.status === 'filled'">
-            <p :class="textBoxStyle(props.selectedColorIndex)">{{ underlinedText(props.selectedWord) }}</p>
+            <span :class="textBoxStyle(props.selectedColorIndex)">{{ underlinedText(props.selectedWord) }}</span>
         </template>
     </div>
 </template>
 <style lang="scss" scoped>
+p {
+    margin-bottom: 10px !important;
+}
 @keyframes blink {
     0%,
     100% {
@@ -90,5 +93,36 @@ const textBoxStyle = computed(() => (selectedColorIndex: number) => {
 .unselected,
 .blinking {
     font-family: monospace;
+}
+
+@media (max-width: 599px) {
+    span,
+    .selected,
+    .unselected,
+    .d-inline-block p,
+    .d-inline-block,
+    .filled {
+        height: 25px;
+        padding: 5px;
+        margin-bottom: 15px !important;
+        font-size: medium;
+        padding: 10px;
+        font-weight: bold;
+    }
+}
+
+@media (min-width: 600px) {
+    span,
+    .selected,
+    .unselected,
+    .d-inline-block,
+    .d-inline-block p,
+    .filled {
+        padding: 15px;
+        margin-bottom: 5px !important;
+        font-size: larger;
+        padding: 20px;
+        font-weight: bold;
+    }
 }
 </style>
