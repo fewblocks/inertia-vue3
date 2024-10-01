@@ -97,7 +97,7 @@ aside {
 
 @media (min-width: 600px) {
     .quiz-application-wrapper {
-        height: 100dvh;
+        height: 110dvh;
     }
 }
 </style>

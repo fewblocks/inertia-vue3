@@ -202,15 +202,15 @@ const checkAnswers = computed(() => {
             </div>
             <div v-show="isScreenMiddle" class="col-4 position-relative">
                 <LineQuizCountDownTimerBase :max="5" @changeCountDownState="changeCountDownState" />
+                <Stamp :showAnswer="showAnswer" :answer="checkAnswers" />
             </div>
             <div class="japanese-line row col-12 col-md-8 position-relative">
-                <div class="stamp-wrapper">
-                    <Stamp :showAnswer="showAnswer" :answer="checkAnswers" />
-                </div>
+                <div class="stamp-wrapper"></div>
                 <JapaneseLines :feeling="props.feeling" :japaneseLine="props.japaneseLine" />
                 <!-- カウントダウンタイマー -->
                 <div v-show="!isScreenMiddle" class="col-2 position-relative">
                     <LineQuizCountDownTimerBase :max="5" @changeCountDownState="changeCountDownState" />
+                    <Stamp :showAnswer="showAnswer" :answer="checkAnswers" />
                 </div>
             </div>
         </div>
@@ -254,8 +254,8 @@ main-content {
 
 .stamp-wrapper {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 20%;
+    left: 40%;
 }
 
 @media (max-width: 599px) {

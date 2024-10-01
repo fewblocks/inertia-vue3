@@ -19,17 +19,59 @@ const show = computed(() => {
 <template>
     <figure :class="show">
         <template v-if="props.answer === true">
-            正解
+            <div class="stamp-correct">正解!!</div>
             <img :src="Correct" class="stamp2 wp-image-8151" alt="正解画像" width="150" height="150" />
         </template>
         <template v-else-if="props.answer === false">
-            不正解
+            <div class="stamp-uncorrect">不正解!!</div>
             <img :src="Incorrect" class="stamp2 wp-image-8151" alt="不正解画像" width="150" height="150" />
         </template>
     </figure>
 </template>
 
 <style lang="scss" scoped>
+.my-stamp {
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+}
+
+.stamp-correct {
+    color: $malachite;
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    bottom: -20px;
+    left: 34%;
+    background-color: white;
+    animation: glow 1.5s infinite alternate;
+    border-radius: 10px;
+}
+
+.stamp-uncorrect {
+    width: 80px;
+    color: $red-damask;
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    bottom: -20px;
+    left: 15%;
+    background-color: white;
+    animation: glow 1.5s infinite alternate;
+    border-radius: 10px;
+}
+
+@keyframes glow {
+    0% {
+        background-color: white;
+        box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.5);
+    }
+    100% {
+        background-color: #f0f0f0; /* 少し暗い白色に変更 */
+        box-shadow: 0 0 30px 30px rgba(255, 255, 255, 0.5);
+    }
+}
+
 figure .my-stamp {
     position: relative;
     width: 150px;

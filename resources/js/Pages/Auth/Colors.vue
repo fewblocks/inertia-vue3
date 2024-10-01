@@ -206,7 +206,9 @@ const quizColors = reactive([
     { id: 27, value: getColorValue('peach'), variable: 'peach', description: 'カードの設定色' },
     { id: 28, value: getColorValue('light-orchi'), variable: 'light-orchi', description: 'カードの設定色' },
     { id: 29, value: getColorValue('orchid'), variable: 'orchid', description: 'カードの設定色' },
-    { id: 30, value: getColorValue('mint-green'), variable: 'mint-green', description: 'カードの設定色' }
+    { id: 30, value: getColorValue('mint-green'), variable: 'mint-green', description: 'カードの設定色' },
+    { id: 31, value: getColorValue('malachite'), variable: 'malachite', description: 'スタンプ正解' },
+    { id: 32, value: getColorValue('red-damask'), variable: 'red-damask', description: 'スタンプ不正解' }
 ])
 
 const aphorismColors = reactive([
