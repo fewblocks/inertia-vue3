@@ -91,12 +91,21 @@ aside {
 @media (max-width: 599px) {
     // モバイル対応：クイズがはみ出してしまうため
     .quiz-application-wrapper {
+        background-color: $sugar-cane;
         height: 115dvh;
     }
 }
-
-@media (min-width: 600px) {
+@media (min-width: 600px) and (max-width: 799px) {
+    // タブレット対応：クイズがはみ出してしまうため
     .quiz-application-wrapper {
+        background-color: $sugar-cane;
+        height: 150dvh;
+    }
+}
+
+@media (min-width: 800px) {
+    .quiz-application-wrapper {
+        background-color: $sugar-cane;
         height: 110dvh;
     }
 }

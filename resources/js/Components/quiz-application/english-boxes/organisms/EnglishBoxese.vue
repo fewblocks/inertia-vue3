@@ -98,7 +98,7 @@ const isButtonExist = (textIndex: number) => {
 }
 </script>
 <template>
-    <div class="w-100 d-flex justify-content-start flex-wrap">
+    <div class="english-boxes-wrap w-100 d-flex justify-content-start flex-wrap">
         <template v-for="textObject in textObjects" :key="textObject.index">
             <template v-if="isButtonExist(textObject.index)">
                 <div class="content-box mb-4">
@@ -134,6 +134,11 @@ const isButtonExist = (textIndex: number) => {
 </template>
 
 <style lang="scss" scoped>
+.english-boxes-wrap {
+    padding: 10px;
+    background-color: $caper;
+}
+
 .content-box {
     width: fit-content;
     height: fit-content;

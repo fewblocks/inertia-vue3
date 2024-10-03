@@ -167,6 +167,14 @@
                    {
                        "value":  "#e06e48",
                        "name":  "red-damask"
+                   },
+                   {
+                       "value":  "#f1ffef",
+                       "name":  "sugar-cane"
+                   },
+                   {
+                       "value":  "#e2f0bb",
+                       "name":  "caper"
                    }
                ]
 }

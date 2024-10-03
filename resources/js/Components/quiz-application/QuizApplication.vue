@@ -231,7 +231,7 @@ const checkAnswers = computed(() => {
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .english-lines-block {
     margin-top: 20px;
 }
