@@ -43,8 +43,11 @@ const { resultArray } = useSentenceSplitter(props.englishLine, difficulty)
 resultArray.value
 /** テキストオブジェクツ */
 const textObjects = ref(resultArray)
+/** テキストオブジェクツを逆順にしたもの */
 const reversedTextObjects = ref([])
 
+/** 割り込み（カウントダウン停止） */
+const intercept = ref(false)
 const colors = [
     { color: 'red', index: 0 },
     { color: 'cornflower-blue', index: 1 },
@@ -78,6 +81,7 @@ const colors = [
     { color: 'mint-green', index: 29 }
 ]
 
+/** カラー配列シャッフル */
 const shuffleColorsArray = (array: any[]) => {
     const newArray = array.slice() // 配列のコピーを作成
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -87,29 +91,51 @@ const shuffleColorsArray = (array: any[]) => {
     return newArray
 }
 
+/** カラーオブジェクト */
 const colorsObjects = ref(shuffleColorsArray(colors))
 
-/** ページステート */
-const pageState = ref('beforeCount')
-
-/** ページステート */
+/** 答え表示 */
 const showAnswer = ref(false)
 
 /** 選択中した単語のindex配列 */
 const selectedWordIndexes = ref([])
 
-/** カウントダウンステート変更 */
-const changeCountDownState = (state: string) => {
-    pageState.value = state
+// ページの状態変化
+const emit = defineEmits(['changePageState', 'collect'])
+
+/** ページの状態変化(カウントダウンに終了に伴うもの) */
+const changeCountDownState = (state) => {
+    if (state === 'countDownEnd') {
+        // スタンプ表示（不正解のスタンプを押す不正解のスタンプが押される)
+        showAnswer.value = true
+        stampClass.value = 'wp-block-image size-large is-resized my-stamp my-stamp-on'
+        // 1秒後に伝播
+        setTimeout(() => {
+            emit('changePageState', {
+                state: 'countDownEnd'
+            })
+        }, 1000)
+    }
+}
+
+/** ページの状態変化(正解、不正解発覚時に伴うもの) */
+const changeCorrectState = () => {
+    // 割り込み（カウントダウン停止）
+    intercept.value = true
+    // 1秒後に伝播
+    setTimeout(() => {
+        // 割り込み（カウントダウン最下位）
+        intercept.value = false
+        emit('changePageState', {
+            state: 'countDownEnd'
+        })
+    }, 1000)
 }
 
 const stampClass = ref('wp-block-image size-large is-resized my-stamp')
 
-/** プレースホルダーのボタンを選択した際の処理
- * ボタンの選択された単語を設定
- * ボタンのステータス（入力済み）に変更
- * 次のプレースホルダーのボタンを選択状態にする
- *
+/**
+ * プレースホルダーのボタンを選択した際の処理
  */
 const handleSelectText = ({ boxIndex, nextPlaceholderIndex, buttonWord }) => {
     // ボタンを非活性にする
@@ -140,10 +166,12 @@ const handleSelectText = ({ boxIndex, nextPlaceholderIndex, buttonWord }) => {
     if (!textObjects.value.some((textObject) => textObject.selectedWord === '' && textObject.type === 'placeholder')) {
         showAnswer.value = true
         stampClass.value = 'wp-block-image size-large is-resized my-stamp my-stamp-on'
+        changeCorrectState()
     }
 }
 
-const handleReset = ({ boxIndex }) => {
+//** 単語の選び直しの処理 */
+const resetText = ({ boxIndex }) => {
     // ボタンを活性にする
     textObjects.value = textObjects.value.map((item) => (item.index === boxIndex ? { ...item, disabled: false } : item))
 
@@ -181,6 +209,7 @@ const handleReset = ({ boxIndex }) => {
     )
 }
 
+//** 答え合わせ */
 const checkAnswers = computed(() => {
     if (!showAnswer.value) return null
     let allMatch = true
@@ -189,6 +218,12 @@ const checkAnswers = computed(() => {
             allMatch = false
         }
     })
+    // 正解の場合、伝播
+    if (allMatch) {
+        emit('collect', {
+            isCollect: true
+        })
+    }
     return allMatch
 })
 </script>
@@ -200,8 +235,14 @@ const checkAnswers = computed(() => {
             <div class="character-icon row col-6 col-md-4">
                 <CharacterIcon />
             </div>
+            <!-- v-if だと再レンダリングされ、カウンターもリセットされる -->
             <div v-show="isScreenMiddle" class="col-4 position-relative">
-                <LineQuizCountDownTimerBase :max="5" @changeCountDownState="changeCountDownState" />
+                <LineQuizCountDownTimerBase
+                    :max="10"
+                    :isActionWithCountDownEnd="true"
+                    :intercept="intercept"
+                    @changeCountDownState="changeCountDownState"
+                />
                 <Stamp :showAnswer="showAnswer" :answer="checkAnswers" />
             </div>
             <div class="japanese-line row col-12 col-md-8 position-relative">
@@ -209,7 +250,12 @@ const checkAnswers = computed(() => {
                 <JapaneseLines :feeling="props.feeling" :japaneseLine="props.japaneseLine" />
                 <!-- カウントダウンタイマー -->
                 <div v-show="!isScreenMiddle" class="col-2 position-relative">
-                    <LineQuizCountDownTimerBase :max="5" @changeCountDownState="changeCountDownState" />
+                    <LineQuizCountDownTimerBase
+                        :max="10"
+                        :isActionWithCountDownEnd="true"
+                        :intercept="intercept"
+                        @changeCountDownState="changeCountDownState"
+                    />
                     <Stamp :showAnswer="showAnswer" :answer="checkAnswers" />
                 </div>
             </div>
@@ -224,7 +270,7 @@ const checkAnswers = computed(() => {
                 :textObjects="textObjects"
                 :colorsObjects="colorsObjects"
                 @select-text="handleSelectText"
-                @reset-text="handleReset"
+                @reset-text="resetText"
                 :selectedWordIndexes="selectedWordIndexes"
             />
         </div>

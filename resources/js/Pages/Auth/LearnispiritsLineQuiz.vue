@@ -1,12 +1,31 @@
 <script setup>
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
 import QuizApplication from '@/Components/quiz-application/QuizApplication.vue'
-import { ref } from 'vue'
-const hover = ref(false)
+import { ref, watch } from 'vue'
 
 // ページの状態
 // 'beforeQuiz(クイズ前) -> duringQuiz（クイズ中） -> afterQuiz（クイズ後）'
 // の順番に変化していく
+// 詳細は以下のようになる
+//
+// 1.beforeQuiz(クイズ前)
+//
+//    ↓
+//
+// 2.duringQuiz（クイズ中）
+//
+//    ↓ ............クイズに正解or不正解
+//
+// 3.duringQuizReset （クイズ中でのリセット処理0.5秒）
+//
+//    ↓
+//
+// 4.duringQuiz（クイズ中）
+//
+//    ↓ .............3と4を繰り返す
+//
+// 5.afterQuiz（クイズ後）
+
 const pageState = ref('beforeQuiz')
 
 // ページの状態
@@ -17,12 +36,14 @@ const countDownState = ref('countdownStart')
 // クイズの出題番号、
 const quizCounter = ref(0)
 
+/** 正解数 */
+const collectCounter = ref(0)
+
 // サーバーからのセリフ（クイズデータ取得）
 const props = defineProps({
     lines: Array
 })
 
-console.log(props.lines)
 //　アクセサー
 {
     /* <ul v-for="line in lines" :key="line.id">
@@ -34,9 +55,42 @@ console.log(props.lines)
             </ul> */
 }
 
+/** クイズアプリケーション起動時のカウントダウン終了(手動) */
 const changeCountDownState = (state) => {
     if (state === 'countDownEnd') pageState.value = 'duringQuiz'
 }
+/** ページステータス変更 (クイズ中でのリセット処理) */
+const changePageState = ({ state }) => {
+    if (state === 'countDownEnd') pageState.value = 'duringQuizReset'
+}
+
+/** 正解 */
+const collect = ({ isCollect }) => {
+    if (isCollect) {
+        collectCounter.value = collectCounter.value + 1
+    }
+}
+
+/** ページステート監視（0.5秒インターバル次のクイズ移動） */
+watch(pageState, (newValue, oldValue) => {
+    // クイズ前、クイズ終了の場合は何もしない
+    if (oldValue === 'afterQuiz' || oldValue === 'beforeQuiz') {
+        return
+    }
+
+    // 最大10問、クイズ終了
+    if (quizCounter.value === 9) {
+        pageState.value = 'afterQuiz'
+    }
+
+    // クイズ中でのリセット処理(次のクイズへ)
+    if (newValue === 'duringQuizReset') {
+        setTimeout(() => {
+            quizCounter.value++
+            pageState.value = 'duringQuiz'
+        }, 1000)
+    }
+})
 </script>
 
 <!-- トップページ -->
@@ -57,6 +111,7 @@ const changeCountDownState = (state) => {
                     <LineQuizCountDownTimerBase
                         :max="5"
                         :countDownState="countDownState"
+                        :isActionWithCountDownEnd="false"
                         @changeCountDownState="changeCountDownState"
                     />
 
@@ -73,7 +128,13 @@ const changeCountDownState = (state) => {
                     :japaneseLine="lines[quizCounter].line.japanese_line"
                     :englishLine="lines[quizCounter].line.english_line"
                     :feeling="lines[quizCounter].feeling"
+                    @changePageState="changePageState"
+                    @collect="collect"
                 />
+            </template>
+            <!-- クイズ後 -->
+            <template v-else-if="pageState == 'afterQuiz'">
+                あなたの正解数は{{ `${collectCounter} / 10 ` }}です
             </template>
         </div>
     </main>

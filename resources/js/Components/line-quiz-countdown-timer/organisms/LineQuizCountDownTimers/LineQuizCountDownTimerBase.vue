@@ -3,10 +3,22 @@ import { ref, onMounted } from 'vue'
 import LineQuizCountDownTimerNumber from './LineQuizCountDownTimerNumber.vue'
 
 const props = defineProps({
-    // カウントダウン数
+    /** カウントダウン数 */
     max: Number,
-    // カウントダウンタイマー開閉
-    countDownState: String
+    /** カウントダウンタイマー開閉 */
+    countDownState: String,
+    /** カウントダウンと同時にアクション */
+    isActionWithCountDownEnd: {
+        type: Boolean,
+        default: false,
+        required: false
+    },
+    /** 割り込み(カウントダウン非表示) */
+    intercept: {
+        type: Boolean,
+        default: false,
+        required: false
+    }
 })
 
 // 起動装置クラス名
@@ -41,7 +53,12 @@ onMounted(() => {
 
 // ページの状態変化
 const emit = defineEmits(['changeCountDownState'])
-const changeCountDownState = () => {
+/** カウントダウン終了の伝播 */
+const countDownEnd = () => {
+    emit('changeCountDownState', 'countDownEnd')
+}
+/** クリック時の伝播 */
+const clickSend = () => {
     emit('changeCountDownState', 'countDownEnd')
 }
 
@@ -67,6 +84,10 @@ const countDownStart = () => {
         }
         // カウントダウン上限に達した場合
         if (elapsedSecond.value == max.value) {
+            // カウントダウン終了
+            if (props.isActionWithCountDownEnd) {
+                countDownEnd()
+            }
             // ポーリング停止
             clearInterval(polling)
             // 遅延処理（最後だけ0.5秒追加）
@@ -87,16 +108,25 @@ const countDownStart = () => {
     <div :class="counterClassName">
         <div class="numbers">
             <template v-for="item in counterItemList" :key="item.id">
-                <LineQuizCountDownTimerNumber :class-name="item.className">
-                    {{ item.id }}
-                </LineQuizCountDownTimerNumber>
+                <template v-if="!intercept">
+                    <LineQuizCountDownTimerNumber :class-name="item.className">
+                        {{ item.id }}
+                    </LineQuizCountDownTimerNumber>
+                </template>
             </template>
         </div>
         <h4>Get Ready</h4>
     </div>
     <div :class="launcherClassName">
-        <h1>GO</h1>
-        <button class="launch" v-on:click="changeCountDownState">Launch</button>
+        <template v-if="isActionWithCountDownEnd">
+            <h1>0</h1>
+        </template>
+        <template v-else>
+            <h1>GO</h1>
+        </template>
+        <template v-if="!isActionWithCountDownEnd">
+            <button class="launch" v-on:click="clickSend">Launch</button>
+        </template>
     </div>
 </template>
 
