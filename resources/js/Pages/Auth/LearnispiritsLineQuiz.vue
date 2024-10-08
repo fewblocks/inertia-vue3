@@ -39,6 +39,9 @@ const quizCounter = ref(0)
 /** 正解数 */
 const collectCounter = ref(0)
 
+/** 正解クイズ集 */
+const collectQuiz = ref([])
+
 // サーバーからのセリフ（クイズデータ取得）
 const props = defineProps({
     lines: Array
@@ -65,9 +68,10 @@ const changePageState = ({ state }) => {
 }
 
 /** 正解 */
-const collect = ({ isCollect }) => {
+const collect = ({ isCollect, quizIndex }) => {
     if (isCollect) {
         collectCounter.value = collectCounter.value + 1
+        collectQuiz.value.push(lines[quizIndex])
     }
 }
 
@@ -128,6 +132,7 @@ watch(pageState, (newValue, oldValue) => {
                     :japaneseLine="lines[quizCounter].line.japanese_line"
                     :englishLine="lines[quizCounter].line.english_line"
                     :feeling="lines[quizCounter].feeling"
+                    :quizIndex="quizCounter"
                     @changePageState="changePageState"
                     @collect="collect"
                 />
@@ -135,6 +140,15 @@ watch(pageState, (newValue, oldValue) => {
             <!-- クイズ後 -->
             <template v-else-if="pageState == 'afterQuiz'">
                 あなたの正解数は{{ `${collectCounter} / 10 ` }}です
+                <template v-for="quiz in collectQuiz" :key="quiz.id">
+                    <ul>
+                        <li>{{ lines.some_line_field }}</li>
+                        <li>{{ lines.character.japanese_name }}</li>
+                        <li>{{ lines.character.english_name }}</li>
+                        <li>{{ lines.japanese_line }}</li>
+                        <li>{{ lines.english_line }}</li>
+                    </ul>
+                </template>
             </template>
         </div>
     </main>
