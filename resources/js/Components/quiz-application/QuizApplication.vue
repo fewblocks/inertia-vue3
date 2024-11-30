@@ -35,6 +35,8 @@ const props = defineProps<{
     feeling?: Feeling
     /** クイズIndex */
     quizIndex?: number
+    /** クイズId */
+    quizId?: number
 }>()
 
 /** 難易度 */
@@ -194,7 +196,8 @@ const checkAnswers = computed(() => {
         setTimeout(() => {
             emit('collect', {
                 isCollect: true,
-                quizIndex: props.quizIndex
+                quizIndex: props.quizIndex,
+                quizId: props.quizId
             })
         }, 500)
     }
@@ -212,7 +215,7 @@ const checkAnswers = computed(() => {
             <!-- v-if だと再レンダリングされ、カウンターもリセットされる -->
             <div v-show="isScreenMiddle" class="col-4 position-relative">
                 <LineQuizCountDownTimerBase
-                    :max="10"
+                    :max="5"
                     :isActionWithCountDownEnd="true"
                     :intercept="intercept"
                     @changeCountDownState="changeCountDownState"
@@ -225,7 +228,7 @@ const checkAnswers = computed(() => {
                 <!-- カウントダウンタイマー -->
                 <div v-show="!isScreenMiddle" class="col-2 position-relative">
                     <LineQuizCountDownTimerBase
-                        :max="10"
+                        :max="5"
                         :isActionWithCountDownEnd="true"
                         :intercept="intercept"
                         @changeCountDownState="changeCountDownState"

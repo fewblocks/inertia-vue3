@@ -11,11 +11,7 @@ import NavigationLayout from '../../resources/js/Layouts/NavigationLayout.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFile as faFileSolid } from '@fortawesome/free-solid-svg-icons'
 import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
-import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
-import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faHeartSolid)
-library.add(faHeartRegular)
 library.add(faFileSolid)
 library.add(faFileRegular)
 

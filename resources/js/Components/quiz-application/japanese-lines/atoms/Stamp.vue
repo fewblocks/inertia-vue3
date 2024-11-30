@@ -37,6 +37,7 @@ const show = computed(() => {
 }
 
 .stamp-correct {
+    width: 80px;
     color: $malachite;
     font-size: 20px;
     font-weight: bold;

@@ -1,7 +1,9 @@
 <script setup>
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
 import QuizApplication from '@/Components/quiz-application/QuizApplication.vue'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
+import AfterQuiz from '@/Components/quiz-application/after-quiz/organisms/AfterQuiz.vue'
+import cloneDeep from 'lodash/cloneDeep'
 
 // ページの状態
 // 'beforeQuiz(クイズ前) -> duringQuiz（クイズ中） -> afterQuiz（クイズ後）'
@@ -39,8 +41,11 @@ const quizCounter = ref(0)
 /** 正解数 */
 const collectCounter = ref(0)
 
-/** 正解クイズ集 */
-const collectQuiz = ref([])
+/** 正解クイズ集Index */
+const collectQuizIndexes = ref([]) // これいらないかも
+
+/** 正解クイズ集id */
+const collectQuizIds = ref([])
 
 // サーバーからのセリフ（クイズデータ取得）
 const props = defineProps({
@@ -68,12 +73,39 @@ const changePageState = ({ state }) => {
 }
 
 /** 正解 */
-const collect = ({ isCollect, quizIndex }) => {
+const collect = ({ isCollect, quizIndex, quizId }) => {
     if (isCollect) {
         collectCounter.value = collectCounter.value + 1
-        collectQuiz.value.push(lines[quizIndex])
+        collectQuizIndexes.value.push([quizIndex]) // これいらないかも
+        collectQuizIds.value.push(quizId)
     }
 }
+
+/** クイズ結果オブジェクト */
+// const resultObjects = computed(() => {
+//     const resultObjecs = []
+//     props.lines.forEach((line, i) => {
+//         let resultObject = {}
+//         if (collectQuizIds.value.find((quizId) => line.id === quizId)) {
+//             resultObject = {
+//                 ...line,
+//                 isCollect: true
+//             }
+//             const result = cloneDeep(resultObject)
+//             resultObjecs.push(result)
+//         } else {
+//             resultObject = {
+//                 ...line,
+//                 isCollect: false
+//             }
+//             const result = cloneDeep(resultObject)
+//             resultObjecs.push(result)
+//         }
+//     })
+
+//     console.log(resultObjecs)
+//     return resultObjects
+// })
 
 /** ページステート監視（0.5秒インターバル次のクイズ移動） */
 watch(pageState, (newValue, oldValue) => {
@@ -85,6 +117,7 @@ watch(pageState, (newValue, oldValue) => {
     // 最大10問、クイズ終了
     if (quizCounter.value === 9) {
         pageState.value = 'afterQuiz'
+        return
     }
 
     // クイズ中でのリセット処理(次のクイズへ)
@@ -133,6 +166,7 @@ watch(pageState, (newValue, oldValue) => {
                     :englishLine="lines[quizCounter].line.english_line"
                     :feeling="lines[quizCounter].feeling"
                     :quizIndex="quizCounter"
+                    :quizId="lines[quizCounter].line.id"
                     @changePageState="changePageState"
                     @collect="collect"
                 />
@@ -140,15 +174,7 @@ watch(pageState, (newValue, oldValue) => {
             <!-- クイズ後 -->
             <template v-else-if="pageState == 'afterQuiz'">
                 あなたの正解数は{{ `${collectCounter} / 10 ` }}です
-                <template v-for="quiz in collectQuiz" :key="quiz.id">
-                    <ul>
-                        <li>{{ lines.some_line_field }}</li>
-                        <li>{{ lines.character.japanese_name }}</li>
-                        <li>{{ lines.character.english_name }}</li>
-                        <li>{{ lines.japanese_line }}</li>
-                        <li>{{ lines.english_line }}</li>
-                    </ul>
-                </template>
+                <AfterQuiz :lines="lines" :collectQuizIds="collectQuizIds"> </AfterQuiz>
             </template>
         </div>
     </main>
@@ -161,6 +187,10 @@ watch(pageState, (newValue, oldValue) => {
 <style lang="scss" scoped>
 aside {
     background-color: #ffcc27;
+}
+
+.quiz-application-wrapper {
+    padding: 10px;
 }
 
 @media (max-width: 599px) {
