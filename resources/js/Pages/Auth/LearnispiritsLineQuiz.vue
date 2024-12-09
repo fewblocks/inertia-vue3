@@ -1,7 +1,7 @@
 <script setup>
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
 import QuizApplication from '@/Components/quiz-application/QuizApplication.vue'
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
 import AfterQuiz from '@/Components/quiz-application/after-quiz/organisms/AfterQuiz.vue'
 import cloneDeep from 'lodash/cloneDeep'
 
@@ -52,6 +52,11 @@ const props = defineProps({
     lines: Array
 })
 
+/** ウィンドウの動的高さ */
+const activeHeight = ref(0)
+
+const a = route().current('learnispirits.line-quiz')
+
 //　アクセサー
 {
     /* <ul v-for="line in lines" :key="line.id">
@@ -81,32 +86,6 @@ const collect = ({ isCollect, quizIndex, quizId }) => {
     }
 }
 
-/** クイズ結果オブジェクト */
-// const resultObjects = computed(() => {
-//     const resultObjecs = []
-//     props.lines.forEach((line, i) => {
-//         let resultObject = {}
-//         if (collectQuizIds.value.find((quizId) => line.id === quizId)) {
-//             resultObject = {
-//                 ...line,
-//                 isCollect: true
-//             }
-//             const result = cloneDeep(resultObject)
-//             resultObjecs.push(result)
-//         } else {
-//             resultObject = {
-//                 ...line,
-//                 isCollect: false
-//             }
-//             const result = cloneDeep(resultObject)
-//             resultObjecs.push(result)
-//         }
-//     })
-
-//     console.log(resultObjecs)
-//     return resultObjects
-// })
-
 /** ページステート監視（0.5秒インターバル次のクイズ移動） */
 watch(pageState, (newValue, oldValue) => {
     // クイズ前、クイズ終了の場合は何もしない
@@ -128,6 +107,67 @@ watch(pageState, (newValue, oldValue) => {
         }, 1000)
     }
 })
+
+// ▼▼▼▼ウィンドウの高さを監視して、最低でも1.5倍の高さになるように調整する▼▼▼▼
+
+// Dom要素
+let quizApplicationWrapper = document.getElementById('quiz-application-content')
+let quizApplicationContent = document.getElementById('quiz-application-content')
+
+/**  高さを監視する関数 */
+const observeHeight = () => {
+    // 監視対象の要素がない場合は何もしない
+    if (!quizApplicationContent) return
+    // ResizeObserverを使って高さを監視
+    const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+            activeHeight.value = entry.contentRect.height
+            // targetの高さが変わったら高さを更新
+            updateHeight()
+        }
+    })
+    resizeObserver.observe(quizApplicationContent)
+
+    /** ウィンドウのリサイズイベントを監視 */
+    const handleResize = () => {
+        activeHeight.value = quizApplicationContent.offsetHeight
+        // targetの高さが変わったら高さを更新
+        updateHeight()
+    }
+    window.addEventListener('resize', handleResize)
+
+    /** クリーンアップ関数 */
+    const cleanup = () => {
+        resizeObserver.disconnect()
+        window.removeEventListener('resize', handleResize)
+    }
+    return cleanup
+}
+
+/** 高さを更新する関数 */
+const updateHeight = () => {
+    // ウィンドウの高さが取得できない場合は何もしない
+    if (!activeHeight.value) return
+    // ウィンドウの高さの1.5倍の高さを取得(150vh)
+    const vhHeight = window.innerHeight * 1.5
+    // ウィンドウの高さと取得した高さの大きい方を取得
+    const newHeight = Math.max(activeHeight.value, vhHeight)
+    quizApplicationWrapper.style.height = `${newHeight + 100}px` // ∔100pxは余白
+}
+
+onMounted(() => {
+    // Dom要素を取得
+    quizApplicationWrapper = document.getElementById('quiz-application-wrapper')
+    quizApplicationContent = document.getElementById('quiz-application-content')
+    // 高さを更新
+    updateHeight()
+    // Unmount 前に cleanup関数を呼び出す
+    const { cleanup } = observeHeight()
+    onBeforeUnmount(() => {
+        if (cleanup) cleanup()
+    })
+})
+// ▲▲▲▲ウィンドウの高さを監視して、最低でも1.5倍の高さになるように調整する▲▲▲▲
 </script>
 
 <!-- トップページ -->
@@ -135,47 +175,51 @@ watch(pageState, (newValue, oldValue) => {
 <!-- 動的コンテンツなので、セマンティックなスタイルにしない -->
 <template>
     <main class="col-sm-12 col-md-12">
-        <div class="quiz-application-wrapper" style="margin-top: 56px; width: 100%">
-            <!-- クイズ前 -->
-            <template v-if="pageState == 'beforeQuiz'">
-                <div style="width: 100%; display: flex; justify-content: center">
-                    <!-- 説明文 -->
-                    <div style="position: fixed; top: 30%; width: 100%; display: flex; justify-content: center">
-                        <h2>クイズが開始するまであと...</h2>
-                    </div>
+        <div id="quiz-application-wrapper" class="quiz-application-wrapper" style="margin-top: 56px; width: 100%">
+            <div id="quiz-application-content">
+                <!-- このコンテンツの大きさを監視してサイズを計測 -->
 
-                    <!-- カウントダウンタイマー -->
-                    <LineQuizCountDownTimerBase
-                        :max="5"
-                        :countDownState="countDownState"
-                        :isActionWithCountDownEnd="false"
-                        @changeCountDownState="changeCountDownState"
+                <!-- クイズ前 -->
+                <template v-if="pageState == 'beforeQuiz'">
+                    <div style="width: 100%; display: flex; justify-content: center">
+                        <!-- 説明文 -->
+                        <div style="position: fixed; top: 30%; width: 100%; display: flex; justify-content: center">
+                            <h2>クイズが開始するまであと...</h2>
+                        </div>
+
+                        <!-- カウントダウンタイマー -->
+                        <LineQuizCountDownTimerBase
+                            :max="5"
+                            :countDownState="countDownState"
+                            :isActionWithCountDownEnd="false"
+                            @changeCountDownState="changeCountDownState"
+                        />
+
+                        <!-- 煽り文 -->
+                        <div style="position: fixed; top: 65%; width: 100%; display: flex; justify-content: center">
+                            <h2>最高にハイって奴だーー！！</h2>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- クイズ中 -->
+                <template v-else-if="pageState == 'duringQuiz'">
+                    <QuizApplication
+                        :japaneseLine="lines[quizCounter].line.japanese_line"
+                        :englishLine="lines[quizCounter].line.english_line"
+                        :feeling="lines[quizCounter].feeling"
+                        :quizIndex="quizCounter"
+                        :quizId="lines[quizCounter].line.id"
+                        @changePageState="changePageState"
+                        @collect="collect"
                     />
-
-                    <!-- 煽り文 -->
-                    <div style="position: fixed; top: 65%; width: 100%; display: flex; justify-content: center">
-                        <h2>最高にハイって奴だーー！！</h2>
-                    </div>
-                </div>
-            </template>
-
-            <!-- クイズ中 -->
-            <template v-else-if="pageState == 'duringQuiz'">
-                <QuizApplication
-                    :japaneseLine="lines[quizCounter].line.japanese_line"
-                    :englishLine="lines[quizCounter].line.english_line"
-                    :feeling="lines[quizCounter].feeling"
-                    :quizIndex="quizCounter"
-                    :quizId="lines[quizCounter].line.id"
-                    @changePageState="changePageState"
-                    @collect="collect"
-                />
-            </template>
-            <!-- クイズ後 -->
-            <template v-else-if="pageState == 'afterQuiz'">
-                あなたの正解数は{{ `${collectCounter} / 10 ` }}です
-                <AfterQuiz :lines="lines" :collectQuizIds="collectQuizIds"> </AfterQuiz>
-            </template>
+                </template>
+                <!-- クイズ後 -->
+                <template v-else-if="pageState == 'afterQuiz'">
+                    あなたの正解数は{{ `${collectCounter} / 10 ` }}です
+                    <AfterQuiz :lines="lines" :collectQuizIds="collectQuizIds"> </AfterQuiz>
+                </template>
+            </div>
         </div>
     </main>
     <!-- TODO: クイズ終了後に出す勉強を促す系の広告に修正 -->
@@ -197,21 +241,24 @@ aside {
     // モバイル対応：クイズがはみ出してしまうため
     .quiz-application-wrapper {
         background-color: $sugar-cane;
-        height: 115dvh;
+        height: fit-content;
+        min-height: 150dvh;
     }
 }
 @media (min-width: 600px) and (max-width: 799px) {
     // タブレット対応：クイズがはみ出してしまうため
     .quiz-application-wrapper {
         background-color: $sugar-cane;
-        height: 150dvh;
+        height: fit-content;
+        min-height: 150dvh;
     }
 }
 
 @media (min-width: 800px) {
     .quiz-application-wrapper {
         background-color: $sugar-cane;
-        height: 110dvh;
+        height: fit-content;
+        min-height: 150dvh;
     }
 }
 </style>

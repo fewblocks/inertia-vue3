@@ -1,19 +1,19 @@
 <script setup>
-import { ref } from "vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import NavLink from "@/Components/NavLink.vue";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { Link } from "@inertiajs/vue3";
-import { onMounted } from "vue";
+import { ref } from 'vue'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import Dropdown from '@/Components/Dropdown.vue'
+import DropdownLink from '@/Components/DropdownLink.vue'
+import NavLink from '@/Components/NavLink.vue'
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
+import { Link } from '@inertiajs/vue3'
+import { onMounted } from 'vue'
 
-const showingNavigationDropdown = ref(false);
-const num = ref(1);
+const showingNavigationDropdown = ref(false)
+const num = ref(1)
 
 onMounted(() => {
-    num.value = num.value * 2;
-});
+    num.value = num.value * 2
+})
 </script>
 
 <template>
@@ -21,9 +21,7 @@ onMounted(() => {
         <div class="tw-min-h-screen tw-bg-gray-100">
             <nav class="tw-bg-white tw-border-b tw-border-gray-100">
                 <!-- Primary Navigation Menu -->
-                <div
-                    class="tw-max-w-7xl tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8"
-                >
+                <div class="tw-max-w-7xl tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8">
                     <div class="tw-flex tw-justify-between tw-h-16">
                         <div class="tw-flex">
                             <!-- Logo -->
@@ -37,28 +35,19 @@ onMounted(() => {
                             {{ num }}
 
                             <!-- Navigation Links -->
-                            <div
-                                class="tw-hidden tw-space-x-8 sm:tw--my-px sm:tw-ml-10 sm:tw-flex"
-                            >
-                                <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
-                                >
+                            <div class="tw-hidden tw-space-x-8 sm:tw--my-px sm:tw-ml-10 sm:tw-flex">
+                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
                             </div>
                         </div>
 
-                        <div
-                            class="tw-hidden sm:tw-flex sm:tw-items-center sm:tw-ml-6"
-                        >
+                        <div class="tw-hidden sm:tw-flex sm:tw-items-center sm:tw-ml-6">
                             <!-- Settings Dropdown -->
                             <div class="tw-ml-3 tw-relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
-                                        <span
-                                            class="tw-inline-flex tw-rounded-md"
-                                        >
+                                        <span class="tw-inline-flex tw-rounded-md">
                                             <button
                                                 type="button"
                                                 class="tw-inline-flex tw-items-center tw-px-3 tw-py-2 tw-border tw-border-transparent tw-text-sm tw-leading-4 tw-font-medium tw-rounded-md tw-text-gray-500 tw-bg-white hover:tw-text-gray-700 focus:tw-outline-none tw-transition tw-ease-in-out tw-duration-150"
@@ -82,16 +71,8 @@ onMounted(() => {
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink
-                                            :href="route('profile.edit')"
-                                        >
-                                            Profile
-                                        </DropdownLink>
-                                        <DropdownLink
-                                            :href="route('logout')"
-                                            method="post"
-                                            as="button"
-                                        >
+                                        <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+                                        <DropdownLink :href="route('logout')" method="post" as="button">
                                             Log Out
                                         </DropdownLink>
                                     </template>
@@ -100,27 +81,16 @@ onMounted(() => {
                         </div>
 
                         <!-- Hamburger -->
-                        <div
-                            class="tw--mr-2 tw-flex tw-items-center sm:tw-hidden"
-                        >
+                        <div class="tw--mr-2 tw-flex tw-items-center sm:tw-hidden">
                             <button
-                                @click="
-                                    showingNavigationDropdown =
-                                        !showingNavigationDropdown
-                                "
+                                @click="showingNavigationDropdown = !showingNavigationDropdown"
                                 class="tw-inline-flex tw-items-center tw-justify-center tw-p-2 tw-rounded-md tw-text-gray-400 hover:tw-text-gray-500 hover:tw-bg-gray-100 focus:tw-outline-none focus:tw-bg-gray-100 focus:tw-text-gray-500 tw-transition tw-duration-150 tw-ease-in-out"
                             >
-                                <svg
-                                    class="tw-h-6 tw-w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
+                                <svg class="tw-h-6 tw-w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path
                                         :class="{
                                             hidden: showingNavigationDropdown,
-                                            'tw-inline-flex':
-                                                !showingNavigationDropdown,
+                                            'tw-inline-flex': !showingNavigationDropdown
                                         }"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
@@ -130,8 +100,7 @@ onMounted(() => {
                                     <path
                                         :class="{
                                             hidden: !showingNavigationDropdown,
-                                            'tw-inline-flex':
-                                                showingNavigationDropdown,
+                                            'tw-inline-flex': showingNavigationDropdown
                                         }"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
@@ -148,15 +117,13 @@ onMounted(() => {
                 <div
                     :class="{
                         block: showingNavigationDropdown,
-                        hidden: !showingNavigationDropdown,
+                        hidden: !showingNavigationDropdown
                     }"
                     class="sm:tw-hidden"
                 >
+                    {{ route() }}
                     <div class="tw-pt-2 tw-pb-3 tw-space-y-1">
-                        <ResponsiveNavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
-                        >
+                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
                     </div>
@@ -164,27 +131,17 @@ onMounted(() => {
                     <!-- Responsive Settings Options -->
                     <div class="tw-pt-4 tw-pb-1 tw-border-t tw-border-gray-200">
                         <div class="tw-px-4">
-                            <div
-                                class="tw-font-medium tw-text-base tw-text-gray-800"
-                            >
+                            <div class="tw-font-medium tw-text-base tw-text-gray-800">
                                 {{ $page.props.auth.user.name }}
                             </div>
-                            <div
-                                class="tw-font-medium tw-text-sm tw-text-gray-500"
-                            >
+                            <div class="tw-font-medium tw-text-sm tw-text-gray-500">
                                 {{ $page.props.auth.user.email }}
                             </div>
                         </div>
 
                         <div class="tw-mt-3 tw-space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
-                            >
+                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
@@ -194,9 +151,7 @@ onMounted(() => {
 
             <!-- Page Heading -->
             <header class="tw-bg-white tw-shadow" v-if="$slots.header">
-                <div
-                    class="tw-max-w-7xl tw-mx-auto tw-py-6 tw-px-4 sm:tw-px-6 lg:tw-px-8"
-                >
+                <div class="tw-max-w-7xl tw-mx-auto tw-py-6 tw-px-4 sm:tw-px-6 lg:tw-px-8">
                     <slot name="header" />
                 </div>
             </header>

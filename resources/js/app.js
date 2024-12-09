@@ -14,12 +14,14 @@ import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import LearnispiritsAphorism from './Pages/Auth/LearnispiritsAphorism.vue'
 library.add(faHeartSolid)
 library.add(faHeartRegular)
 library.add(faFileSolid)
 library.add(faFileRegular)
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
+const title = 'Learnispirits'
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

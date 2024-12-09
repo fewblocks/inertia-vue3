@@ -5,6 +5,7 @@
         "paths": {
             "@/*": ["resources/js/*"]
         },
+
         "typeRoots": ["./node_modules/@types", "./resouces/types"]
     },
     "exclude": ["node_modules", "public"]

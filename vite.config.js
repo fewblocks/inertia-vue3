@@ -16,6 +16,7 @@ export default defineConfig({
             bootstrap: ['./node_modules/types/bootstrap']
         }
     },
+    include: ['resources/js/**/*.ts', 'resources/js/**/*.d.ts', 'resources/js/**/*.vue'],
     resolve: {
         alias: {
             // 画像インポートalias

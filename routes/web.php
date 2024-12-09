@@ -4,7 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use App\Http\Controllers\Auth\ColorsController;
+use App\Http\Controllers\Auth\LearnispiritsTopController;
+use App\Http\Controllers\Auth\LearnispiritsAphorismController;
+use App\Http\Controllers\Auth\LearnispiritsLineQuizController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,5 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
 
 require __DIR__.'/auth.php';

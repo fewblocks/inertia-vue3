@@ -39,6 +39,13 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'address' => [
+                'country' => '日本',
+                'state' => '東京都',
+                'city' => '渋谷区',
+                'street' => '道玄坂2-24-1',
+                'postcode' => '150-0043',
+            ],
         ]);
     }
 }

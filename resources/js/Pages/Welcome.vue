@@ -1,12 +1,12 @@
 <script setup>
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link } from '@inertiajs/vue3'
 
 defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
-    phpVersion: String,
-});
+    phpVersion: String
+})
 </script>
 
 <template>
@@ -15,10 +15,7 @@ defineProps({
     <div
         class="tw-relative sm:tw-flex sm:tw-justify-center sm:tw-items-center tw-min-h-screen bg-dots-darker tw-bg-center tw-bg-gray-100 dark:bg-dots-lighter dark:tw-bg-gray-900 selection:tw-bg-red-500 selection:tw-text-white"
     >
-        <div
-            v-if="canLogin"
-            class="sm:tw-fixed sm:tw-top-0 sm:tw-right-0 tw-p-6 tw-text-right"
-        >
+        <div v-if="canLogin" class="sm:tw-fixed sm:tw-top-0 sm:tw-right-0 tw-p-6 tw-text-right">
             <Link
                 :href="route('register')"
                 class="tw-ml-4 tw-font-semibold tw-text-gray-600 hover:tw-text-gray-900 dark:tw-text-gray-400 dark:hover:tw-text-white focus:outline focus:outline-2 focus:tw-rounded-sm focus:outline-red-500"
@@ -57,9 +54,7 @@ defineProps({
             </div>
 
             <div class="tw-mt-16">
-                <div
-                    class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6 lg:tw-gap-8"
-                >
+                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6 lg:tw-gap-8">
                     <a
                         href="https://laravel.com/docs"
                         class="tw-scale-100 tw-p-6 tw-bg-white dark:bg-gray-800/50 dark:tw-bg-gradient-to-bl from-gray-700/50 tw-via-transparent dark:tw-ring-1 dark:tw-ring-inset dark:ring-white/5 tw-rounded-lg tw-shadow-2xl shadow-gray-500/20 dark:tw-shadow-none tw-flex motion-safe:hover:scale-[1.01] tw-transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
@@ -83,20 +78,14 @@ defineProps({
                                 </svg>
                             </div>
 
-                            <h2
-                                class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white"
-                            >
+                            <h2 class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white">
                                 Documentation
                             </h2>
 
-                            <p
-                                class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed"
-                            >
-                                Laravel has wonderful documentation covering
-                                every aspect of the framework. Whether you are a
-                                newcomer or have prior experience with Laravel,
-                                we recommend reading our documentation from
-                                beginning to end.
+                            <p class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed">
+                                Laravel has wonderful documentation covering every aspect of the framework. Whether you
+                                are a newcomer or have prior experience with Laravel, we recommend reading our
+                                documentation from beginning to end.
                             </p>
                         </div>
 
@@ -137,19 +126,14 @@ defineProps({
                                 </svg>
                             </div>
 
-                            <h2
-                                class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white"
-                            >
+                            <h2 class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white">
                                 Laracasts
                             </h2>
 
-                            <p
-                                class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed"
-                            >
-                                Laracasts offers thousands of video tutorials on
-                                Laravel, PHP, and JavaScript development. Check
-                                them out, see for yourself, and massively level
-                                up your development skills in the process.
+                            <p class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed">
+                                Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript
+                                development. Check them out, see for yourself, and massively level up your development
+                                skills in the process.
                             </p>
                         </div>
 
@@ -191,19 +175,14 @@ defineProps({
                                 </svg>
                             </div>
 
-                            <h2
-                                class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white"
-                            >
+                            <h2 class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white">
                                 Laravel News ここにテキスト
                             </h2>
 
-                            <p
-                                class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed"
-                            >
-                                Laravel News is a community driven portal and
-                                newsletter aggregating all of the latest and
-                                most important news in the Laravel ecosystem,
-                                including new package releases and tutorials.
+                            <p class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed">
+                                Laravel News is a community driven portal and newsletter aggregating all of the latest
+                                and most important news in the Laravel ecosystem, including new package releases and
+                                tutorials.
                             </p>
                         </div>
 
@@ -244,17 +223,12 @@ defineProps({
                                 </svg>
                             </div>
 
-                            <h2
-                                class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white"
-                            >
+                            <h2 class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white">
                                 Vibrant Ecosystem
                             </h2>
 
-                            <p
-                                class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed"
-                            >
-                                Laravel's robust library of first-party tools
-                                and libraries, such as
+                            <p class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed">
+                                Laravel's robust library of first-party tools and libraries, such as
                                 <a
                                     href="https://forge.laravel.com"
                                     class="tw-underline hover:tw-text-gray-700 dark:hover:tw-text-white focus:outline focus:outline-2 focus:tw-rounded-sm focus:outline-red-500"
@@ -275,9 +249,8 @@ defineProps({
                                     class="tw-underline hover:tw-text-gray-700 dark:hover:tw-text-white focus:outline focus:outline-2 focus:tw-rounded-sm focus:outline-red-500"
                                     >Envoyer</a
                                 >
-                                help you take your projects to the next level.
-                                Pair them with powerful open source libraries
-                                like
+                                help you take your projects to the next level. Pair them with powerful open source
+                                libraries like
                                 <a
                                     href="https://laravel.com/docs/billing"
                                     class="tw-underline hover:tw-text-gray-700 dark:hover:tw-text-white focus:outline focus:outline-2 focus:tw-rounded-sm focus:outline-red-500"
@@ -314,6 +287,7 @@ defineProps({
                                     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                                 </a>
                             </button>
+                            <!-- {{ $page.props.auth.user.name }} -->
                         </div>
                     </div>
 
@@ -340,19 +314,14 @@ defineProps({
                                 </svg>
                             </div>
 
-                            <h2
-                                class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white"
-                            >
+                            <h2 class="tw-mt-6 tw-text-xl tw-font-semibold tw-text-gray-900 dark:tw-text-white">
                                 Laravel News ここにテキスト
                             </h2>
 
-                            <p
-                                class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed"
-                            >
-                                Laravel News is a community driven portal and
-                                newsletter aggregating all of the latest and
-                                most important news in the Laravel ecosystem,
-                                including new package releases and tutorials.
+                            <p class="tw-mt-4 tw-text-gray-500 dark:tw-text-gray-400 tw-text-sm tw-leading-relaxed">
+                                Laravel News is a community driven portal and newsletter aggregating all of the latest
+                                and most important news in the Laravel ecosystem, including new package releases and
+                                tutorials.
                             </p>
                         </div>
 
@@ -373,12 +342,8 @@ defineProps({
                 </div>
             </div>
 
-            <div
-                class="tw-flex tw-justify-center tw-mt-16 tw-px-6 sm:tw-items-center sm:tw-justify-between"
-            >
-                <div
-                    class="tw-text-center tw-text-sm tw-text-gray-500 dark:tw-text-gray-400 sm:tw-text-left"
-                >
+            <div class="tw-flex tw-justify-center tw-mt-16 tw-px-6 sm:tw-items-center sm:tw-justify-between">
+                <div class="tw-text-center tw-text-sm tw-text-gray-500 dark:tw-text-gray-400 sm:tw-text-left">
                     <div class="tw-flex tw-items-center tw-gap-4">
                         <a
                             href="https://github.com/sponsors/taylorotwell"
