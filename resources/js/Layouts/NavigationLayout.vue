@@ -2,13 +2,12 @@
 import Navbar from '@/Components/Learnispirits/organisms/Navbar.vue'
 import MainVisual from '@/Components/Learnispirits/organisms/MainVisual.vue'
 import FooterBar from '@/Components/Learnispirits/organisms/FooterBar.vue'
-
+import { defineExpose } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
 const { props: shareProps } = usePage()
 
 // const addressData = (shareProps.value as { address: { country: string; state: string; city: string } }).address
-console.log(shareProps.address.country)
 // Define the type for the shared props
 interface SharedProps {
     address: {
@@ -38,13 +37,19 @@ const props = defineProps<{
 const userName = props.auth?.user ? props.auth.user : 'ゲスト'
 const address = `${props.address}`
 const a = route().current('learnispirits.top')
+
+const trueBox = () => {
+    return route().current('learnispirits.top')
+}
+
+const b = route().current('learnispirits.top')
 console.log(a)
 </script>
 
 <template>
     <header>
         <!-- Topページのみメインビジュアル表示 -->
-        <template v-if="route().current('learnispirits.top')">
+        <template v-if="a">
             <MainVisual />
         </template>
     </header>

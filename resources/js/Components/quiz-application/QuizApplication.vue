@@ -215,7 +215,7 @@ const checkAnswers = computed(() => {
             <!-- v-if だと再レンダリングされ、カウンターもリセットされる -->
             <div v-show="isScreenMiddle" class="col-4 position-relative">
                 <LineQuizCountDownTimerBase
-                    :max="5"
+                    :max="15"
                     :isActionWithCountDownEnd="true"
                     :intercept="intercept"
                     @changeCountDownState="changeCountDownState"
@@ -228,7 +228,7 @@ const checkAnswers = computed(() => {
                 <!-- カウントダウンタイマー -->
                 <div v-show="!isScreenMiddle" class="col-2 position-relative">
                     <LineQuizCountDownTimerBase
-                        :max="5"
+                        :max="15"
                         :isActionWithCountDownEnd="true"
                         :intercept="intercept"
                         @changeCountDownState="changeCountDownState"

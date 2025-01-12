@@ -10,9 +10,9 @@ const props = defineProps<{
 
 const className = computed(() => {
     if (!props.isCorrect && !props.isPickUp) {
-        return 'fa-4x dottedText'
+        return 'fa-3x dottedText'
     } else {
-        return 'fa-4x'
+        return 'fa-3x'
     }
 })
 </script>
@@ -38,7 +38,7 @@ FALSE	FALSE	FALSE -->
             </template>
             <template v-else-if="props.isCorrect && props.isPickUp && !props.hasCurrentItem">
                 <!-- 赤アイコン -->
-                <font-awesome-icon :icon="['fas', 'heart']" class="red-icon" />
+                <font-awesome-icon :icon="['fas', 'heart']" class="red-icon" shake />
             </template>
             <template v-else-if="props.isCorrect && !props.isPickUp && props.hasCurrentItem">
                 <!-- 青済アイコン -->
@@ -46,7 +46,7 @@ FALSE	FALSE	FALSE -->
             </template>
             <template v-else-if="props.isCorrect && !props.isPickUp && !props.hasCurrentItem">
                 <!-- 透明アイコン -->
-                <font-awesome-icon :icon="['far', 'heart']" />
+                <font-awesome-icon :icon="['far', 'heart']" fade />
             </template>
             <template v-else-if="!props.isCorrect && props.isPickUp && props.hasCurrentItem">
                 <!-- 無し -->
@@ -74,6 +74,7 @@ FALSE	FALSE	FALSE -->
 <style lang="scss" scoped>
 .font-wrapper {
     position: relative;
+    width: fit-content;
 }
 
 .dottedText:after {

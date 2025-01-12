@@ -4,6 +4,7 @@ import QuizApplication from '@/Components/quiz-application/QuizApplication.vue'
 import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
 import AfterQuiz from '@/Components/quiz-application/after-quiz/organisms/AfterQuiz.vue'
 import cloneDeep from 'lodash/cloneDeep'
+import { useHeightObserver } from '@/Composable/useHeightObserver'
 
 // ページの状態
 // 'beforeQuiz(クイズ前) -> duringQuiz（クイズ中） -> afterQuiz（クイズ後）'
@@ -54,7 +55,6 @@ const props = defineProps({
 
 /** ウィンドウの動的高さ */
 const activeHeight = ref(0)
-
 const a = route().current('learnispirits.line-quiz')
 
 //　アクセサー
@@ -108,65 +108,8 @@ watch(pageState, (newValue, oldValue) => {
     }
 })
 
-// ▼▼▼▼ウィンドウの高さを監視して、最低でも1.5倍の高さになるように調整する▼▼▼▼
-
-// Dom要素
-let quizApplicationWrapper = document.getElementById('quiz-application-content')
-let quizApplicationContent = document.getElementById('quiz-application-content')
-
-/**  高さを監視する関数 */
-const observeHeight = () => {
-    // 監視対象の要素がない場合は何もしない
-    if (!quizApplicationContent) return
-    // ResizeObserverを使って高さを監視
-    const resizeObserver = new ResizeObserver((entries) => {
-        for (let entry of entries) {
-            activeHeight.value = entry.contentRect.height
-            // targetの高さが変わったら高さを更新
-            updateHeight()
-        }
-    })
-    resizeObserver.observe(quizApplicationContent)
-
-    /** ウィンドウのリサイズイベントを監視 */
-    const handleResize = () => {
-        activeHeight.value = quizApplicationContent.offsetHeight
-        // targetの高さが変わったら高さを更新
-        updateHeight()
-    }
-    window.addEventListener('resize', handleResize)
-
-    /** クリーンアップ関数 */
-    const cleanup = () => {
-        resizeObserver.disconnect()
-        window.removeEventListener('resize', handleResize)
-    }
-    return cleanup
-}
-
-/** 高さを更新する関数 */
-const updateHeight = () => {
-    // ウィンドウの高さが取得できない場合は何もしない
-    if (!activeHeight.value) return
-    // ウィンドウの高さの1.5倍の高さを取得(150vh)
-    const vhHeight = window.innerHeight * 1.5
-    // ウィンドウの高さと取得した高さの大きい方を取得
-    const newHeight = Math.max(activeHeight.value, vhHeight)
-    quizApplicationWrapper.style.height = `${newHeight + 100}px` // ∔100pxは余白
-}
-
-onMounted(() => {
-    // Dom要素を取得
-    quizApplicationWrapper = document.getElementById('quiz-application-wrapper')
-    quizApplicationContent = document.getElementById('quiz-application-content')
-    // 高さを更新
-    updateHeight()
-    // Unmount 前に cleanup関数を呼び出す
-    const { cleanup } = observeHeight()
-    onBeforeUnmount(() => {
-        if (cleanup) cleanup()
-    })
-})
+// コンポーザブルを使用して高さを監視
+useHeightObserver('quiz-application-wrapper', 'quiz-application-content')
 // ▲▲▲▲ウィンドウの高さを監視して、最低でも1.5倍の高さになるように調整する▲▲▲▲
 </script>
 
@@ -176,7 +119,7 @@ onMounted(() => {
 <template>
     <main class="col-sm-12 col-md-12">
         <div id="quiz-application-wrapper" class="quiz-application-wrapper" style="margin-top: 56px; width: 100%">
-            <div id="quiz-application-content">
+            <div id="quiz-application-content" class="quiz-application-content">
                 <!-- このコンテンツの大きさを監視してサイズを計測 -->
 
                 <!-- クイズ前 -->
@@ -188,13 +131,14 @@ onMounted(() => {
                         </div>
 
                         <!-- カウントダウンタイマー -->
-                        <LineQuizCountDownTimerBase
-                            :max="5"
-                            :countDownState="countDownState"
-                            :isActionWithCountDownEnd="false"
-                            @changeCountDownState="changeCountDownState"
-                        />
-
+                        <div style="position: fixed; top: 50%; width: 100%; display: flex; justify-content: center">
+                            <LineQuizCountDownTimerBase
+                                :max="5"
+                                :countDownState="countDownState"
+                                :isActionWithCountDownEnd="false"
+                                @changeCountDownState="changeCountDownState"
+                            />
+                        </div>
                         <!-- 煽り文 -->
                         <div style="position: fixed; top: 65%; width: 100%; display: flex; justify-content: center">
                             <h2>最高にハイって奴だーー！！</h2>
@@ -216,8 +160,9 @@ onMounted(() => {
                 </template>
                 <!-- クイズ後 -->
                 <template v-else-if="pageState == 'afterQuiz'">
-                    あなたの正解数は{{ `${collectCounter} / 10 ` }}です
-                    <AfterQuiz :lines="lines" :collectQuizIds="collectQuizIds"> </AfterQuiz>
+                    <!-- <div class="col-12">あなたの正解数は{{ `${collectCounter} / 10 ` }}です</div> -->
+                    <AfterQuiz :lines="lines" :collectQuizIds="collectQuizIds" :collectCounter="collectCounter">
+                    </AfterQuiz>
                 </template>
             </div>
         </div>
@@ -235,6 +180,11 @@ aside {
 
 .quiz-application-wrapper {
     padding: 10px;
+}
+
+.quiz-application-content {
+    display: flex;
+    justify-content: center;
 }
 
 @media (max-width: 599px) {

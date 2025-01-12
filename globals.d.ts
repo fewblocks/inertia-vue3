@@ -2,7 +2,7 @@
 import 'ziggy-js'
 
 declare global {
-    function route(...args: any[]): any
+    function route(name?: string, params?: any, absolute?: boolean, config?: any): any
 }
 
 export {}
