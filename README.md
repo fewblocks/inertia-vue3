@@ -27,7 +27,7 @@ Laravel has the most extensive and thorough [documentation](https://laravel.com/
 
 You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+If ＃＃＃＃＃＃ don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
 ## Laravel Sponsors
 
@@ -70,3 +70,87 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 line　テーブルの difficalty は、設定せず、レアリティー（rarity）に変更し、
 出現頻度に変える、
 difficalty は、ユーザーが選択するものなので、DBに保持しておく必要なし。
+
+## 色追加の方法
+
+### vsCodeのカラーピッカーで色を指定
+
+```css
+.correct-line {
+    background-color: rgb(163, 232, 163);
+}
+```
+
+### Copilot でHEXコードに変更
+
+```css
+.correct-line {
+    background-color: #a3e8a3;
+}
+```
+
+### カラーネームを取得
+
+Name That Color　で getColorName をコマンド出力
+
+```css
+.correct-line {
+    background-color: #9DE093;
+    // #9DE093 is Granny Smith Apple (granny-smith-apple).
+}
+```
+
+※実際255 \* 255 \* 255 \*\*\*\*色の名前があるわけではないので、近似のカラーネームの hex値に吸収される
+
+### カラー変数ファイルに追加
+
+`resources\sass\_variables.scss`
+
+にカラーコードを追加
+
+`$granny-smith-apple: #9DE093 `
+
+### コンバートファイルの実行
+
+PowerShellの実行
+↓
+output.jsonが生成される
+
+### コンバートファイルの上書き
+
+`resources\js\json\output.json`\*\*\*\*
+ファイルの上書き
+
+### colors
+
+`resources\js\Pages\Auth\Colors.vue`
+の更新
+
+```js
+    { id: 32, value: getColorValue('red-damask'), variable: 'red-damask', description: 'スタンプ不正解' },
+    {
+        id: 33,
+        value: getColorValue('sugar-cane'),
+        variable: 'sugar-cane',
+        description: 'クイズアプリケーションバックグラウンドカラー'
+    },
+    { id: 34, value: getColorValue('caper'), variable: 'caper', description: '英語ブロック背景' },
+    {                                                    // ← 新しく追加したブロックの追加
+        id: 35,
+        value: getColorValue('granny-smith-apple'),
+        variable: 'granny-smith-apple',
+        description: 'クイズ結果正解カード背景'
+    }
+
+```
+
+`http://127.0.0.1:8000/learnispirits/colors`
+にてカラー一覧の表示確認
+
+### 直接記述個所を参照記述に修正
+
+```scss
+.correct-line {
+    background-color: $granny-smith-apple;
+}
+```

@@ -8,13 +8,14 @@ const props = defineProps<{
         english_line: string
     }
     isCorrect: boolean
-    isOverlap: boolean
     isAfterCollection: boolean
     lastPickUpIndex?: number
+    isPickUp?: boolean
 }>()
 
-console.log(props.lastPickUpIndex, 'props.lastPickUpIndex')
+/** コレクション対象のカードのスタイル */
 const cardStyle = computed(() =>
+    // コレクション後のカードの場合、10pxずつずらして重ねて表示する
     props.isAfterCollection
         ? {
               position: 'absolute' as 'absolute',
@@ -30,22 +31,31 @@ const cardStyle = computed(() =>
 
 const cardClassName = computed(() => {
     let name = ''
+    // 正解か不正解か
     name = props.isCorrect ? 'row correct-line' : 'row incorrect-line'
-    name += props.isAfterCollection ? ' container' : ''
+    //  コレクション後のカードかどうか(カード全体を発光させる)
+    name += props.isAfterCollection ? ' container glow-wrapper' : ''
+    // ピックアップされているかどうか(カード単体を発光させる)
+    name += props.isPickUp ? ' glow' : ''
     return name
 })
 </script>
 
 <template>
     <div :class="cardClassName" :style="cardStyle">
+        <!-- カードインデックス -->
         <div class="question-index">
             <div class="text-top">
+                <!-- コレクション後は重なった一番上だけインデックスを見せる -->
                 {{ lastPickUpIndex ? lastPickUpIndex : props.index }}
             </div>
         </div>
+        <!-- 問題文 -->
         <div class="question-text">
             <ul>
+                <!-- 日本語テキストライン -->
                 <li style="text-decoration: underline">{{ props.line.japanese_line }}</li>
+                <!-- 英語テキストライン -->
                 <li>{{ props.line.english_line }}</li>
             </ul>
         </div>
@@ -53,10 +63,37 @@ const cardClassName = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+// 正解不正解時のテキストラインスタイル
+.correct-line {
+    background-color: $granny-smith-apple;
+    color: black;
+}
+.incorrect-line {
+    background-color: $dove-gray;
+    color: $dusty-gray;
+}
+
+// カード単体発光エフェクト
+.glow {
+    transition: box-shadow ease-in-out 0.5s;
+    filter: drop-shadow(5px 5px 0px #ffffff);
+    box-shadow: 0px 0px 26px 7px $salmon;
+}
+
+// カード全体発行エフェクト
+.glow-wrapper {
+    transition: box-shadow ease-in-out 0.5s;
+    // TODO: 色の調整必要
+    filter: drop-shadow(10px 10px 15px rgb(255, 210, 154));
+}
+
+// コレクション後のカードスタイル
 .container {
+    // カードを重ねて表示するためのスタイルのため、高さ、幅を固定する
     overflow: hidden;
     width: 100%;
     height: 200px;
+    // テキストはそれぞれのカードに収まるようにする（...省略表示）
     .question-text > ul > li {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -64,19 +101,14 @@ const cardClassName = computed(() => {
     }
 }
 
+// インデックスのスタイル
 .question-index {
     font-size: 1.5rem;
     font-weight: bold;
 }
 
+// 問題文のスタイル
 .question-text {
     font-size: 1.5rem;
-}
-
-.correct-line {
-    background-color: green;
-}
-.incorrect-line {
-    background-color: red;
 }
 </style>

@@ -6,26 +6,36 @@ const props = defineProps<{
     pickUpCounter?: number
     showLayerText?: boolean
     showEffect?: boolean
+    isBounce?: boolean
 }>()
-const fontWrappperClassName = computed(() => {
+
+/** アイコンのラッパーのラッパーのクラス名 */
+const iconWrappperWrapperClassName = computed(() => {
+    // バウンスエフェクトを付けるかどうか
     let name = ''
-    props.showEffect ? (name = 'font-wrapper site') : (name = 'font-wrapper bounce-text')
+    !props.isBounce ? (name = 'icon-wrapper-wrapper') : (name = 'icon-wrapper-wrapper bounce-text')
     return name
 })
 
+/** アイコンのラッパーのクラス名 */
 const iconWrappperClassName = computed(() => {
+    // カウンターを表示するかどうか
     let name = ''
     props.showLayerText ? (name = 'icon-wrapper') : (name = 'icon-wrapper-without-counter')
     return name
 })
 
+/** アイコンのクラス名 */
 const iconClass = computed(() => {
+    // アイコン用のエフェクトを付けるかどうか
     let name = ''
     props.showEffect ? (name = 'fa-5x bookmark-icon effect-icon') : (name = 'fa-5x bookmark-icon')
     return name
 })
 
+/** パーティクルのクラス名 */
 const particlesClass = computed(() => {
+    // パーティクル用のエフェクトを付けるかどうか
     let name = ''
     props.showEffect ? (name = 'particles effect-perticles') : (name = 'particles')
     return name
@@ -34,9 +44,10 @@ const particlesClass = computed(() => {
 
 <template>
     <div class="d-flex justify-content-center pt-4">
-        <div :class="fontWrappperClassName">
+        <!-- アイコン本体 -->
+        <div :class="iconWrappperWrapperClassName">
             <div :class="iconWrappperClassName">
-                <font-awesome-layers :class="iconClass" style="color: #ffd43b" bounce>
+                <font-awesome-layers :class="iconClass" style="color: #ffd43b">
                     <font-awesome-icon :icon="['fas', 'star']" />
                     <transition name="fade" mode="out-in">
                         <div v-if="props.showLayerText">
@@ -46,6 +57,7 @@ const particlesClass = computed(() => {
                 </font-awesome-layers>
             </div>
         </div>
+        <!-- パーティクル -->
         <div :class="particlesClass">
             <span></span>
             <span></span>
@@ -58,32 +70,32 @@ const particlesClass = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+// パーティクル用の色
 :root {
-    --primary-color: #ff4757;
-    --bg: #f5f5f5;
-    --orange: #ff7f50;
-    --green: #2ecc71;
-    --blue: #3498db;
-    --pink: #ff6b81;
-    --lime: #00ff00;
+    --primary-color: $red;
+    --orange: $coral;
+    --green: $malachite;
+    --blue: $cyan-aqua;
+    --pink: $pink;
+    --lime: $green;
 }
 
+// 基本スタイル
 * {
     margin: 0;
     padding: 0;
 }
 
-.site {
-    display: flex;
-    align-items: center;
-    justify-self: center;
-    height: 100%;
+// ブックマーク用アイコン
+.bookmark-icon {
+    margin-right: 5px;
 }
-
+// エフェクト用のアイコン
 .effect-icon {
     animation: scale 1s 0.2s;
 }
 
+// スケールアニメーション
 @keyframes scale {
     0%,
     100% {
@@ -95,6 +107,7 @@ const particlesClass = computed(() => {
     }
 }
 
+// パーティクルの基本スタイル
 .particles {
     position: absolute;
     width: 90px;
@@ -103,13 +116,14 @@ const particlesClass = computed(() => {
     margin-left: 10px;
 }
 
+// パーティクルの疑似要素
 .particles::before {
     content: '';
     position: absolute;
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    box-shadow: inset 0 0 0 50px #ff4757;
+    box-shadow: inset 0 0 0 50px $mint-green;
     opacity: 0;
     transform: scale(0);
     transition:
@@ -118,12 +132,12 @@ const particlesClass = computed(() => {
         transform 0.3s;
 }
 
+// エフェクト用のパーティクル
 .effect-perticles::before {
-    box-shadow: inset 0 0 0 0 #ff4757;
+    box-shadow: inset 0 0 0 0 $cyan-aqua;
     opacity: 1;
-    transform: scale(1);
+    transform: scale(2);
 }
-
 .particles span {
     position: absolute;
     top: 0;
@@ -154,27 +168,27 @@ const particlesClass = computed(() => {
 }
 
 .particles span:nth-child(1) {
-    background: #ff4757;
+    background: $red;
     --item: 1;
 }
 .particles span:nth-child(2) {
-    background: #ff7f50;
+    background: $coral;
     --item: 2;
 }
 .particles span:nth-child(3) {
-    background: #2ecc71;
+    background: $malachite;
     --item: 3;
 }
 .particles span:nth-child(4) {
-    background: #3498db;
+    background: $cyan-aqua;
     --item: 4;
 }
 .particles span:nth-child(5) {
-    background: #ff6b81;
+    background: $pink;
     --item: 5;
 }
 .particles span:nth-child(6) {
-    background: #00ff00;
+    background: $green;
     --item: 6;
 }
 
@@ -194,6 +208,7 @@ const particlesClass = computed(() => {
     box-sizing: border-box;
 }
 
+// フェードインアウトのスタイル(transitionsコンポーネント)
 .fade-enter-active,
 .fade-leave-active {
     transition:
@@ -206,18 +221,22 @@ const particlesClass = computed(() => {
     height: 0;
     width: 0;
 }
-.font-wrapper {
+
+// アイコンのラッパーのラッパーのスタイル
+.icon-wrapper-wrapper {
     position: relative;
     width: fit-content;
     color: black;
 }
 
+// アイコンのラッパーのスタイル
 .icon-wrapper,
 .icon-wrapper-without-counter {
     position: relative;
     display: inline-block;
 }
 
+// ポインターのスタイル（エフェクトが終わると押せなくなる）
 .icon-wrapper {
     cursor: pointer;
 }
@@ -225,6 +244,7 @@ const particlesClass = computed(() => {
     cursor: default;
 }
 
+// アイコン内文字列のスタイル
 .icon-wrapper::after {
     content: 'click!';
     position: absolute;
@@ -232,10 +252,11 @@ const particlesClass = computed(() => {
     left: 55%;
     transform: translate(-50%, -50%);
     font-size: 1rem;
-    color: red; /* 文字の色を指定 */
+    color: $red; /* 文字の色を指定 */
     pointer-events: none; /* クリックイベントを無視 */
 }
 
+// アイコン内文字列のスタイル（エフェクトが終わると非表示になる）
 .icon-wrapper-without-counter::after {
     content: 'click!';
     position: absolute;
@@ -243,18 +264,17 @@ const particlesClass = computed(() => {
     left: 55%;
     transform: translate(-50%, -50%);
     font-size: 1rem;
-    color: red; /* 文字の色を指定 */
+    color: $red; /* 文字の色を指定 */
     pointer-events: none; /* クリックイベントを無視 */
     opacity: 1;
     -webkit-transition: opacity 500ms;
     transition: opacity 500ms;
 }
-
 .icon-wrapper-without-counter:after {
     opacity: 0;
 }
 
-// テキストのアニメーション layers-text には効かない ので直接追記
+// テキストのアニメーション layers-text には効かないので直接追記
 @keyframes bounce {
     0%,
     20%,
@@ -270,7 +290,6 @@ const particlesClass = computed(() => {
         transform: translateY(-15px);
     }
 }
-
 .bounce-text {
     animation: bounce 2s infinite;
 }

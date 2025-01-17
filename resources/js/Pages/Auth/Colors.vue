@@ -140,21 +140,10 @@
 import { reactive } from 'vue'
 import colorsData from '@/json/output.json'
 import { ColorsData } from '@/types/Colors'
-// Remove the duplicate import statement for 'ColorsData'
+import { getColorValue } from '@/utils/colors'
 
 // JSONデータを型付きでインポート
 const data: ColorsData = colorsData || { colors: [] }
-
-const getColorValue = (name) => {
-    console.log(data.colors.find((color) => color.name === name))
-    return data.colors.find((color) => color.name === name).value
-}
-// const color = ref('')
-// const sunglow = data.colors.find((color) => color.name === props.color)
-// if (sunglow) {
-//     color.value = sunglow.value
-//     console.log(color.value)
-// }
 
 const commonColors = reactive([
     { id: 1, value: getColorValue('sunglow'), variable: 'sunglow', description: '広告表示用' },
@@ -215,7 +204,25 @@ const quizColors = reactive([
         variable: 'sugar-cane',
         description: 'クイズアプリケーションバックグラウンドカラー'
     },
-    { id: 34, value: getColorValue('caper'), variable: 'caper', description: '英語ブロック背景' }
+    { id: 34, value: getColorValue('caper'), variable: 'caper', description: '英語ブロック背景' },
+    {
+        id: 35,
+        value: getColorValue('granny-smith-apple'),
+        variable: 'granny-smith-apple',
+        description: 'クイズ結果正解カード背景'
+    },
+    {
+        id: 36,
+        value: getColorValue('emperor'),
+        variable: 'emperor',
+        description: 'クイズ結果不正カード背景'
+    },
+    {
+        id: 37,
+        value: getColorValue('dusty-gray'),
+        variable: 'dusty-gray',
+        description: 'クイズ結果不正カード文字色'
+    }
 ])
 
 const aphorismColors = reactive([
