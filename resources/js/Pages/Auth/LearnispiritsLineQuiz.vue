@@ -48,10 +48,29 @@ const collectQuizIndexes = ref([]) // これいらないかも
 /** 正解クイズ集id */
 const collectQuizIds = ref([])
 
-// サーバーからのセリフ（クイズデータ取得）
+/**  サーバーからのセリフ（クイズデータ取得）*/
 const props = defineProps({
     lines: Array
 })
+
+// TODO: 難易度変更、簡易関数、要リファクタリング
+/** 難易度 */
+const difficulty = ref('medium')
+const high = () => {
+    difficulty.value = 'high'
+}
+const medium = () => {
+    difficulty.value = 'medium'
+}
+const low = () => {
+    difficulty.value = 'low'
+}
+
+const timeLimit = ref(1)
+const timeLimitChange = (event) => {
+    timeLimit.value = event.target.value
+}
+//
 
 /** ウィンドウの動的高さ */
 const activeHeight = ref(0)
@@ -96,6 +115,7 @@ watch(pageState, (newValue, oldValue) => {
     // 最大10問、クイズ終了
     if (quizCounter.value === 9) {
         pageState.value = 'afterQuiz'
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         return
     }
 
@@ -104,6 +124,7 @@ watch(pageState, (newValue, oldValue) => {
         setTimeout(() => {
             quizCounter.value++
             pageState.value = 'duringQuiz'
+            window.scrollTo({ top: 0, behavior: 'smooth' })
         }, 1000)
     }
 })
@@ -143,6 +164,29 @@ useHeightObserver('quiz-application-wrapper', 'quiz-application-content')
                         <div style="position: fixed; top: 65%; width: 100%; display: flex; justify-content: center">
                             <h2>最高にハイって奴だーー！！</h2>
                         </div>
+                        <div class="row">
+                            <div>
+                                <button v-on:click="high">high</button>
+                            </div>
+                            <div>
+                                <button v-on:click="medium">medium</button>
+                            </div>
+                            <div>
+                                <button v-on:click="low">low</button>
+                            </div>
+                            <div>
+                                <input
+                                    type="range"
+                                    id="volume"
+                                    name="volume"
+                                    min="1"
+                                    max="30"
+                                    v-model="timeLimit"
+                                    v-on:change="timeLimitChange"
+                                />
+                                <label for="volume">Volume: {{ timeLimit }}</label>
+                            </div>
+                        </div>
                     </div>
                 </template>
 
@@ -154,6 +198,8 @@ useHeightObserver('quiz-application-wrapper', 'quiz-application-content')
                         :feeling="lines[quizCounter].feeling"
                         :quizIndex="quizCounter"
                         :quizId="lines[quizCounter].line.id"
+                        :difficulty="difficulty"
+                        :timeLimit="timeLimit"
                         @changePageState="changePageState"
                         @collect="collect"
                     />

@@ -7,15 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 use App\Enums\Feeling;
 use App\Enums\Difficulty;
 use App\Models\Characters;
+use App\Models\Collections;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Line extends Model
 {
+    use SoftDeletes;
     use HasFactory;
 
-    // リレーションの定義
+    // リレーションの定義(キャラクターとのリレーション)
     public function character()
     {
         return $this->belongsTo(Characters::class, 'character_id', 'id');
+    }
+
+    // リレーションの定義(コレクションとのリレーション)
+    public function collections()
+    {
+        return $this->hasMany(Collections::class);
     }
 
     // 参照させたいSQLのテーブル名を指定してあげる

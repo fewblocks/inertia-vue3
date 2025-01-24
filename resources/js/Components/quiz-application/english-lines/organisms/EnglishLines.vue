@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, Reactive, ref } from 'vue'
-import { useSentenceSplitter } from '@/Composable/useSentenceSplitter'
 import StaticTextBox from '@/Components/quiz-application/english-lines/organisms/StaticTextBox.vue'
 import PlaceholderTextBox from '@/Components/quiz-application/english-lines/organisms/PlaceholderTextBox.vue'
 

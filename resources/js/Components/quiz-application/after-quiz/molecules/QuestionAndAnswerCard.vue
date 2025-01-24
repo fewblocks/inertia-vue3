@@ -11,6 +11,7 @@ const props = defineProps<{
     isAfterCollection: boolean
     lastPickUpIndex?: number
     isPickUp?: boolean
+    hasCurrentItem?: boolean
 }>()
 
 /** コレクション対象のカードのスタイル */
@@ -32,7 +33,9 @@ const cardStyle = computed(() =>
 const cardClassName = computed(() => {
     let name = ''
     // 正解か不正解か
-    name = props.isCorrect ? 'row correct-line' : 'row incorrect-line'
+    name += props.isCorrect ? 'row correct-' : 'row incorrect-'
+    // 正解か不正解か
+    name += props.hasCurrentItem ? 'has-current-line' : 'has-not-line'
     //  コレクション後のカードかどうか(カード全体を発光させる)
     name += props.isAfterCollection ? ' container glow-wrapper' : ''
     // ピックアップされているかどうか(カード単体を発光させる)
@@ -63,14 +66,28 @@ const cardClassName = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-// 正解不正解時のテキストラインスタイル
-.correct-line {
-    background-color: $granny-smith-apple;
+// 正解不正解, コレクション済みかどうかのテキストラインスタイル
+.correct-has-current-line {
+    background-color: $teal;
     color: black;
+    opacity: 0.5;
+    margin: 5px;
 }
-.incorrect-line {
-    background-color: $dove-gray;
-    color: $dusty-gray;
+.correct-has-not-line {
+    background-color: $teal;
+    color: black;
+    margin: 5px;
+}
+.incorrect-has-current-line {
+    background-color: $dusty-gray;
+    color: $emperor;
+    opacity: 0.5;
+    margin: 5px;
+}
+.incorrect-has-not-line {
+    background-color: $dusty-gray;
+    color: $emperor;
+    margin: 5px;
 }
 
 // カード単体発光エフェクト

@@ -18,21 +18,37 @@ class LearnispiritsLineQuizController extends Controller
 
     public function index ()
     {
+        $userId = auth()->id() ?? 1;
+
         // ランダムに10件取得し、関連するキャラクターをロード
+        // また、ユーザーが既にコレクションしているどうかも取得
         // $lines = Line::with('character')->inRandomOrder()->limit(10)->get();
         // return Inertia::render('Auth/LearnispiritsLineQuiz', ['lines' => $lines]);
 
-
-
-        $lines = Line::with('character')->inRandomOrder()->limit(10)->get()->map(function($line) {
-            return [
-                'id' => $line->id,
-                'character' => $line->character,
-                'line' => $line,
-                // 'feeling' => $line->feeling->label(),
-                'feeling' => $line->feeling
-            ];
-        });
+        $lines = Line::with(['character'])
+        // withCountはdeleted_atを自動的には考慮しません。
+        // ソフトデリートされたレコードを除外するには、以下のように明示的に条件を指定する必要があります
+        ->withCount(['collections' => function($query) use ($userId) {
+            $query->where('user_id', $userId)
+                  ->whereNull('deleted_at');  // ソフトデリート済みのレコードを除外
+        }])
+            ->get()
+            // TODO: 一旦userId の確認
+            ->map(function ($line) use ($userId) {
+                return [
+                    'id' => $line->id,
+                    'character' => $line->character,
+                    'line' => $line,
+                    // 'feeling' => $line->feeling->label(),
+                    'feeling' => $line->feeling,
+                    // withCount(['collections'])を使用すると、
+                    // 自動的に{relation}_countという命名規則でカウント値が取得されます
+                    // この場合はcollections_countというキーで取得できます
+                    'has_current_item' => $line->collections_count > 0,
+                    // TODO: 一旦userId の確認
+                    'console_log_user_id_is_existing' => $userId
+                ];
+            });
 
         return Inertia::render('Auth/LearnispiritsLineQuiz', ['lines' => $lines]);
     }

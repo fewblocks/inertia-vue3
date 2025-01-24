@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { breakpoints } from '@/utils/breakpoints'
 import CharacterIcon from '@/Components/quiz-application/japanese-lines/atoms/CharacterIcon.vue'
 import JapaneseLines from '@/Components/quiz-application/japanese-lines/organisms/JapaneseLines.vue'
@@ -37,17 +37,30 @@ const props = defineProps<{
     quizIndex?: number
     /** クイズId */
     quizId?: number
+    /** 難易度 */
+    difficulty?: string
+    /** 制限時間 */
+    timeLimit?: number
 }>()
 
 /** 難易度 */
-const difficulty = 'medium' // "high", "medium", "low" のいずれか
+const difficulty = ref(props.difficulty) // "high", "medium", "low" のいずれか
 
 /**  TODO: 仮の値（日本語文）*/
 /**  文章分割処理結果取得 「文章全部」「難易度」 */
-const { resultArray } = useSentenceSplitter(props.englishLine, difficulty)
-resultArray.value
+// const { resultArray } = useSentenceSplitter(props.englishLine, difficulty)
+// /** テキストオブジェクツ */
+// const text   Objects = ref(resultArray)
+
 /** テキストオブジェクツ */
-const textObjects = ref(resultArray)
+const textObjects = ref(useSentenceSplitter(props.englishLine, props.difficulty).resultArray)
+
+// props.difficulty または props.englishLine が変更されたときに textObjects を更新
+watch([difficulty.value, () => props.englishLine], () => {
+    textObjects.value = useSentenceSplitter(props.englishLine, props.difficulty).resultArray.value
+    console.log(textObjects.value)
+})
+
 /** テキストオブジェクツを逆順にしたもの */
 const reversedTextObjects = ref([])
 
@@ -215,7 +228,7 @@ const checkAnswers = computed(() => {
             <!-- v-if だと再レンダリングされ、カウンターもリセットされる -->
             <div v-show="isScreenMiddle" class="col-4 position-relative">
                 <LineQuizCountDownTimerBase
-                    :max="15"
+                    :max="props.timeLimit"
                     :isActionWithCountDownEnd="true"
                     :intercept="intercept"
                     @changeCountDownState="changeCountDownState"
@@ -228,7 +241,7 @@ const checkAnswers = computed(() => {
                 <!-- カウントダウンタイマー -->
                 <div v-show="!isScreenMiddle" class="col-2 position-relative">
                     <LineQuizCountDownTimerBase
-                        :max="15"
+                        :max="props.timeLimit"
                         :isActionWithCountDownEnd="true"
                         :intercept="intercept"
                         @changeCountDownState="changeCountDownState"

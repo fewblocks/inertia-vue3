@@ -15,6 +15,16 @@ const className = computed(() => {
         return 'fa-3x'
     }
 })
+const fontWrapperClassName = computed(() => {
+    let name = 'font-wrapper'
+    if (!props.isCorrect) name += ' incorrect-item'
+    if (props.hasCurrentItem) name += ' hascurrent-item'
+    return name
+})
+
+const layerTextClassName = computed(() => {
+    return props.isCorrect ? 'layer correct-text' : 'layer incorrect-text'
+})
 </script>
 
 <!-- isCorrect	isPickUp	hasCurrentItem
@@ -31,7 +41,13 @@ FALSE	FALSE	FALSE -->
 <!-- regular フチ取り-->
 
 <template>
-    <div class="font-wrapper">
+    <div :class="fontWrapperClassName">
+        <templete v-if="!props.isCorrect && !props.isPickUp && props.hasCurrentItem">
+            <div style="position: absolute; top: 25%; left: 30%; z-index: 2">
+                <span>済</span>
+            </div>
+        </templete>
+
         <font-awesome-layers full-width :class="className">
             <template v-if="props.isCorrect && props.isPickUp && props.hasCurrentItem">
                 <!-- 無し -->
@@ -64,8 +80,8 @@ FALSE	FALSE	FALSE -->
             </template>
 
             <!-- 「済」の文字の有無 -->
-            <template v-if="props.hasCurrentItem">
-                <font-awesome-layers-text class="gray8" transform="up-0.5 shrink-6" value="済" />
+            <template v-if="props.isCorrect && !props.isPickUp && props.hasCurrentItem">
+                <font-awesome-layers-text :class="layerTextClassName" transform="up-0.5 shrink-6" value="済" />
             </template>
         </font-awesome-layers>
     </div>
@@ -77,6 +93,11 @@ FALSE	FALSE	FALSE -->
     width: fit-content;
 }
 
+.incorrect-item,
+.hascurrent-item {
+    pointer-events: none;
+}
+
 .dottedText:after {
     content: '';
     position: absolute;
@@ -84,6 +105,7 @@ FALSE	FALSE	FALSE -->
     top: 0;
     width: 100%;
     height: 100%;
+    z-index: 1;
     background:
         radial-gradient(circle, transparent 30%, transparent 20%),
         radial-gradient(circle, transparent 20%, white 70%) 30px 30px;
@@ -91,14 +113,14 @@ FALSE	FALSE	FALSE -->
 }
 
 .red-icon {
-    color: red;
+    color: $tall-poppy;
 }
 
-.biue-icon {
-    color: red;
+.blue-icon {
+    color: $cyan-aqua;
 }
 
-.gray8 {
+.layer {
     color: gray; /* テキストの色をグレーに設定 */
     font-size: 1.5rem; /* テキストサイズを小さく */
     text-align: center; /* テキストを中央揃え */
@@ -106,5 +128,13 @@ FALSE	FALSE	FALSE -->
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.correct-text {
+    color: white; /* テキストの色を白に設定 */
+}
+
+.incorrect-text {
+    color: red; /* テキストの色を赤に設定 */
 }
 </style>

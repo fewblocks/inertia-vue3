@@ -52,7 +52,7 @@ onMounted(() => {
                                                 type="button"
                                                 class="tw-inline-flex tw-items-center tw-px-3 tw-py-2 tw-border tw-border-transparent tw-text-sm tw-leading-4 tw-font-medium tw-rounded-md tw-text-gray-500 tw-bg-white hover:tw-text-gray-700 focus:tw-outline-none tw-transition tw-ease-in-out tw-duration-150"
                                             >
-                                                {{ $page.props.auth.user.name }}
+                                                <!-- {{ $page.props.auth.user.name }} -->
 
                                                 <svg
                                                     class="tw-ml-2 tw--mr-0.5 tw-h-4 tw-w-4"
@@ -121,9 +121,14 @@ onMounted(() => {
                     }"
                     class="sm:tw-hidden"
                 >
-                    {{ route() }}
+                    <!-- route()の直接表示を削除 -->
+                    <!-- {{ route() }} -->
                     <div class="tw-pt-2 tw-pb-3 tw-space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                        <!-- route().currentの存在チェックを追加 -->
+                        <ResponsiveNavLink
+                            :href="route('dashboard')"
+                            :active="route().current ? route().current('dashboard') : false"
+                        >
                             Dashboard
                         </ResponsiveNavLink>
                     </div>
@@ -132,10 +137,10 @@ onMounted(() => {
                     <div class="tw-pt-4 tw-pb-1 tw-border-t tw-border-gray-200">
                         <div class="tw-px-4">
                             <div class="tw-font-medium tw-text-base tw-text-gray-800">
-                                {{ $page.props.auth.user.name }}
+                                <!-- {{ $page.props.auth.user.name }} -->
                             </div>
                             <div class="tw-font-medium tw-text-sm tw-text-gray-500">
-                                {{ $page.props.auth.user.email }}
+                                <!-- {{ $page.props.auth.user.email }} -->
                             </div>
                         </div>
 

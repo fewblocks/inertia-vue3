@@ -19,6 +19,7 @@ const props = defineProps<{
             japanese_line: string
             english_line: string
         }
+        has_current_item: boolean
     }>
     collectQuizIds: Array<number>
     pickUpIndexes?: Array<number>
@@ -97,7 +98,7 @@ const reactiveLines = reactive(
         ...line,
         isCorrect: props.collectQuizIds.includes(line.id),
         isPickUp: false,
-        hasCurrentItem: false
+        hasCurrentItem: line.has_current_item
     }))
 )
 
@@ -106,9 +107,19 @@ const reactivePickUpedLines = computed(() => () => {
     return reactiveLines.filter((line) => line.isPickUp)
 })
 
-/** 正解か不正解かのアイコンのクラス名作成 */
-const iconClassName = computed(() => (isCorrect: boolean) => {
-    return isCorrect ? 'correct-icon' : 'incorrect-icon'
+/** アイコンのクラス名作成 */
+const iconClassName = computed(() => (isCorrect: boolean, hasCurrentItem: boolean) => {
+    let name = ''
+    if (isCorrect) {
+        name += 'correct-icon'
+    } else {
+        name += 'incorrect-icon'
+    }
+    if (hasCurrentItem) {
+        name += ' has-current-item-icon'
+    }
+
+    return name
 })
 /** ピックアップ対象のカードのクラス名 */
 const pickUpCardsClassName = computed(() => () => {
@@ -208,6 +219,7 @@ onMounted(() => {
                                 :isCorrect="collectQuizIds.includes(line.id)"
                                 :is-after-collection="false"
                                 :is-pick-up="line.isPickUp"
+                                :has-current-item="line.hasCurrentItem"
                             />
                         </div>
                         <!-- ↓ col-2 右側の要素 ハートアイコン -->
@@ -216,7 +228,7 @@ onMounted(() => {
                                 <button
                                     data-container="body"
                                     type="button"
-                                    :class="iconClassName(line.isCorrect)"
+                                    :class="iconClassName(line.isCorrect, line.hasCurrentItem)"
                                     data-bs-placement="right"
                                     data-bs-toggle="popover"
                                     data-bs-title="クイズに正解しました!!"
@@ -258,6 +270,7 @@ onMounted(() => {
                                     :isCorrect="collectQuizIds.includes(line.id)"
                                     :is-after-collection="true"
                                     :lastPickUpIndex="pickUpIndexesSorted[pickUpIndexesSorted.length - 1]"
+                                    :has-current-item="line.hasCurrentItem"
                                 />
                             </template>
                         </template>
