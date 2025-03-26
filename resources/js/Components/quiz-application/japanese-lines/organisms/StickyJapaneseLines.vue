@@ -10,36 +10,27 @@ const props = defineProps<{
     feeling?: Feeling
     japaneseLine: string
 }>()
-
-const url = ref(SpeechBubbleAngry)
-const url2 = ref(untitled)
-const url3 = ref(Untitled2)
-// background-image: v-bind　するために必要
-// https://github.com/vuejs/core/issues/8117
-const shapeUrl = `url(${SpeechBubbleAngry})`
-const shapeUrl2 = `url(${untitled})`
-const shapeUrl3 = `url(${Untitled2})`
 </script>
 
 <template>
     <template v-if="props.feeling === 'angry'">
-        <div class="japanese-line-back col-12 col-md-8 col-lg-8">
+        <div class="japanese-line-back col-12 col-md-10 col-lg-10">
             <div class="japanese-line-text">{{ props.japaneseLine }}</div>
         </div>
     </template>
     <template v-else-if="props.feeling === 'happy'">
-        <div class="japanese-line-back col-12 col-md-8 col-lg-8">
+        <div class="japanese-line-back col-12 col-md-10 col-lg-10">
             <div class="japanese-line2-text">{{ props.japaneseLine }}</div>
         </div>
     </template>
     <template v-else="props.feeling === 'sad'">
-        <div class="japanese-line-back col-12 col-md-8 col-lg-8">
+        <div class="japanese-line-back col-12 col-md-10 col-lg-10">
             <div class="japanese-line-text3">{{ props.japaneseLine }}</div>
         </div>
     </template>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 /* TODO: SVGがテキスト量に伴って縦比率だけ変化するように記述、
 padding の値がこのままだと対応しきれていないので、何かしらの工夫が必要
 */
@@ -50,18 +41,15 @@ padding の値がこのままだと対応しきれていないので、何かし
 }
 
 .japanese-line-back {
-    min-height: 200px;
+    min-height: 100px;
     height: auto;
-    background-image: v-bind(shapeUrl);
-    background-repeat: no-repeat;
-    background-size: 100% 100%; /* 幅は自動、縦は100%に設定 */
-    background-position: center top;
+    background: $coral;
 }
 .japanese-line-text {
-    padding-top: 24%;
-    padding-left: 24%;
-    padding-right: 24%;
-    padding-bottom: 24%;
+    padding-top: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 5%;
     width: 100%;
     font-size: 20px;
     word-break: break-all;
@@ -69,16 +57,13 @@ padding の値がこのままだと対応しきれていないので、何かし
 .japanese-line-back2 {
     min-height: 200px;
     height: auto;
-    background-image: v-bind(shapeUrl2);
-    background-repeat: no-repeat;
-    background-size: 100% 100%; /* 幅は自動、縦は100%に設定 */
-    background-position: center top;
+    background: $coral;
 }
 .japanese-line-text2 {
-    padding-top: 24%;
-    padding-left: 24%;
-    padding-right: 24%;
-    padding-bottom: 24%;
+    padding-top: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 5%;
     width: 100%;
     font-size: 20px;
     word-break: break-all;
@@ -86,18 +71,16 @@ padding の値がこのままだと対応しきれていないので、何かし
 .japanese-line-back3 {
     min-height: 200px;
     height: auto;
-    background-image: v-bind(shapeUrl3);
-    background-repeat: no-repeat;
-    background-size: 100% 100%; /* 幅は自動、縦は100%に設定 */
-    background-position: center top;
+    background: $coral;
 }
 .japanese-line-text3 {
-    padding-top: 24%;
-    padding-left: 24%;
-    padding-right: 24%;
-    padding-bottom: 24%;
+    padding-top: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 5%;
     width: 100%;
     font-size: 20px;
     word-break: break-all;
+    background: $silver;
 }
 </style>

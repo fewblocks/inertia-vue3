@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, Ref, ref, watch } from 'vue'
 import { breakpoints } from '@/utils/breakpoints'
 import CharacterIcon from '@/Components/quiz-application/japanese-lines/atoms/CharacterIcon.vue'
 import JapaneseLines from '@/Components/quiz-application/japanese-lines/organisms/JapaneseLines.vue'
+import StickyJapaneseLines from '@/Components/quiz-application/japanese-lines/organisms/StickyJapaneseLines.vue'
 import EnglishLines from '@/Components/quiz-application/english-lines/organisms/EnglishLines.vue'
 import EnglishBoxese from '@/Components/quiz-application/english-boxes/organisms/EnglishBoxese.vue'
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
@@ -21,10 +22,7 @@ const mediaQuery = window.matchMedia(`(max-width : ${breakpoints.md})`)
 /** スクリーンmiddle 以下判定 */
 const isScreenMiddle = ref(mediaQuery.matches)
 
-/** windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新）*/
 const update = (event: { matches: boolean }) => (isScreenMiddle.value = event.matches)
-onMounted(() => mediaQuery.addEventListener('change', update))
-onUnmounted(() => mediaQuery.removeEventListener('change', update))
 
 const props = defineProps<{
     /** 日本語 */
@@ -43,6 +41,63 @@ const props = defineProps<{
     timeLimit?: number
 }>()
 
+const toShowElement: Ref<HTMLElement | null> = ref(null)
+const toHideElement: Ref<HTMLElement | null> = ref(null)
+const isButtonActive = ref(false)
+const isStickyJapaneseLine = ref(false)
+
+const topObserverCallback = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+        if (entry.target === toHideElement.value) {
+            // 要素が見えなくなったとき（!isIntersecting）に true
+            isStickyJapaneseLine.value = !entry.isIntersecting
+        }
+    })
+}
+
+const bottomObserverCallback = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+        if (entry.target === toShowElement.value) {
+            isButtonActive.value = entry.isIntersecting
+            isStickyJapaneseLine.value = false
+        }
+    })
+}
+let topObserver: IntersectionObserver | null = null
+let bottomObserver: IntersectionObserver | null = null
+
+onMounted(() => {
+    /** windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新）*/
+    mediaQuery.addEventListener('change', update)
+
+    /** スクロール監視用のオブサーバー配置 */
+    if (toHideElement.value instanceof Element) {
+        topObserver = new IntersectionObserver(topObserverCallback, {
+            root: null,
+            threshold: 0 // 要素が完全に見えなくなった時点で判定
+        })
+        topObserver.observe(toHideElement.value)
+    }
+
+    if (toShowElement.value instanceof Element) {
+        bottomObserver = new IntersectionObserver(bottomObserverCallback, {
+            root: null,
+            threshold: 0 // 要素が見え始めた時点で判定
+        })
+        bottomObserver.observe(toShowElement.value)
+    }
+})
+
+onUnmounted(() => {
+    mediaQuery.removeEventListener('change', update)
+    topObserver?.disconnect()
+    bottomObserver?.disconnect()
+})
+
+const buttonClickHandler = (): void => {
+    alert('ボタンが活性化され、クリックされました！')
+}
+
 /** 難易度 */
 const difficulty = ref(props.difficulty) // "high", "medium", "low" のいずれか
 
@@ -56,9 +111,8 @@ const difficulty = ref(props.difficulty) // "high", "medium", "low" のいずれ
 const textObjects = ref(useSentenceSplitter(props.englishLine, props.difficulty).resultArray)
 
 // props.difficulty または props.englishLine が変更されたときに textObjects を更新
-watch([difficulty.value, () => props.englishLine], () => {
-    textObjects.value = useSentenceSplitter(props.englishLine, props.difficulty).resultArray.value
-    console.log(textObjects.value)
+watch([difficulty, () => props.englishLine], ([newDifficulty, newEnglishLine]) => {
+    textObjects.value = useSentenceSplitter(newEnglishLine, newDifficulty).resultArray.value
 })
 
 /** テキストオブジェクツを逆順にしたもの */
@@ -221,7 +275,9 @@ const checkAnswers = computed(() => {
 <template>
     <div class="wrap">
         <!-- 日本語 -->
-        <div class="content japanese-lines row">
+        <!-- スクロール前 -->
+        <div v-show="isStickyJapaneseLine" ref="toShowElement" class="h-1">{{ isButtonActive }}</div>
+        <div v-show="!isStickyJapaneseLine" class="content japanese-lines row">
             <div class="character-icon row col-6 col-md-4">
                 <CharacterIcon />
             </div>
@@ -233,7 +289,7 @@ const checkAnswers = computed(() => {
                     :intercept="intercept"
                     @changeCountDownState="changeCountDownState"
                 />
-                <Stamp :showAnswer="showAnswer" :answer="checkAnswers" />
+                <Stamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp-sticky" />
             </div>
             <div class="japanese-line row col-12 col-md-8 position-relative">
                 <div class="stamp-wrapper"></div>
@@ -246,16 +302,78 @@ const checkAnswers = computed(() => {
                         :intercept="intercept"
                         @changeCountDownState="changeCountDownState"
                     />
-                    <Stamp :showAnswer="showAnswer" :answer="checkAnswers" />
+                    <div>
+                        <Stamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp" />
+                    </div>
                 </div>
             </div>
         </div>
+        <div v-show="!isStickyJapaneseLine" class="top-element" ref="toHideElement"></div>
+
+        <!-- TODO　カウントダウンタイマー左寄せ　+　縮小 -->
+        <!-- スタンプ正常化 -->
+
+        <!-- スクロール後 -->
+        <div v-show="isStickyJapaneseLine" class="sticky-lines">
+            <!-- カウントダウンタイマー -->
+            <div v-show="isScreenMiddle" class="col-2 position-relative">
+                <div class="count-down-timer-right">
+                    <LineQuizCountDownTimerBase
+                        :max="props.timeLimit"
+                        :isActionWithCountDownEnd="true"
+                        :intercept="intercept"
+                        @changeCountDownState="changeCountDownState"
+                    />
+                </div>
+                <Stamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp" />
+            </div>
+
+            <div class="line-flex low col-12">
+                <transition name="slide-fade" mode="out-in" appear>
+                    <StickyJapaneseLines
+                        v-show="isStickyJapaneseLine"
+                        :feeling="props.feeling"
+                        :japaneseLine="props.japaneseLine"
+                    />
+                </transition>
+                <!-- カウントダウンタイマー -->
+                <div v-show="!isScreenMiddle" class="col-2 position-relative">
+                    <LineQuizCountDownTimerBase
+                        :max="props.timeLimit"
+                        :isActionWithCountDownEnd="true"
+                        :intercept="intercept"
+                        @changeCountDownState="changeCountDownState"
+                    />
+
+                    <div>
+                        <Stamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp" />
+                    </div>
+                </div>
+            </div>
+
+            <div v-show="isStickyJapaneseLine" class="content english-lines row">
+                <EnglishLines
+                    :englishLine="props.englishLine"
+                    :colorsObjects="colorsObjects"
+                    :textObjects="textObjects"
+                />
+            </div>
+            <div v-show="isStickyJapaneseLine" class="content english-lines-block row">
+                <EnglishBoxese
+                    :textObjects="textObjects"
+                    :colorsObjects="colorsObjects"
+                    @select-text="handleSelectText"
+                    @reset-text="resetText"
+                    :selectedWordIndexes="selectedWordIndexes"
+                />
+            </div>
+        </div>
         <!-- 英語 -->
-        <div class="content english-lines row">
+        <div v-show="!isStickyJapaneseLine" class="content english-lines row">
             <EnglishLines :englishLine="props.englishLine" :colorsObjects="colorsObjects" :textObjects="textObjects" />
         </div>
         <!-- 英語ブロック -->
-        <div class="content english-lines-block row">
+        <div v-show="!isStickyJapaneseLine" class="content english-lines-block row">
             <EnglishBoxese
                 :textObjects="textObjects"
                 :colorsObjects="colorsObjects"
@@ -264,12 +382,38 @@ const checkAnswers = computed(() => {
                 :selectedWordIndexes="selectedWordIndexes"
             />
         </div>
+        <!-- 親要素の最下部を検出するための要素 -->
+        <div style="height: 400px">.</div>
     </div>
 </template>
 
 <style lang="scss" scoped>
+.slide-fade-enter-active {
+    transition: all 0.5s ease-out;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.slide-fade-enter-to,
+.slide-fade-leave-from {
+    transform: translateY(0);
+    opacity: 1;
+}
 .english-lines-block {
     margin-top: 20px;
+}
+
+.line-flex {
+    display: flex;
+    justify-content: flex-start;
 }
 
 main-content {
@@ -278,6 +422,10 @@ main-content {
 
 .wrap {
     width: 100%;
+}
+.top-element {
+    width: 100%;
+    height: 10px;
 }
 .content {
     width: 100%;
@@ -288,10 +436,43 @@ main-content {
     justify-content: flex-start;
 }
 
-.stamp-wrapper {
-    position: absolute;
+.count-down-timer-right {
+    position: fixed;
+    top: 10%;
+    left: 90%;
+    transform: scale(0.5, 0.5); //
+    opacity: 0.7;
+    z-index: 1000; // 他の要素より前面に表示
+}
+
+.sticky-lines {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 100px;
+}
+
+.stamp {
+    position: fixed;
     top: 20%;
-    left: 40%;
+    left: 80%;
+    transform: translate(-50%, -50%); // 中央揃え
+    z-index: 1000; // 他の要素より前面に表示
+}
+
+.stamp-sticky {
+    position: fixed;
+    top: 20%;
+    left: 80%;
+    transform: translate(-50%, -50%); // 中央揃え
+    z-index: 1000; // 他の要素より前面に表示
+}
+
+.stamp2 {
+    position: fixed;
+    top: 20%;
+    left: 80%;
+    transform: translate(-50%, -50%); // 中央揃え
+    z-index: 1000; // 他の要素より前面に表示
 }
 
 @media (max-width: 599px) {

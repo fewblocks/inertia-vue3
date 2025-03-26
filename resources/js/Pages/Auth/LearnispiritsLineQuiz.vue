@@ -68,7 +68,7 @@ const low = () => {
 
 const timeLimit = ref(1)
 const timeLimitChange = (event) => {
-    timeLimit.value = event.target.value
+    timeLimit.value = Number(event.target.value)
 }
 //
 
@@ -180,9 +180,9 @@ useHeightObserver('quiz-application-wrapper', 'quiz-application-content')
                                     id="volume"
                                     name="volume"
                                     min="1"
-                                    max="30"
-                                    v-model="timeLimit"
-                                    v-on:change="timeLimitChange"
+                                    max="1000"
+                                    :value="timeLimit"
+                                    @input="timeLimitChange"
                                 />
                                 <label for="volume">Volume: {{ timeLimit }}</label>
                             </div>

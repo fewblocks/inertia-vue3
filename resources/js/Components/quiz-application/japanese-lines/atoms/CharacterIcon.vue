@@ -20,5 +20,8 @@ import characterIcon from '~/sample_character_icon.png'
         max-width: 100%;
         height: auto;
     }
+    img {
+        caret-color: transparent;
+    }
 }
 </style>
