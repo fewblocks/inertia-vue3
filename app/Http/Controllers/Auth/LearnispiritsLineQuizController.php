@@ -32,6 +32,8 @@ class LearnispiritsLineQuizController extends Controller
             $query->where('user_id', $userId)
                   ->whereNull('deleted_at');  // ソフトデリート済みのレコードを除外
         }])
+            ->inRandomOrder()  // ランダムに並び替え
+            ->limit(10)       // 10件に制限
             ->get()
             // TODO: 一旦userId の確認
             ->map(function ($line) use ($userId) {

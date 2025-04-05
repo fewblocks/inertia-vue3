@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import HeartIcon from '@/Components/quiz-application/after-quiz/atoms/HeartIcon.vue'
 import QuestionAndAnswerCard from '@/Components/quiz-application/after-quiz/molecules/QuestionAndAnswerCard.vue'
 import AddBookMarkIcon from '@/Components/quiz-application/after-quiz/atoms/AddBookMarkIcon.vue'
-import FlipCardDemo from '@/Components/flip-card/FlipCardDemo.vue'
+import FlipCardDemoCopy from '@/Components/flip-card-copy/FlipCardDemoCopy.vue'
 import { Popover } from 'bootstrap'
 const props = defineProps<{
     lines: Array<{
@@ -282,7 +282,7 @@ onMounted(() => {
         <!-- コレクション後 フリップカードデモ-->
         <transition name="fade-type-3" mode="out-in">
             <div div class="row w-100" v-if="afterQuizState === 'duaringDemo'">
-                <FlipCardDemo />
+                <FlipCardDemoCopy :lines="reactiveLines" />
             </div>
         </transition>
 
