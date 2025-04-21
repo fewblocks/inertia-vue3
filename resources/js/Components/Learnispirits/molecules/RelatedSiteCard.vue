@@ -16,7 +16,6 @@ const color = ref('')
 const sunglow = data.colors.find((color) => color.name === props.color)
 if (sunglow) {
     color.value = sunglow.value
-    console.log(color.value)
 }
 </script>
 

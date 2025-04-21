@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { breakpoints } from '@/utils/breakpoints'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /**
  * Props
@@ -13,7 +14,10 @@ const props = defineProps({
     ja: String,
     en: String,
     flip: Boolean,
-    cardLength: Number
+    cardLength: Number,
+    isPickUp: Boolean,
+    isCorrect: Boolean,
+    hasCurrentItem: Boolean
 })
 
 /**  TODO: タイプファイル別切り出し */
@@ -35,36 +39,44 @@ const isScreenLarge = ref(mediaQueryLarge.matches)
 /** カード幅算出。メディアクエリー依存 */
 const cardWidth = computed(() => {
     if (isScreenSmall.value) {
-        return '168px'
+        return '270px'
     } else if (isScreenMedium.value) {
-        return '192px'
+        return '252px'
     } else if (isScreenLarge.value) {
-        return '276px'
+        return '300px'
     } else {
-        return '360px'
+        return '480px'
     }
 })
 /** カード高さ算出。メディアクエリー依存 */
 const cardHeight = computed(() => {
     if (isScreenSmall.value) {
-        return '112px'
+        return '180px'
     } else if (isScreenMedium.value) {
-        return '128px'
+        return '180px'
     } else if (isScreenLarge.value) {
-        return '184px'
-    } else {
         return '240px'
+    } else {
+        return '300px'
     }
 })
 
 /** カード間隔判定。メディアクエリー依存 */
 const cardBetween = (times: number, isScreenSmall: boolean) => {
     if (isScreenSmall) {
-        return 32 * times + 'px'
+        return 15 * times + 'px'
     } else {
         return 50 * times + 'px'
     }
 }
+
+const cardBodyClasses = computed(() => ({
+    'card-body': true,
+    'd-flex': true,
+    'flex-column': true,
+    'pt-0': isScreenSmall.value,
+    'pt-2': !isScreenSmall.value
+}))
 
 /**  windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新） */
 const updateSmall = (event: { matches: boolean }) => (isScreenSmall.value = event.matches)
@@ -99,19 +111,77 @@ const flipCardClassByLength = computed(() => {
         return 'flip-card-1'
     }
 })
+
+const flipCardFrontClass = computed(() => {
+    if (props.isCorrect && props.isPickUp) {
+        return 'flip-card-front flip-card-front-correct-pickup'
+    } else if (props.isCorrect && !props.isPickUp) {
+        return 'flip-card-front flip-card-front-correct-not-pickup'
+    } else if (props.isCorrect && props.hasCurrentItem) {
+        return 'flip-card-front flip-card-front-correct-has-current-item'
+    } else {
+        return 'flip-card-front flip-card-front-incorrect'
+    }
+})
 </script>
 
 <!-- フリップカード -->
 <template>
     <div :class="flipCardClassByLength">
         <div :class="flipClass">
-            <div class="flip-card-front">{{ props.ja }}</div>
-            <div class="flip-card-back">{{ props.en }}</div>
+            <div :class="flipCardFrontClass">
+                <div class="card h-100" style="background-color: inherit">
+                    <div :class="cardBodyClasses">
+                        <!-- flex-columnを追加 -->
+                        <blockquote class="blockquote blockquote-custom pt-2 h-100 d-flex flex-column">
+                            <div class="blockquote-custom-icon bg-info shadow-4-strong">
+                                <font-awesome-icon :icon="['fas', 'quote-left']" style="color: #ffffff" />
+                            </div>
+                            <p class="mb-0 mt-2 font-italic flex-grow-1">
+                                <!-- flex-grow-1を追加 -->
+                                "{{ props.ja }}<br />
+                                <a href="#" class="text-info">@consequat</a>."
+                            </p>
+                            <footer class="blockquote-footer pt-2 mt-auto border-top">
+                                <!-- mt-autoを追加 -->
+                                {{ props.isPickUp ? 'ピックアップ' : '通常' }}<br />
+                                <cite title="Source Title">引用元：ジョジョの奇妙な冒険第3巻</cite>
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card-back p-2">
+                <div class="general">
+                    <p>{{ props.en }}</p>
+                    <div><a href="#">@consequat</a></div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+h1 {
+    text-align: center;
+}
+
+.blockquote-custom {
+    position: relative;
+    font-size: 1rem;
+}
+
+.blockquote-custom-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -40px;
+    left: 19px;
+}
 .flip-card {
     position: absolute;
     background-color: transparent;
@@ -134,6 +204,7 @@ const flipCardClassByLength = computed(() => {
 
 .flip-card-front,
 .flip-card-back {
+    border-radius: 5px;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -141,8 +212,27 @@ const flipCardClassByLength = computed(() => {
     backface-visibility: hidden;
 }
 
-.flip-card-front {
-    background-color: #bbb;
+// .flip-card-front {
+//     background-color: #ffffff;
+// }
+
+// 正解 + ピックアップ
+.flip-card-front-correct-pickup {
+    background-color: #ffffff;
+}
+// 正解 + ピックアップしない
+.flip-card-front-correct-not-pickup {
+    background-color: #818181;
+}
+
+// 正解 + コレクション済み
+.flip-card-front-correct-has-current-item {
+    background-color: #ffd085;
+}
+
+// 不正解
+.flip-card-front-incorrect {
+    background-color: #414141;
 }
 
 /* 5枚目だけアニメーションを付ける */
@@ -159,7 +249,7 @@ const flipCardClassByLength = computed(() => {
 } */
 
 .flip-card-back {
-    background-color: dodgerblue;
+    background-color: $malachite;
     transform: rotateX(180deg);
 }
 

@@ -19,9 +19,6 @@ interface SharedProps {
 
 // Cast the shared props to the defined type
 const addressData = (shareProps as unknown as SharedProps).address
-console.log(addressData.country)
-console.log(addressData.state)
-console.log(addressData.city)
 
 const props = defineProps<{
     auth: {

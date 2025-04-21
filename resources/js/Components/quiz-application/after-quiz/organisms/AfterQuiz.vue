@@ -281,7 +281,7 @@ onMounted(() => {
 
         <!-- コレクション後 フリップカードデモ-->
         <transition name="fade-type-3" mode="out-in">
-            <div div class="row w-100" v-if="afterQuizState === 'duaringDemo'">
+            <div div v-if="afterQuizState === 'duaringDemo'">
                 <FlipCardDemoCopy :lines="reactiveLines" />
             </div>
         </transition>

@@ -139,7 +139,7 @@ useHeightObserver('quiz-application-wrapper', 'quiz-application-content')
 <!-- 動的コンテンツなので、セマンティックなスタイルにしない -->
 <template>
     <main class="col-sm-12 col-md-12">
-        <div id="quiz-application-wrapper" class="quiz-application-wrapper" style="margin-top: 56px; width: 100%">
+        <div id="quiz-application-wrapper" class="quiz-application-wrapper" style="">
             <div id="quiz-application-content" class="quiz-application-content">
                 <!-- このコンテンツの大きさを監視してサイズを計測 -->
 
@@ -226,6 +226,7 @@ aside {
 
 .quiz-application-wrapper {
     padding: 10px;
+    margin: 56px auto 0;
 }
 
 .quiz-application-content {
@@ -239,6 +240,7 @@ aside {
         background-color: $sugar-cane;
         height: fit-content;
         min-height: 150dvh;
+        margin: 56px auto 0;
     }
 }
 @media (min-width: 600px) and (max-width: 799px) {
@@ -247,6 +249,7 @@ aside {
         background-color: $sugar-cane;
         height: fit-content;
         min-height: 150dvh;
+        margin: 56px auto 0;
     }
 }
 
@@ -255,6 +258,7 @@ aside {
         background-color: $sugar-cane;
         height: fit-content;
         min-height: 150dvh;
+        margin: 56px auto 0;
     }
 }
 </style>

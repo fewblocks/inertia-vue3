@@ -42,11 +42,11 @@ FALSE	FALSE	FALSE -->
 
 <template>
     <div :class="fontWrapperClassName">
-        <templete v-if="!props.isCorrect && !props.isPickUp && props.hasCurrentItem">
+        <template v-if="!props.isCorrect && !props.isPickUp && props.hasCurrentItem">
             <div style="position: absolute; top: 25%; left: 30%; z-index: 2">
                 <span>済</span>
             </div>
-        </templete>
+        </template>
 
         <font-awesome-layers full-width :class="className">
             <template v-if="props.isCorrect && props.isPickUp && props.hasCurrentItem">

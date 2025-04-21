@@ -14,6 +14,7 @@ import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 import { faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons'
+import { faQuoteLeft as faQuoteLeftSolid } from '@fortawesome/free-solid-svg-icons'
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import LearnispiritsAphorism from './Pages/Auth/LearnispiritsAphorism.vue'
@@ -21,6 +22,7 @@ library.add(faHeartSolid)
 library.add(faHeartRegular)
 library.add(faFileSolid)
 library.add(faFileRegular)
+library.add(faQuoteLeftSolid)
 library.add(faStarSolid)
 library.add(faStarRegular)
 

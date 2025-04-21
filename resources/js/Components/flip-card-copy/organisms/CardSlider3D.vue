@@ -2,6 +2,50 @@
 <script setup lang="ts">
 import FlipCard3D from '@/Components/flip-card-copy/molecules/FlipCard3D.vue'
 import { ref, toRaw } from 'vue'
+import { breakpoints } from '@/utils/breakpoints'
+
+/** let mediaQuery = window.matchMedia(`(max-width : ${breakpoints.xs})`); */
+const mediaQuerySmall = window.matchMedia(`(max-width : ${breakpoints.sm})`)
+const isScreenSmall = ref(mediaQuerySmall.matches)
+
+const touchStartX = ref(0)
+const touchEndX = ref(0)
+const touchStartY = ref(0) // Y軸の開始位置を追加
+const touchEndY = ref(0) // Y軸の終了位置を追加
+
+const handleTouchStart = (e: TouchEvent) => {
+    touchStartX.value = e.touches[0].clientX
+    touchStartY.value = e.touches[0].clientY // Y軸の位置を記録
+}
+
+const handleTouchMove = (e: TouchEvent) => {
+    touchEndX.value = e.touches[0].clientX
+    touchEndY.value = e.touches[0].clientY // Y軸の位置を記録
+}
+
+const handleTouchEnd = () => {
+    const swipeDistance = touchStartX.value - touchEndX.value
+    const swipeVerticalDistance = touchStartY.value - touchEndY.value
+
+    const minSwipeDistance = 50 // スワイプを検知する最小距離
+
+    // 垂直方向のスワイプの方が大きい場合
+    if (Math.abs(swipeVerticalDistance) > Math.abs(swipeDistance)) {
+        if (Math.abs(swipeVerticalDistance) > minSwipeDistance) {
+            flip() // 上下どちらのスワイプでもフリップ
+        }
+        return
+    }
+
+    // 水平方向のスワイプ処理
+    if (Math.abs(swipeDistance) > minSwipeDistance) {
+        if (swipeDistance > 0) {
+            next()
+        } else {
+            prev()
+        }
+    }
+}
 
 /**
  * Props
@@ -11,8 +55,6 @@ const props = defineProps({
     cardData: Array,
     default: () => []
 })
-
-console.log(props.cardData, 'props.cardData')
 
 /**
  * counterから始まり、昇順の情報配列を生成する
@@ -38,12 +80,13 @@ const generateAscData = (counter, maxCounter, cardThresholdNumber, Data) => {
 
 const pointer = ref(0)
 // TODO 一旦正解画面では10枚固定とする
-const maxCounter = 10
+const maxCounter = props.cardData.length
 const cardThreshold = props.cardData.length < 5 ? Array(props.cardData.length).fill(0) : Array(6).fill(0)
 const cloneCardData = toRaw(props.cardData)
 
 /**  ここにcloneData を入れると reactiveになる */
 const items = ref(generateAscData(pointer.value, maxCounter, cardThreshold.length, cloneCardData))
+console.log(items, 'items 中にisCorrect は')
 
 /**
  * カードを進める
@@ -105,17 +148,34 @@ const flip = () => {
     <div class="slider-wrapper">
         <div class="card-slider-3d-wrapper row gx-0 gy-0">
             <!-- フリップカード -->
-            <div class="slider-3d col-12 gx-0 gy-0">
+            <div
+                class="slider-3d col-12 gx-0 gy-0"
+                @touchstart="handleTouchStart"
+                @touchmove="handleTouchMove"
+                @touchend="handleTouchEnd"
+            >
                 <template v-for="item in items" :key="item.id">
-                    <FlipCard3D :ja="item.ja" :en="item.en" :flip="item.flip" :cardLength="cardThreshold.length">
+                    <FlipCard3D
+                        :ja="item.ja"
+                        :en="item.en"
+                        :flip="item.flip"
+                        :cardLength="cardThreshold.length"
+                        :isPickUp="item.isPickUp"
+                        :isCorrect="item.isCorrect"
+                        :hasCurrentItem="item.hasCurrentItem"
+                    >
                     </FlipCard3D>
                 </template>
             </div>
             <!-- 操作ボタン -->
-            <div class="slider-controller">
-                <button class="btn btn-primary" v-on:click="next()">進める</button>
-                <button class="btn btn-primary" v-on:click="prev()">戻す</button>
-                <button class="btn btn-primary" v-on:click="flip()">ひっくり返す</button>
+            <div class="slider-controller d-flex flex-column gap-2">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary" v-on:click="prev()">←</button>
+                    <button class="btn btn-primary" v-on:click="next()">→</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-primary" v-on:click="flip()">↓</button>
+                </div>
             </div>
         </div>
     </div>
@@ -126,6 +186,7 @@ const flip = () => {
     .slider-wrapper {
         height: 90%;
         margin-top: 0px;
+        margin-right: 40px;
     }
 }
 @media (575px <= width) {
@@ -147,10 +208,19 @@ const flip = () => {
 }
 
 .slider-controller {
-    height: 10%;
+    height: 300px;
+    width: 90px;
     position: absolute;
-    bottom: 27px;
+    right: 0px;
 }
-.slider-3d {
+@media (0px <= width <= 576px) {
+    .slider-controller {
+        top: -40px;
+    }
+}
+@media (577px <= width) {
+    .slider-controller {
+        top: 0px;
+    }
 }
 </style>
