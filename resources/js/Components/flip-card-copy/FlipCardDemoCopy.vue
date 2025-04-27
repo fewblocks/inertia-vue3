@@ -78,7 +78,7 @@ const changeComponent = () => {
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        height: 250px;
+        height: 450px;
     }
 }
 .flip-card-demo-wrapper {

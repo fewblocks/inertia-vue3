@@ -51,7 +51,7 @@ const cardWidth = computed(() => {
 /** カード高さ算出。メディアクエリー依存 */
 const cardHeight = computed(() => {
     if (isScreenSmall.value) {
-        return '180px'
+        return '360px'
     } else if (isScreenMedium.value) {
         return '180px'
     } else if (isScreenLarge.value) {
@@ -74,8 +74,8 @@ const cardBodyClasses = computed(() => ({
     'card-body': true,
     'd-flex': true,
     'flex-column': true,
-    'pt-0': isScreenSmall.value,
-    'pt-2': !isScreenSmall.value
+    'pt-4': isScreenSmall.value,
+    'pt-0': !isScreenSmall.value
 }))
 
 /**  windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新） */
