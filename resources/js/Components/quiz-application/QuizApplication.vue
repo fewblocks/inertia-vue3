@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, Ref, ref, watch } from 'vue'
 import { breakpoints } from '@/utils/breakpoints'
 import CharacterIcon from '@/Components/quiz-application/japanese-lines/atoms/CharacterIcon.vue'
+import DotLogo from '@/Components/DotLogo.vue'
 import JapaneseLines from '@/Components/quiz-application/japanese-lines/organisms/JapaneseLines.vue'
 import StickyJapaneseLines from '@/Components/quiz-application/japanese-lines/organisms/StickyJapaneseLines.vue'
 import EnglishLines from '@/Components/quiz-application/english-lines/organisms/EnglishLines.vue'
@@ -31,6 +32,8 @@ const props = defineProps<{
     englishLine?: string
     /** 英語 */
     feeling?: Feeling
+    /** キャラクターID */
+    characterId?: number
     /** クイズIndex */
     quizIndex?: number
     /** クイズId */
@@ -278,8 +281,11 @@ const checkAnswers = computed(() => {
         <!-- スクロール前 -->
         <div v-show="isStickyJapaneseLine" ref="toShowElement" class="h-1">{{ isButtonActive }}</div>
         <div v-show="!isStickyJapaneseLine" class="content japanese-lines row">
-            <div class="character-icon row col-6 col-md-4">
-                <CharacterIcon />
+            <div
+                class="character-icon row col-6 col-md-4 d-flex justify-content-center justify-content-md-center my-auto"
+            >
+                <!-- // <CharacterIcon /> -->
+                <DotLogo :character-id="props.characterId" />
             </div>
             <!-- v-if だと再レンダリングされ、カウンターもリセットされる -->
             <div v-show="isScreenMiddle" class="col-4 position-relative">

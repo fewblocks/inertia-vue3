@@ -47,6 +47,7 @@ const show = computed(() => {
     background-color: white;
     animation: glow 1.5s infinite alternate;
     border-radius: 10px;
+    animation: sample_anime03 1s;
 }
 
 .stamp-uncorrect {
@@ -60,6 +61,7 @@ const show = computed(() => {
     background-color: white;
     animation: glow 1.5s infinite alternate;
     border-radius: 10px;
+    animation: sample_anime03 1s;
 }
 
 @keyframes glow {
@@ -99,7 +101,12 @@ figure .my-stamp {
         opacity: 0;
         transform: rotate(-30deg) scale(2.5);
     }
-    30% {
+    10% {
+        visibility: visible;
+        opacity: 0;
+        transform: rotate(-30deg) scale(2.5);
+    }
+    50% {
         visibility: visible;
         opacity: 0.8;
         transform: rotate(5deg) scale(1.04);
@@ -108,6 +115,17 @@ figure .my-stamp {
         visibility: visible;
         opacity: 1;
         transform: rotate(0deg);
+    }
+}
+@keyframes sample_anime03 {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 1;
     }
 }
 

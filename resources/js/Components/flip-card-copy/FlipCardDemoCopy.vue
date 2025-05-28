@@ -2,10 +2,23 @@
 <script setup lang="ts">
 import CardSlider3D from '@/Components/flip-card-copy/organisms/CardSlider3D.vue'
 import CardSlider2D from '@/Components/flip-card-copy/organisms/CardSlider2D.vue'
-import { ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import axios from 'axios'
 import { defineProps } from 'vue'
 import SwipeFingerIcon from '@/Components/Learnispirits/atoms/SwipeFingerIcon.vue'
+import { breakpoints } from '@/utils/breakpoints'
+
+// スマートフォンサイズかどうかを判定
+const mediaQuery = window.matchMedia(`(max-width : ${breakpoints.sm})`)
+const isScreenSmall = ref(mediaQuery.matches)
+const update = (event: { matches: boolean }) => (isScreenSmall.value = event.matches)
+onMounted(() => {
+    /** windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新）*/
+    mediaQuery.addEventListener('change', update)
+})
+onUnmounted(() => {
+    mediaQuery.removeEventListener('change', update)
+})
 
 const props = defineProps<{
     lines: {
@@ -57,7 +70,7 @@ const changeComponent = () => {
         <div class="flip-card-demo col-12 col-sm-11 col-md-10">
             <template v-if="show">
                 <component :is="tabs[selectedTab]" :card-data="cardData"></component>
-                <SwipeFingerIcon />
+                <SwipeFingerIcon v-show="isScreenSmall" />
             </template>
             <button class="btn btn-primary" v-on:click="changeComponent">変更</button>
         </div>

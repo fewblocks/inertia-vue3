@@ -1,7 +1,10 @@
 <!-- ナビゲーションバー -->
 <script setup lang="ts">
 import { breakpoints } from '@/utils/breakpoints'
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { set } from 'lodash'
+import { ref, computed, onMounted, onUnmounted, watch, watchEffect } from 'vue'
+import { router, usePage } from '@inertiajs/vue3'
+
 /** TODO: タイプファイル別切り出し */
 type Breakpoints = keyof typeof breakpoints // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 /** メディアクエリーの判別値(windowオブジェクト) */
@@ -10,16 +13,42 @@ const isScreenMiddle = ref(mediaQuery.matches)
 
 /** テキスト寄せ判定 */
 const textAlign = computed(() => (isScreenMiddle.value ? 'left' : 'center'))
+const urlState = ref('')
+
+const page = usePage()
+watchEffect(() => {
+    urlState.value = page.url
+})
 
 /** windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新） */
 const update = (event: { matches: boolean }) => (isScreenMiddle.value = event.matches)
 onMounted(() => mediaQuery.addEventListener('change', update))
 onUnmounted(() => mediaQuery.removeEventListener('change', update))
+
+const prevScrollpos = ref(window.pageYOffset)
+
+///////////////////////
+
+window.onscroll = () => {
+    if (urlState.value !== '/learnispirits/line-quiz') {
+        // トップページの場合はスクロール処理を無効化
+        document.getElementById('navbar').style.top = '0'
+        return
+    }
+    const currentScrollPos = window.pageYOffset
+    if (prevScrollpos.value > currentScrollPos) {
+        document.getElementById('navbar').style.top = '0'
+    } else {
+        document.getElementById('navbar').style.top = '-50px'
+    }
+    prevScrollpos.value = currentScrollPos
+}
+/////////////////////
 </script>
 
 <template>
     <!-- 「navbar-expand-md」 md以下のサイズのみトグルボタン表示 -->
-    <nav class="navbar fixed-top navbar-expand-md navbar-light" role="navigation">
+    <nav id="navbar" class="navbar fixed-top navbar-expand-md navbar-light" role="navigation">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Learnispirits</a>
             <!-- 「data-bs-target」="#切り替え表示されるコンテンツ名" -->
@@ -77,5 +106,6 @@ onUnmounted(() => mediaQuery.removeEventListener('change', update))
     right: 0;
     left: 0;
     z-index: 1030;
+    transition: top 0.3s ease-in-out;
 }
 </style>

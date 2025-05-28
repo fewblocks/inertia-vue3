@@ -196,6 +196,7 @@ useHeightObserver('quiz-application-wrapper', 'quiz-application-content')
                         :japaneseLine="lines[quizCounter].line.japanese_line"
                         :englishLine="lines[quizCounter].line.english_line"
                         :feeling="lines[quizCounter].feeling"
+                        :characterId="lines[quizCounter].line.character_id"
                         :quizIndex="quizCounter"
                         :quizId="lines[quizCounter].line.id"
                         :difficulty="difficulty"

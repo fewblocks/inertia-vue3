@@ -70,13 +70,20 @@ const cardBetween = (times: number, isScreenSmall: boolean) => {
     }
 }
 
-const cardBodyClasses = computed(() => ({
+const frontCardBodyClasses = computed(() => ({
     'card-body': true,
     'd-flex': true,
     'flex-column': true,
     'pt-4': isScreenSmall.value,
     'pt-0': !isScreenSmall.value
 }))
+// const backCardBodyClasses = computed(() => ({
+//     'card-body': true,
+//     'd-flex': true,
+//     'flex-column': true,
+//     'pt-4': isScreenSmall.value,
+//     'pt-0': !isScreenSmall.value
+// }))
 
 /**  windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新） */
 const updateSmall = (event: { matches: boolean }) => (isScreenSmall.value = event.matches)
@@ -123,6 +130,9 @@ const flipCardFrontClass = computed(() => {
         return 'flip-card-front flip-card-front-incorrect'
     }
 })
+const flipCardBackClass = computed(() => {
+    return 'flip-card-back pt-4'
+})
 </script>
 
 <!-- フリップカード -->
@@ -131,7 +141,7 @@ const flipCardFrontClass = computed(() => {
         <div :class="flipClass">
             <div :class="flipCardFrontClass">
                 <div class="card h-100" style="background-color: inherit">
-                    <div :class="cardBodyClasses">
+                    <div :class="frontCardBodyClasses">
                         <!-- flex-columnを追加 -->
                         <blockquote class="blockquote blockquote-custom pt-2 h-100 d-flex flex-column">
                             <div class="blockquote-custom-icon bg-info shadow-4-strong">
@@ -151,7 +161,7 @@ const flipCardFrontClass = computed(() => {
                     </div>
                 </div>
             </div>
-            <div class="flip-card-back p-2">
+            <div :class="flipCardBackClass">
                 <div class="general">
                     <p>{{ props.en }}</p>
                     <div><a href="#">@consequat</a></div>
