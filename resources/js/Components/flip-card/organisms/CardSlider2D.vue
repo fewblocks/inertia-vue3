@@ -1,4 +1,4 @@
-<!-- 2Dカードスライダー（コントローラー）コンポーネント -->
+<!-- @v overview: 2Dカードスライダー（コントローラー）コンポーネント -->
 <script setup lang="ts">
 import FlipCard2D from '@/Components/flip-card/molecules/FlipCard2D.vue'
 import { ref, toRaw } from 'vue'
@@ -8,7 +8,10 @@ import { ref, toRaw } from 'vue'
  * @param { Array } cardData カード情報配列
  */
 const props = defineProps({
-    cardData: Array,
+    cardData: {
+        type: Array as () => Array<{ id: number; flip: boolean; ja: string; en: string }>,
+        default: () => []
+    },
     default: () => []
 })
 
@@ -29,9 +32,10 @@ const updateData = ({ cardId, fliped }) => {
         </div>
         <!-- 操作ボタン -->
         <div style="">
-            <button class="btn btn-primary" v-on:click="next()">進める</button>
+            基本的にスクロールでの操作となる
+            <!-- <button class="btn btn-primary" v-on:click="next()">進める</button>
             <button class="btn btn-primary" v-on:click="prev()">戻す</button>
-            <button class="btn btn-primary" v-on:click="flip()">ひっくり返す</button>
+            <button class="btn btn-primary" v-on:click="flip()">ひっくり返す</button> -->
         </div>
     </div>
 </template>

@@ -1,3 +1,5 @@
+<!-- @v overview: お気に入りハートアイコン -->
+<!-- @v complecate: アイコン種別が複数あり、各種ステータスによって分岐する -->
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome'
@@ -27,19 +29,23 @@ const layerTextClassName = computed(() => {
 })
 </script>
 
-<!-- isCorrect	isPickUp	hasCurrentItem
-TRUE	TRUE	TRUE
-TRUE	TRUE	FALSE
-TRUE	FALSE	TRUE
-TRUE	FALSE	FALSE
-FALSE	TRUE	TRUE
-FALSE	TRUE	FALSE
-FALSE	FALSE	TRUE
-FALSE	FALSE	FALSE -->
+<!--
+パターン一覧表
+正解        取得        取得済み
+
+isCorrect   isPickUp    hasCurrentItem
+
+TRUE        TRUE        TRUE
+TRUE        TRUE        FALSE
+TRUE        FALSE       TRUE
+TRUE        FALSE       FALSE
+FALSE       TRUE        TRUE
+FALSE       TRUE        FALSE
+FALSE       FALSE       TRUE
+FALSE       FALSE       FALSE -->
 
 <!-- solid 塗りつぶし-->
 <!-- regular フチ取り-->
-
 <template>
     <div :class="fontWrapperClassName">
         <template v-if="!props.isCorrect && !props.isPickUp && props.hasCurrentItem">

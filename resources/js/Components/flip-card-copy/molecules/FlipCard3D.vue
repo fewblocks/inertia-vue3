@@ -1,4 +1,4 @@
-<!-- 3Dフリップカード(個別)コンポーネント -->
+<!-- @v overview: TODO課題多数！3Dフリップカード(個別)コンポーネント -->
 <script setup lang="ts">
 import { breakpoints } from '@/utils/breakpoints'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
@@ -142,18 +142,18 @@ const flipCardBackClass = computed(() => {
             <div :class="flipCardFrontClass">
                 <div class="card h-100" style="background-color: inherit">
                     <div :class="frontCardBodyClasses">
-                        <!-- flex-columnを追加 -->
+                        <!-- flex-columnを追加 子要素が縦方向に並ぶ-->
                         <blockquote class="blockquote blockquote-custom pt-2 h-100 d-flex flex-column">
                             <div class="blockquote-custom-icon bg-info shadow-4-strong">
                                 <font-awesome-icon :icon="['fas', 'quote-left']" style="color: #ffffff" />
                             </div>
                             <p class="mb-0 mt-2 font-italic flex-grow-1">
-                                <!-- flex-grow-1を追加 -->
+                                <!-- flex-grow-1を追加 要素を最大限に使うようになる-->
                                 "{{ props.ja }}<br />
                                 <a href="#" class="text-info">@consequat</a>."
                             </p>
                             <footer class="blockquote-footer pt-2 mt-auto border-top">
-                                <!-- mt-autoを追加 -->
+                                <!-- mt-autoを追加 　mt-auto を付けると、その要素は親の下端に寄せられます-->
                                 {{ props.isPickUp ? 'ピックアップ' : '通常' }}<br />
                                 <cite title="Source Title">引用元：ジョジョの奇妙な冒険第3巻</cite>
                             </footer>

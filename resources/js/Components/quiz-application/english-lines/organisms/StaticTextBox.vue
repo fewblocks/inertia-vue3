@@ -1,3 +1,4 @@
+<!-- @v overview: 静的英単語コンポーネント -->
 <script setup lang="ts">
 const props = defineProps<{
     // 英文

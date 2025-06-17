@@ -1,9 +1,7 @@
+<!-- @v overview: 下にスクロールしたとき用の上に張り付いた日本語文 -->
+<!-- @v age_old: 感情の吹き出しごとにブロックを作っている -->
 <script setup lang="ts">
 import type { Feeling } from '@/types/Feeling'
-import SpeechBubbleAngry from '~/speech-bubble-angry.svg'
-import untitled from '~/untitled.svg'
-import Untitled2 from '~/Untitled2.svg'
-import { ref } from 'vue'
 const props = defineProps<{
     // 日本語文
     // constant じゃなくてtype!!!
@@ -13,6 +11,8 @@ const props = defineProps<{
 </script>
 
 <template>
+    <!-- ユーザーが下にスクロールしたときの日本語、 -->
+    <!-- 感情のprops口が作ってあるが...今のところすべて同じスタイル。 -->
     <template v-if="props.feeling === 'angry'">
         <div class="japanese-line-back col-12 col-md-10 col-lg-10">
             <div class="japanese-line-text">{{ props.japaneseLine }}</div>

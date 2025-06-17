@@ -1,3 +1,5 @@
+<!-- @v overview: 正解不正解のスタンプ -->
+<!-- @v tips: スタンプが押されたようなアニメーション -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import Correct from '~/correct.png'

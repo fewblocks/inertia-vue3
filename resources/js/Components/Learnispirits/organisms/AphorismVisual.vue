@@ -1,15 +1,11 @@
-<!-- 名言石碑イメージ -->
+<!-- @v overview: 名言石碑イメージ -->
 <script setup lang="ts">
-import aphorismVisual from "~/aphorism-image.png";
+import aphorismVisual from '~/aphorism-image.png'
 </script>
 <template>
     <!-- 名言石碑イメージ -->
     <div class="aphorism-visual-wrapper">
-        <img
-            :src="aphorismVisual"
-            class="aphorism-visual img-fluid"
-            alr="名言石碑画像"
-        />
+        <img :src="aphorismVisual" class="aphorism-visual img-fluid" alr="名言石碑画像" />
     </div>
 </template>
 

@@ -1,4 +1,4 @@
-<!-- 3Dフリップカード(個別)コンポーネント -->
+<!-- @v overview: TODO課題多数！3Dフリップカード(個別)コンポーネント -->
 <script setup lang="ts">
 import { breakpoints } from '@/utils/breakpoints'
 import { ref, computed, onMounted, onUnmounted } from 'vue'

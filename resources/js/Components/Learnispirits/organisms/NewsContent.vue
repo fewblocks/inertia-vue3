@@ -1,4 +1,4 @@
-<!-- ニュースコンテンツ -->
+<!-- @v overview: ニュースコンテンツ -->
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { NewsData } from '@/types/NewsData.ts'

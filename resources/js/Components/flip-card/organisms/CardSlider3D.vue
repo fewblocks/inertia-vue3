@@ -1,4 +1,5 @@
-<!-- 3Dカードスライダー（コントローラー）コンポーネント -->
+<!-- @v overview: 3Dカードスライダー（コントローラー）コンポーネント -->
+<!-- @v complecate: カード順番変更メソッドがきつい... -->
 <script setup lang="ts">
 import FlipCard3D from '@/Components/flip-card/molecules/FlipCard3D.vue'
 import { ref, toRaw } from 'vue'
@@ -8,7 +9,10 @@ import { ref, toRaw } from 'vue'
  * @param { Array } cardData カード情報配列
  */
 const props = defineProps({
-    cardData: Array,
+    cardData: {
+        type: Array as () => Array<{ id: number }>,
+        default: () => []
+    },
     default: () => []
 })
 

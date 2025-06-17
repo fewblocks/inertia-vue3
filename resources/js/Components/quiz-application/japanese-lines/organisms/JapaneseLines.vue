@@ -1,3 +1,5 @@
+<!-- @v overview: 吹き出しで囲まれた日本語文 -->
+<!-- @v age_old: 感情の吹き出しごとにブロックを作っている。 -->
 <script setup lang="ts">
 import type { Feeling } from '@/types/Feeling'
 import SpeechBubbleAngry from '~/speech-bubble-angry.svg'
@@ -22,16 +24,19 @@ const shapeUrl3 = `url(${SpeechBubbleSad})`
 </script>
 
 <template>
+    <!-- 吹き出し　怒り -->
     <template v-if="props.feeling === 'angry'">
         <div class="japanese-line-back1 col-12 col-md-8 col-lg-8">
             <div class="japanese-line-text1">{{ props.japaneseLine }}</div>
         </div>
     </template>
+    <!-- 吹き出し　楽しみ -->
     <template v-else-if="props.feeling === 'happy'">
         <div class="japanese-line-back2 col-12 col-md-8 col-lg-8">
             <div class="japanese-line-text2">{{ props.japaneseLine }}</div>
         </div>
     </template>
+    <!-- 吹き出し　悲しみ -->
     <template v-else="props.feeling === 'sad'">
         <div class="japanese-line-back3 col-12 col-md-8 col-lg-8">
             <div class="japanese-line-text3">{{ props.japaneseLine }}</div>

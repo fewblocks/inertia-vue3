@@ -1,15 +1,11 @@
-<!-- ワードクラウド -->
+<!-- @v overview: ワードクラウド -->
 <script setup lang="ts">
-import wordCloudSrc from "~/word-cloud.png";
+import wordCloudSrc from '~/word-cloud.png'
 </script>
 <template>
     <!-- ワードクラウト -->
     <div class="word-cloud-visual-wrapper pt-4">
-        <img
-            :src="wordCloudSrc"
-            class="word-cloud-visual img-fluid"
-            alr="ワードクラウド画像"
-        />
+        <img :src="wordCloudSrc" class="word-cloud-visual img-fluid" alr="ワードクラウド画像" />
     </div>
 </template>
 

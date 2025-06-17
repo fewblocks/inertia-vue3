@@ -34,6 +34,8 @@ const pageState = ref('beforeQuiz')
 // ページの状態
 // countdownStart(カウントダウンスタート前)  -> countDownEnd（カウントダウンスタート後）'
 // の順番に変化していく
+
+// TODO: Union型で型付け
 const countDownState = ref('countdownStart')
 
 // クイズの出題番号、
@@ -54,6 +56,7 @@ const props = defineProps({
 })
 
 // TODO: 難易度変更、簡易関数、要リファクタリング
+// TODO: リクエストの形からテストを作る。
 /** 難易度 */
 const difficulty = ref('medium')
 const high = () => {
@@ -66,26 +69,17 @@ const low = () => {
     difficulty.value = 'low'
 }
 
+/** クイズの可変式時間制限 */
 const timeLimit = ref(1)
 const timeLimitChange = (event) => {
     timeLimit.value = Number(event.target.value)
 }
-//
 
 /** ウィンドウの動的高さ */
 const activeHeight = ref(0)
-const a = route().current('learnispirits.line-quiz')
 
-//　アクセサー
-{
-    /* <ul v-for="line in lines" :key="line.id">
-            <li>{{ line.some_line_field }}</li>
-                <li>{{ line.character.japanese_name }}</li>
-                <li>{{ line.character.english_name }}</li>
-                <li>{{ line.japanese_line }}</li>
-                <li>{{ line.english_line }}</li>
-            </ul> */
-}
+// TODO: 画面のルート監視
+const a = route().current('learnispirits.line-quiz')
 
 /** クイズアプリケーション起動時のカウントダウン終了(手動) */
 const changeCountDownState = (state) => {

@@ -1,4 +1,4 @@
-<!-- 石碑画面メニューコンポーネント -->
+<!-- @v overview: 石碑画面メニューコンポーネント -->
 <script setup lang="ts">
 defineProps<{
     /** 背景色設定 */

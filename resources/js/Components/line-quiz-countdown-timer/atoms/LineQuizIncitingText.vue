@@ -1,4 +1,5 @@
-<script setup>
+<!-- @v overview: 動作確認して問題なければ削除 -->
+<!-- <script setup>
 import { ref } from 'vue'
 </script>
 
@@ -7,3 +8,6 @@ import { ref } from 'vue'
 </template>
 
 <style scoped></style>
+ -->
+
+<!-- 動作確認して問題なければ削除 -->

@@ -1,5 +1,6 @@
+<!-- @v overview: 英文コンポーネント動的、静的、両方の単語を表示している-->
 <script setup lang="ts">
-import { computed, Reactive, ref } from 'vue'
+import { ref } from 'vue'
 import StaticTextBox from '@/Components/quiz-application/english-lines/organisms/StaticTextBox.vue'
 import PlaceholderTextBox from '@/Components/quiz-application/english-lines/organisms/PlaceholderTextBox.vue'
 
@@ -24,10 +25,12 @@ const colorsObjects = ref(props.colorsObjects)
 <template>
     <div class="wrapper d-flex">
         <template v-for="(textObject, index) in textObjects" :key="index">
+            <!-- 静的英単語 : クイズの対象ではないもの -->
             <template v-if="textObject.type === 'static'">
                 <StaticTextBox :text="textObject.word" class="me-2" />
             </template>
             &nbsp;
+            <!-- 動的英単語 : クイズの対象 -->
             <template v-if="textObject.type === 'placeholder'">
                 <PlaceholderTextBox
                     :index="textObject.index"

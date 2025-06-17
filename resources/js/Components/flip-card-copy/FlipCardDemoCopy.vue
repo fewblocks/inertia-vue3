@@ -1,4 +1,5 @@
-<!-- フリップカードデモコンポーネント -->
+<!-- @v overview: フリップカードデモコンポーネント -->
+<!-- @v complecate: 多数のメディアクエリ系ロジック -->
 <script setup lang="ts">
 import CardSlider3D from '@/Components/flip-card-copy/organisms/CardSlider3D.vue'
 import CardSlider2D from '@/Components/flip-card-copy/organisms/CardSlider2D.vue'

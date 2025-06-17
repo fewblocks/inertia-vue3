@@ -1,6 +1,9 @@
+// @v overview: 高さを監視、更新するComposable
+// @v tips: ResizeObserverを使用して要素の高さを監視
+// @v tips: ウィンドウのリサイズイベントも監視して高さを更新
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-export function useHeightObserver(wrapperId: string, contentId: string) {
+export const useHeightObserver = (wrapperId: string, contentId: string) => {
     const activeHeight = ref(0)
     let quizApplicationWrapper: HTMLElement | null = null
     let quizApplicationContent: HTMLElement | null = null

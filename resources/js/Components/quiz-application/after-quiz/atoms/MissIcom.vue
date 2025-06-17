@@ -1,3 +1,4 @@
+<!-- @v overview: MissIcon 不要なので削除対象 -->
 <script setup lang="ts">
 import miss from '~/miss.svg'
 </script>

@@ -1,6 +1,6 @@
-<!-- メインビジュアル -->
+<!-- @v overview: メインビジュアル -->
 <script setup lang="ts">
-import topVisual from "~/top-visual.png";
+import topVisual from '~/top-visual.png'
 </script>
 <template>
     <div class="top-visual-wrapper">

@@ -1,4 +1,7 @@
+<!-- @v overview: お気に入り追加用アイコン -->
+<!-- @v tips: ブックマークに追加する際のアニメーションがたくさん盛り込まれたアイコン☆ -->
 <script setup lang="ts">
+/** ブックマークに追加する際のアニメーションがたくさん盛り込まれたアイコン☆ */
 import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome'
 import { computed } from 'vue'
 

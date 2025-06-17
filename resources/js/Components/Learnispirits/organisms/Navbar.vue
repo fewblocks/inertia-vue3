@@ -1,9 +1,10 @@
-<!-- ナビゲーションバー -->
+<!-- @v overview: ナビゲーションバー -->
+<!-- @v complecate: メディアクエリ系のロジック多数 -->
 <script setup lang="ts">
 import { breakpoints } from '@/utils/breakpoints'
-import { set } from 'lodash'
 import { ref, computed, onMounted, onUnmounted, watch, watchEffect } from 'vue'
-import { router, usePage } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3'
+import { useNavbarScroll } from '@/Composable/useNavbarScroll'
 
 /** TODO: タイプファイル別切り出し */
 type Breakpoints = keyof typeof breakpoints // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
@@ -27,23 +28,15 @@ onUnmounted(() => mediaQuery.removeEventListener('change', update))
 
 const prevScrollpos = ref(window.pageYOffset)
 
-///////////////////////
-
-window.onscroll = () => {
-    if (urlState.value !== '/learnispirits/line-quiz') {
-        // トップページの場合はスクロール処理を無効化
-        document.getElementById('navbar').style.top = '0'
-        return
-    }
-    const currentScrollPos = window.pageYOffset
-    if (prevScrollpos.value > currentScrollPos) {
-        document.getElementById('navbar').style.top = '0'
-    } else {
-        document.getElementById('navbar').style.top = '-50px'
-    }
-    prevScrollpos.value = currentScrollPos
-}
-/////////////////////
+//** クイズページのみヘッダー表示非表示制御 */
+const isQuizPage = computed(() => urlState.value === '/learnispirits/line-quiz')
+const { initScrollHandler, cleanup } = useNavbarScroll(isQuizPage)
+onMounted(() => {
+    initScrollHandler()
+})
+onUnmounted(() => {
+    cleanup()
+})
 </script>
 
 <template>

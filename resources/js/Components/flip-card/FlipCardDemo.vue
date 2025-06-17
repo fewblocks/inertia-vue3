@@ -1,4 +1,5 @@
-<!-- フリップカードデモコンポーネント -->
+<!-- @v overview: フリップカードデモコンポーネント -->
+<!-- @v tips: コンポーネントをタブ等で切り替える機構あり  -->
 <script setup lang="ts">
 import CardSlider3D from '@/Components/flip-card/organisms/CardSlider3D.vue'
 import CardSlider2D from '@/Components/flip-card/organisms/CardSlider2D.vue'

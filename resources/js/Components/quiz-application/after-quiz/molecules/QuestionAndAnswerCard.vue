@@ -1,6 +1,9 @@
+<!-- @v overview: コレクション対象、クイズ後にユーザーが選別する、問題文と回答が書かれたカード -->
+<!-- @v complecate: コレクション後のカードの状況がかなり密で書かれている -->
 <script setup lang="ts">
-import { computed, defineProps } from 'vue'
+/** コレクション対象、クイズ後にユーザーが選別する、問題文と回答が書かれたカード */
 
+import { computed, defineProps } from 'vue'
 const props = defineProps<{
     index: number
     line: {

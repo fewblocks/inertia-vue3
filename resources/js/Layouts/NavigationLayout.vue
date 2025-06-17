@@ -31,6 +31,7 @@ const props = defineProps<{
     }
 }>()
 
+// TODO: url系はコメントとユースケースとして将来に残す
 const userName = props.auth?.user ? props.auth.user : 'ゲスト'
 const address = `${props.address}`
 const a = route().current('learnispirits.top')

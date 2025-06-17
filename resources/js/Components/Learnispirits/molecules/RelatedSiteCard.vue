@@ -1,4 +1,5 @@
-<!-- 姉妹サイト情報カード -->
+<!-- @v overview: 姉妹サイト情報カード -->
+<!-- @v complecate: jsonからカラー情報を決定している... -->
 <script setup lang="ts">
 import relatedSiteImage from '~/related-site-image.png'
 import colorsData from '@/json/output.json'

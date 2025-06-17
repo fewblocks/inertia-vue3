@@ -1,3 +1,4 @@
+<!-- @v overview: OKIcon 不要なので削除対象 -->
 <script setup lang="ts">
 import ok from '~/ok.svg'
 </script>

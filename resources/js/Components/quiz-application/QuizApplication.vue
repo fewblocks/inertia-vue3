@@ -1,7 +1,8 @@
+<!-- @v overview: クイズ実施中の大元のコンポーネント -->
+<!-- @v complecate: クイズ用の -->
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, Ref, ref, watch } from 'vue'
 import { breakpoints } from '@/utils/breakpoints'
-import CharacterIcon from '@/Components/quiz-application/japanese-lines/atoms/CharacterIcon.vue'
 import DotLogo from '@/Components/DotLogo.vue'
 import JapaneseLines from '@/Components/quiz-application/japanese-lines/organisms/JapaneseLines.vue'
 import StickyJapaneseLines from '@/Components/quiz-application/japanese-lines/organisms/StickyJapaneseLines.vue'
@@ -11,9 +12,8 @@ import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/o
 import Stamp from '@/Components/quiz-application/japanese-lines/atoms/Stamp.vue'
 import type { Feeling } from '@/types/Feeling'
 import { colors } from '@/constants'
-import Correct from '~/correct.png'
-import Incorrect from '~/incorrect.png'
 import { useSentenceSplitter } from '@/Composable/useSentenceSplitter'
+import { Difficulty } from '@/types/Difficulty'
 
 /** 'xs' | 'sm' | 'md' | 'lg' | 'xl' */
 type Breakpoints = keyof typeof breakpoints
@@ -39,7 +39,7 @@ const props = defineProps<{
     /** クイズId */
     quizId?: number
     /** 難易度 */
-    difficulty?: string
+    difficulty?: Difficulty
     /** 制限時間 */
     timeLimit?: number
 }>()
@@ -96,10 +96,6 @@ onUnmounted(() => {
     topObserver?.disconnect()
     bottomObserver?.disconnect()
 })
-
-const buttonClickHandler = (): void => {
-    alert('ボタンが活性化され、クリックされました！')
-}
 
 /** 難易度 */
 const difficulty = ref(props.difficulty) // "high", "medium", "low" のいずれか
@@ -174,7 +170,7 @@ const changeCorrectState = () => {
         })
     }, 1000)
 }
-
+alert('コンポーネントの説明記述に識別子を付与すること！！！ grepしたときに検索できるように！！！')
 const stampClass = ref('wp-block-image size-large is-resized my-stamp')
 
 /**
@@ -182,6 +178,17 @@ const stampClass = ref('wp-block-image size-large is-resized my-stamp')
  */
 const handleSelectText = ({ boxIndex, nextPlaceholderIndex, buttonWord }) => {
     // ボタンを非活性にする
+    /**
+     * I ____ tennis very 〇〇
+     *
+     * [play] [well]
+     */
+
+    /**
+     * I ____ tennis very 〇〇
+     *
+     * [//// disabled:true] [well]
+     */
     textObjects.value = textObjects.value.map((item) => (item.index === boxIndex ? { ...item, disabled: true } : item))
 
     // ボタンの色を指定
@@ -190,22 +197,59 @@ const handleSelectText = ({ boxIndex, nextPlaceholderIndex, buttonWord }) => {
     )
 
     // ボタンの選択された単語を設定
+    /**
+     * I ____ tennis very 〇〇
+     *
+     * [//// disabled:true]  [well]
+     */
+
+    /**
+     * I [play,] tennis very 〇〇
+     *
+     * [//// disabled:true] [well]
+     */
     textObjects.value = textObjects.value.map((textObject) =>
         textObject.status === 'selected' ? { ...textObject, selectedWord: buttonWord } : textObject
     )
 
-    // ボタンのステータス（入力済み）に変更
+    // テキストのステータス（入力済み）に変更
+    /**
+     * I [play,] tennis very 〇〇
+     *
+     * [//// disabled:true] [well]
+     */
+
+    /**
+     * I [play,states:filled] tennis very 〇〇
+     *
+     * [//// disabled:true] [well]
+     */
     textObjects.value = textObjects.value.map((textObject) =>
         textObject.status === 'selected' ? { ...textObject, status: 'filled' } : textObject
     )
 
     // 次のプレースホルダーのボタンを選択状態にする
+    /**
+     * I [play,states:filled] tennis very 〇〇
+     *
+     * [//// disabled:true] [well]
+     */
+
+    /**
+     * I [play,states:filled] tennis very ____
+     *
+     * [//// disabled:true] [well]
+     */
     textObjects.value = textObjects.value.map((button) =>
         button.index === nextPlaceholderIndex ? { ...button, status: 'selected' } : button
     )
     selectedWordIndexes.value.push(boxIndex)
 
-    // textObjects の中で一つも textObject.selectedWord が true であり、かつ textObject.type が 'placeholder' であるものがないことを判定
+    // textObjects の中で一つも
+    // textObject.selectedWord が true であり、
+    // かつ
+    // textObject.type が 'placeholder'
+    // のものがないことを判定
     if (!textObjects.value.some((textObject) => textObject.selectedWord === '' && textObject.type === 'placeholder')) {
         showAnswer.value = true
         stampClass.value = 'wp-block-image size-large is-resized my-stamp my-stamp-on'
@@ -216,6 +260,17 @@ const handleSelectText = ({ boxIndex, nextPlaceholderIndex, buttonWord }) => {
 //** 単語の選び直しの処理 */
 const resetText = ({ boxIndex }) => {
     // ボタンを活性にする
+    /**
+     * I [play,states:filled] tennis very [well,status:filled] ____
+     *
+     * [//// disabled:true] [//// disabled:true] [today]
+     */
+
+    /**
+     * I [play,states:filled] tennis very [well,status:filled] ____
+     *
+     * [//// disabled:true] [well] [today]
+     */
     textObjects.value = textObjects.value.map((item) => (item.index === boxIndex ? { ...item, disabled: false } : item))
 
     // 現在のアイテムを取得
@@ -226,11 +281,33 @@ const resetText = ({ boxIndex }) => {
     const neXtItem = textObjects.value.find((item) => currentItem.index < item.index && item.type === 'placeholder')
 
     // 取り消しボタン押下した単語の箇所を再選択状態にする
+    /**
+     * I [play,states:filled] tennis very [well,status:filled] ____
+     *
+     * [states:filled] [well] [today]
+     */
+
+    /**
+     * I [play,states:filled] tennis very ____ ____
+     *
+     * [states:filled] [well] [today]
+     */
     textObjects.value = textObjects.value.map((item) =>
         item.index === currentItem.index ? { ...item, selectedWord: '', status: 'selected' } : item
     )
 
     // 取り消しボタン押下した次の単語の箇所を未選択状態にする
+    /**
+     * I [play,states:filled] tennis very ____ ____
+     *
+     * [states:filled] [well] [today]
+     */
+
+    /**
+     * I [play,states:filled] tennis very ____ 〇〇
+     *
+     * [states:filled] [well] [today]
+     */
     textObjects.value = textObjects.value.map((item) =>
         item.index === neXtItem.index ? { ...item, status: 'unselected' } : item
     )
@@ -239,17 +316,30 @@ const resetText = ({ boxIndex }) => {
     const lastIndex = selectedWordIndexes.value[selectedWordIndexes.value.length - 1]
 
     // selectedWordIndexes.value の最後の値を非活性にする
-    textObjects.value = textObjects.value.map((item) =>
-        item.index === lastIndex.index ? { ...item, disabled: 'true' } : item
-    )
+    // TODO: 一旦コメントアウト　不要なら除去する
+    // textObjects.value = textObjects.value.map((item) =>
+    //     item.index === lastIndex.index ? { ...item, disabled: 'true' } : item
+    // )
 
     // selectedWordIndexes.value の最後の値を除去
     selectedWordIndexes.value.pop()
 
+    // TODO: 一旦コメントアウト　不要なら除去する
     // selectedWordIndexes.value の最後の値（除去したので一つ前）の値を活性化させる
-    textObjects.value = textObjects.value.map((item) =>
-        item.index === lastIndex.index ? { ...item, disabled: 'false' } : item
-    )
+    /**
+     * I [play,states:filled] tennis very ____ 〇〇
+     *
+     * [states:filled] [well] [todday]
+     */
+
+    /**
+     * I [play,states:filled] tennis very ____ 〇〇
+     *
+     * [play] [well] [todday]
+     */
+    // textObjects.value = textObjects.value.map((item) =>
+    //     item.index === lastIndex.index ? { ...item, disabled: 'false' } : item
+    // )
 }
 
 //** 答え合わせ */

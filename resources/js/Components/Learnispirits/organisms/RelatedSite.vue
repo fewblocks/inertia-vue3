@@ -1,4 +1,4 @@
-<!-- 姉妹サイト情報 -->
+<!-- @v overview: 姉妹サイト情報 -->
 <script setup lang="ts">
 import RelatedSiteCard from '@/Components/Learnispirits/molecules/RelatedSiteCard.vue'
 import type { RelatedSiteData } from '@/types/RelatedSiteData.ts'

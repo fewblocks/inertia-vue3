@@ -1,4 +1,4 @@
-<!-- 吹き出しコンポーネント -->
+<!-- @v overview: 吹き出しコンポーネント -->
 <script type="ts" setup>
 import SpeechBalloon from "@/components/speech-balloon/molecules/SpeechBallon.vue";
 import useCreateSpeechBalloonDate from "@/composable/useCreateSpeechBalloonDate"

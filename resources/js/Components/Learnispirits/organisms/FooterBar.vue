@@ -1,4 +1,4 @@
-<!-- フッターバー -->
+<!-- @v overview: フッターバー -->
 <script setup lang="ts"></script>
 <template>
     <div class="footer-bar">

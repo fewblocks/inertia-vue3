@@ -1,7 +1,7 @@
-<!-- 2Dフリップカード(個別)コンポーネント -->
+<!-- @v overview: 2Dフリップカード(個別)コンポーネント -->
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
-import arrowimg from "~/arrow-icon.svg";
+import { ref, computed, onMounted } from 'vue'
+import arrowimg from '~/arrow-icon.svg'
 
 /**
  * Props
@@ -14,27 +14,25 @@ const props = defineProps({
     ja: String,
     en: String,
     flip: Boolean,
-    id: Number,
-});
+    id: Number
+})
 
 /**
  * カードのクラス値。 親コンポーネントからの flip のフラグ値にて算出
  */
 const flipClass = computed(() => {
-    return props.flip
-        ? "flip-card-inner flip-card-backback"
-        : "flip-card-inner";
-});
+    return props.flip ? 'flip-card-inner flip-card-backback' : 'flip-card-inner'
+})
 
 /** 呼び出し元へ伝播イベント */
-const emit = defineEmits(["change-flip"]);
+const emit = defineEmits(['change-flip'])
 
 /** カードフリップハンドラー */
 const handleCardFlip = () => {
-    const flipStatus = props.flip === true ? false : true;
+    const flipStatus = props.flip === true ? false : true
     // 呼び出し元へ「cardId」と「flipStatus(裏返っているか否か)」を伝播
-    emit("change-flip", { cardId: props.id, fliped: flipStatus });
-};
+    emit('change-flip', { cardId: props.id, fliped: flipStatus })
+}
 </script>
 <template>
     <div class="card">
@@ -43,20 +41,12 @@ const handleCardFlip = () => {
                 <!-- フリップカード表面 -->
                 <div class="flip-card-front">
                     {{ props.ja }}
-                    <img
-                        v-on:click="handleCardFlip"
-                        class="arrow-img"
-                        :src="arrowimg"
-                    />
+                    <img v-on:click="handleCardFlip" class="arrow-img" :src="arrowimg" />
                 </div>
                 <!-- フリップカード裏面 -->
                 <div class="flip-card-back">
                     {{ props.en }}
-                    <img
-                        v-on:click="handleCardFlip"
-                        class="arrow-img"
-                        :src="arrowimg"
-                    />
+                    <img v-on:click="handleCardFlip" class="arrow-img" :src="arrowimg" />
                 </div>
             </div>
         </div>

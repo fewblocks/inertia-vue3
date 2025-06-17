@@ -1,3 +1,4 @@
+<!-- @v overview: キャラクターアイコン （削除OK) -->
 <script setup>
 import characterIcon from '~/sample_character_icon.png'
 </script>

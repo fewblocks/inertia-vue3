@@ -1,3 +1,6 @@
+<!-- @v overview: カウントダウンタイマー骨組み -->
+<!-- @v complecate: カウントダウンタイマー機構 -->
+<!-- @v tips: カウントダウンタイマー機構 -->
 <script setup>
 import { ref, onMounted } from 'vue'
 import LineQuizCountDownTimerNumber from './LineQuizCountDownTimerNumber.vue'

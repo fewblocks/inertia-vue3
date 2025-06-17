@@ -1,3 +1,5 @@
+<!-- @v overview: スワイプフィンガーアイコン（スマホのみ表示) -->
+<!-- @v tips: cssアニメーション実装 -->
 <script setup lang="ts">
 import swipeFingerImg from '~/swipe-finger-icon.svg'
 </script>

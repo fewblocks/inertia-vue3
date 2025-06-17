@@ -1,3 +1,6 @@
+<!-- @v overview: カウントダウンタイマー　骨組み -->
+<!-- @v complecate: カウントダウンアニメーション用ロジック -->
+<!-- @v tips: カウントダウンアニメーション用ロジック -->
 <script setup>
 import { ref, onMounted } from 'vue'
 import CountDownTimerNumber from './CountDownTimerNumber.vue'

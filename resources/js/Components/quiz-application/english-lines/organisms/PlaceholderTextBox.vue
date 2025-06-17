@@ -1,3 +1,5 @@
+<!-- @v overview: 動的英単語プレースホルダーコンポーネント -->
+<!-- @v age_old: 下線で調整するロジックがそのまま書かれている。 -->
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 const props = defineProps<{
@@ -17,6 +19,7 @@ const props = defineProps<{
 const colorsObjects = ref(props.colorsObjects)
 
 // 10文字以下の英単語に対して下線を引く
+/**  文字数に応じて下線の長さを調整し,10文字に揃える */
 const underlinedText = computed(() => (word) => {
     switch (word.length) {
         case 1:
@@ -51,12 +54,17 @@ const textBoxStyle = computed(() => (selectedColorIndex: number) => {
 </script>
 <template>
     <div class="d-inline-block">
+        <!-- 選択対象 : 点滅エフェクトを付ける -->
         <template v-if="props.status === 'selected'">
             <span class="selected fw-bold w-auto blinking">__________</span>
         </template>
+
+        <!-- 未選択 : 点滅エフェクト無し-->
         <template v-if="props.status === 'unselected'">
             <span class="unselected fw-bold w-auto">__________</span>
         </template>
+
+        <!-- 選択済み : 十文字揃えの下線詰め-->
         <template v-if="props.status === 'filled'">
             <span :class="textBoxStyle(props.selectedColorIndex)">{{ underlinedText(props.selectedWord) }}</span>
         </template>

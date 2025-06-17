@@ -1,8 +1,9 @@
+<!-- @v overview: クイズ後にコレクションを行う画面のコンポーネント -->
+<!-- @v complecate: クイズ後にユーザーが起こすアクションがかなり密で書かれている -->
 <script setup lang="ts">
-import { ref, computed, toRaw, reactive, onMounted, watch } from 'vue'
-import OkIcon from '@/Components/quiz-application/after-quiz/atoms/OkIcon.vue'
-import MissIcon from '@/Components/quiz-application/after-quiz/atoms/MissIcom.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+/** クイズ後にコレクションを行う画面のコンポーネント */
+// TODO: 一問も正解できていないときの考慮ができていないので、対応必要
+import { ref, computed, reactive, onMounted } from 'vue'
 import HeartIcon from '@/Components/quiz-application/after-quiz/atoms/HeartIcon.vue'
 import QuestionAndAnswerCard from '@/Components/quiz-application/after-quiz/molecules/QuestionAndAnswerCard.vue'
 import AddBookMarkIcon from '@/Components/quiz-application/after-quiz/atoms/AddBookMarkIcon.vue'
@@ -49,6 +50,7 @@ const computedLeftMargin = computed(() => {
     return `10% - ${pickUpCounter.value * 10}px`
 })
 
+// TODO: Union型で型付け
 /** クイズ後の状態、（コレクション前 | コレクション後 | デモ前 | デモ開始ちょうど | デモ中 */
 type AfterQuizState = 'beforeCollet' | 'afterCollect' | 'beforeDemo' | 'justInTimeDemo' | 'duaringDemo'
 const afterQuizState = ref<AfterQuizState>('beforeCollet')
@@ -111,14 +113,16 @@ const reactivePickUpedLines = computed(() => () => {
 const iconClassName = computed(() => (isCorrect: boolean, hasCurrentItem: boolean) => {
     let name = ''
     if (isCorrect) {
+        // 正解
         name += 'correct-icon'
     } else {
+        // 不正解
         name += 'incorrect-icon'
     }
     if (hasCurrentItem) {
+        // コレクション済み
         name += ' has-current-item-icon'
     }
-
     return name
 })
 /** ピックアップ対象のカードのクラス名 */

@@ -1,3 +1,6 @@
+<!--  @v overview: 選択肢となる英語のBoxコンポーネント -->
+<!-- @v complecate: ボタンを選択したときの挙動がかなり密で書かれている。 -->
+<!-- @v tips: シャッフルアルゴリズムの話 -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 

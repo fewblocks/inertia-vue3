@@ -1,4 +1,5 @@
-<script setup>
+<!-- @v overview: 動作確認して問題なければ削除 -->
+<!-- <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
 
@@ -19,4 +20,6 @@ getDummyData()
     <div>こんにちは</div>
 </template>
 
-<style scoped></style>
+<style scoped></style> -->
+
+<!-- 動作確認して問題なければ削除 -->
