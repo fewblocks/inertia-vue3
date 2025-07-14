@@ -3,6 +3,7 @@
 import { breakpoints } from '@/utils/breakpoints'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { useScreenSize } from '@/Composable/useScreenSize'
 
 /**
  * Props
@@ -21,45 +22,7 @@ const props = defineProps({
 })
 
 /**  TODO: タイプファイル別切り出し */
-type Breakpoints = keyof typeof breakpoints // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-/**  メディアクエリーの判別値(windowオブジェクト) */
-/** let mediaQuery = window.matchMedia(`(max-width : ${breakpoints.xs})`); */
-const mediaQuerySmall = window.matchMedia(`(max-width : ${breakpoints.sm})`)
-const isScreenSmall = ref(mediaQuerySmall.matches)
-const mediaQueryMedium = window.matchMedia(`(max-width : ${breakpoints.md})`)
-const isScreenMedium = ref(mediaQueryMedium.matches)
-const mediaQueryLarge = window.matchMedia(`(max-width : ${breakpoints.lg})`)
-const isScreenLarge = ref(mediaQueryLarge.matches)
-
-/**  カードサイズ判定 */
-/**  const cardWidth = computed(() => (isScreenSmall.value ? "168px" : "240px")); */
-/**  const cardHeight = computed(() => (isScreenSmall.value ? "112px" : "160px")); */
-
-/**  TODO: ひどすぎるので書き直す */
-/** カード幅算出。メディアクエリー依存 */
-const cardWidth = computed(() => {
-    if (isScreenSmall.value) {
-        return '270px'
-    } else if (isScreenMedium.value) {
-        return '252px'
-    } else if (isScreenLarge.value) {
-        return '300px'
-    } else {
-        return '480px'
-    }
-})
-/** カード高さ算出。メディアクエリー依存 */
-const cardHeight = computed(() => {
-    if (isScreenSmall.value) {
-        return '360px'
-    } else if (isScreenMedium.value) {
-        return '180px'
-    } else if (isScreenLarge.value) {
-        return '240px'
-    } else {
-        return '300px'
-    }
-})
+const { isScreenSmall, isScreenMedium, isScreenLarge, cardWidth, cardHeight } = useScreenSize()
 
 /** カード間隔判定。メディアクエリー依存 */
 const cardBetween = (times: number, isScreenSmall: boolean) => {
@@ -79,22 +42,8 @@ const frontCardBodyClasses = computed(() => ({
 }))
 // const backCardBodyClasses = computed(() => ({
 //     'card-body': true,
-//     'd-flex': true,
-//     'flex-column': true,
-//     'pt-4': isScreenSmall.value,
-//     'pt-0': !isScreenSmall.value
+//    ...
 // }))
-
-/**  windowオブジェクトにリスナーを設定（メディアクエリー判別値随時更新） */
-const updateSmall = (event: { matches: boolean }) => (isScreenSmall.value = event.matches)
-const updateMedium = (event: { matches: boolean }) => (isScreenMedium.value = event.matches)
-const updateLarge = (event: { matches: boolean }) => (isScreenLarge.value = event.matches)
-onMounted(() => mediaQuerySmall.addEventListener('change', updateSmall))
-onUnmounted(() => mediaQuerySmall.removeEventListener('change', updateSmall))
-onMounted(() => mediaQueryMedium.addEventListener('change', updateMedium))
-onUnmounted(() => mediaQueryMedium.removeEventListener('change', updateMedium))
-onMounted(() => mediaQueryLarge.addEventListener('change', updateLarge))
-onUnmounted(() => mediaQueryLarge.removeEventListener('change', updateLarge))
 
 /**
  * カードのクラス値。 親コンポーネントからの flip のフラグ値にて算出
@@ -119,7 +68,11 @@ const flipCardClassByLength = computed(() => {
     }
 })
 
-const flipCardFrontClass = computed(() => {
+/**
+ * フリップカード前面のクラス値
+ * 正解フラグとピックアップフラグ、コレクション済みフラグに応じてクラスを切り替える
+ **/
+const flipCardFrontTypeClassByStatus = computed(() => {
     if (props.isCorrect && props.isPickUp) {
         return 'flip-card-front flip-card-front-correct-pickup'
     } else if (props.isCorrect && !props.isPickUp) {
@@ -139,7 +92,7 @@ const flipCardBackClass = computed(() => {
 <template>
     <div :class="flipCardClassByLength">
         <div :class="flipClass">
-            <div :class="flipCardFrontClass">
+            <div :class="flipCardFrontTypeClassByStatus">
                 <div class="card h-100" style="background-color: inherit">
                     <div :class="frontCardBodyClasses">
                         <!-- flex-columnを追加 子要素が縦方向に並ぶ-->

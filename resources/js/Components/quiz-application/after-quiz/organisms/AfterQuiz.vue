@@ -3,8 +3,29 @@
 <script setup lang="ts">
 /** クイズ後にコレクションを行う画面のコンポーネント */
 // TODO: 一問も正解できていないときの考慮ができていないので、対応必要
+// というか、そもそも一問も正解できていないとき、その人がどういう人なのか...？
+//
+//　□ 1問も正解できなかった場合
+//	→  backDrop を off
+//	→  以下のメッセージを表示
+//		・全問不正解!!
+//		① ドォーンのスタンプ
+//		②To Be Continued　　　　　//　← ①　②　は 3秒かけてゆっくり消える
+//		↓
+//		再度クイズに挑戦への誘導フェーズへ
+//
+// □ 正解できた場合
+//	→  backDrop を on
+//	→  正解した一番上のカードに以下のメッセージを表示
+//		・ログインすると、お気に入りのセリフを<br>コレクションできるゥ!!!
+//		↓
+//		カードコレクションの誘導フェーズへ
+//
+
 import { ref, computed, reactive, onMounted } from 'vue'
 import HeartIcon from '@/Components/quiz-application/after-quiz/atoms/HeartIcon.vue'
+import ToBeContinued from '@/Components/quiz-application/after-quiz/atoms/ToBeContinued.vue'
+import RetireAndDoonStamp from '@/Components/quiz-application/after-quiz/atoms/RetireAndDoonStamp.vue'
 import QuestionAndAnswerCard from '@/Components/quiz-application/after-quiz/molecules/QuestionAndAnswerCard.vue'
 import AddBookMarkIcon from '@/Components/quiz-application/after-quiz/atoms/AddBookMarkIcon.vue'
 import FlipCardDemoCopy from '@/Components/flip-card-copy/FlipCardDemoCopy.vue'
@@ -40,6 +61,12 @@ const pickUpIndexesSorted = computed(() => {
     // これを避けるために、sliceメソッドを使用して配列のコピーを作成してからソートすることをお勧めします。
     return pickUpIndexes.value.slice().sort((a, b) => a - b)
 })
+
+/** To Be Continued のアニメーション */
+const showToBeContinued = ref(false)
+const changeTest = () => {
+    showToBeContinued.value = !showToBeContinued.value
+}
 
 /** クイズに正解した行の数から算出したカード一覧の高さ */
 const computedOverlapHeight = computed(() => {
@@ -185,16 +212,31 @@ onMounted(() => {
         }
     }
 
-    // 背景を灰色にする
     const backdrop = document.getElementById('backdrop')
-    backdrop?.classList.add('modal-backdrop', 'in')
+
+    // 正解したものがあるなら背景を灰色にする
+    if (props.collectCounter !== 0) {
+        backdrop?.classList.add('modal-backdrop', 'in')
+    }
 
     // backdropをクリックしたときにポップオーバーを閉じる
     backdrop?.addEventListener('click', () => {
         isBackDrop.value = false
         popoverList.forEach((popover) => popover.hide())
     })
+
+    // 正解数がゼロなら
+    if (props.collectCounter === 0) {
+        // バックドロップをオフ
+        isBackDrop.value = false
+        // マウント時にtoBeContinuedアニメーションを開始
+        showToBeContinued.value = true
+        // コレクションもできないので、ページ終盤に移動
+        afterQuizState.value = 'duaringDemo'
+    }
 })
+
+alert('カードのサイズ指定がバグっている 再クイズ誘導のボタンコンポーネント作成')
 </script>
 <template>
     <div class="w-100 d-flex justify-content-between flex-wrap row py-1 px-1">
@@ -210,10 +252,26 @@ onMounted(() => {
                 ログインするとお気に入りのクイズがコレクションできる！！
             </div>
         </transition>
+
+        <!-- TODO: テスト用ボタン -->
+        <div>
+            <button type="button" class="btn btn-lg" @click="changeTest">a</button>
+        </div>
+
+        <!--  再起不能 + ドォーンのスタンプ -->
+        <Transition name="gone-type-1">
+            <div v-if="showToBeContinued" class="gone">
+                <RetireAndDoonStamp :showRetireAndDoon="showToBeContinued" class="stamp-sticky" />
+            </div>
+        </Transition>
+
+        <!-- #region:クイズ -->
         <!-- コレクション前 クイズカード-->
         <transition name="fade-type-1" mode="out-in">
             <div v-if="afterQuizState === 'beforeCollet'">
                 <div class="row w-100">
+                    <!-- コレクション前 クイズカードラッパー -->
+
                     <template v-for="(line, index) in reactiveLines" :key="line.id">
                         <!-- ↓ col-10 左側の要素 カード本体 -->
                         <div class="col-10 d-flex flex-wrap row g-0">
@@ -284,11 +342,14 @@ onMounted(() => {
         </transition>
 
         <!-- コレクション後 フリップカードデモ-->
-        <transition name="fade-type-3" mode="out-in">
-            <div div v-if="afterQuizState === 'duaringDemo'">
-                <FlipCardDemoCopy :lines="reactiveLines" />
-            </div>
-        </transition>
+        <!-- 正解数ゼロなら非表示   -->
+        <template v-if="props.collectCounter !== 0">
+            <transition name="fade-type-3" mode="out-in">
+                <div div v-if="afterQuizState === 'duaringDemo'">
+                    <FlipCardDemoCopy :lines="reactiveLines" />
+                </div>
+            </transition>
+        </template>
 
         <!-- コレクション前、コレクション後 ブックマークアイコン (デモ時には消える) -->
         <div class="w-100 d-flex row justify-content-between g-0" style="position: relative">
@@ -339,6 +400,15 @@ onMounted(() => {
                 <button type="button" class="btn btn-lg">トップに戻る</button>
             </div>
         </div>
+
+        <!-- To Be Continued アニメーション -->
+        <div class="col-12 d-flex justify-content-center">
+            <transition name="slide-type-1">
+                <div v-if="showToBeContinued" class="to-be">
+                    <ToBeContinued />
+                </div>
+            </transition>
+        </div>
     </div>
 
     <!-- バックドロップ -->
@@ -379,6 +449,73 @@ onMounted(() => {
     display: flex;
     align-items: left;
     justify-content: flex-start;
+}
+.gone {
+    opacity: 0;
+    pointer-events: none;
+}
+
+// トランジションのスタイル (ゆっくりと消えていく)
+.gone-type-1-enter-active {
+    animation: goneOut 6s forwards;
+}
+@keyframes goneOut {
+    0% {
+        display: block;
+        opacity: 1;
+    }
+    50% {
+        display: block;
+        opacity: 1;
+    }
+    100% {
+        display: none;
+        opacity: 0;
+    }
+}
+
+////////////////////////////
+
+.to-be {
+    transform: translateX(-100vw);
+}
+// トランジションのスタイル（右からスライドして消えていく）
+.slide-type-1-enter-active {
+    animation: slideInOut 8s forwards;
+}
+
+@keyframes slideInOut {
+    0% {
+        opacity: 0;
+        transform: translateX(100vw);
+        visibility: visible;
+    }
+
+    10% {
+        opacity: 0;
+        transform: translateX(100vw);
+        visibility: visible;
+    }
+    30% {
+        opacity: 0;
+        transform: translateX(100vw);
+        visibility: visible;
+    }
+    75% {
+        opacity: 0.5;
+        transform: translateX(0);
+        visibility: visible;
+    }
+    85% {
+        opacity: 0.5;
+        transform: translateX(0);
+        visibility: visible;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-100vw);
+        visibility: hidden;
+    }
 }
 
 // トランジションのスタイル1 : 透明度、幅、高さが変化
@@ -485,4 +622,11 @@ onMounted(() => {
 
 // Y軸移動アニメーションと回転アニメーションは同一のクラスに適用すると
 // 大きく周回を回りながらのアニメーションになってしまうため、別クラスを作成
+.stamp-sticky {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%); // 中央揃え
+    z-index: 1000; // 他の要素より前面に表示
+}
 </style>

@@ -9,7 +9,7 @@ import StickyJapaneseLines from '@/Components/quiz-application/japanese-lines/or
 import EnglishLines from '@/Components/quiz-application/english-lines/organisms/EnglishLines.vue'
 import EnglishBoxese from '@/Components/quiz-application/english-boxes/organisms/EnglishBoxese.vue'
 import LineQuizCountDownTimerBase from '@/Components/line-quiz-countdown-timer/organisms/LineQuizCountDownTimers/LineQuizCountDownTimerBase.vue'
-import Stamp from '@/Components/quiz-application/japanese-lines/atoms/Stamp.vue'
+import TrueFalseStamp from '@/Components/quiz-application/japanese-lines/atoms/TrueFalseStamp.vue'
 import type { Feeling } from '@/types/Feeling'
 import { colors } from '@/constants'
 import { useSentenceSplitter } from '@/Composable/useSentenceSplitter'
@@ -170,7 +170,6 @@ const changeCorrectState = () => {
         })
     }, 1000)
 }
-alert('コンポーネントの説明記述に識別子を付与すること！！！ grepしたときに検索できるように！！！')
 const stampClass = ref('wp-block-image size-large is-resized my-stamp')
 
 /**
@@ -385,7 +384,7 @@ const checkAnswers = computed(() => {
                     :intercept="intercept"
                     @changeCountDownState="changeCountDownState"
                 />
-                <Stamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp-sticky" />
+                <TrueFalseStamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp-sticky" />
             </div>
             <div class="japanese-line row col-12 col-md-8 position-relative">
                 <div class="stamp-wrapper"></div>

@@ -26,8 +26,6 @@ const update = (event: { matches: boolean }) => (isScreenMiddle.value = event.ma
 onMounted(() => mediaQuery.addEventListener('change', update))
 onUnmounted(() => mediaQuery.removeEventListener('change', update))
 
-const prevScrollpos = ref(window.pageYOffset)
-
 //** クイズページのみヘッダー表示非表示制御 */
 const isQuizPage = computed(() => urlState.value === '/learnispirits/line-quiz')
 const { initScrollHandler, cleanup } = useNavbarScroll(isQuizPage)
