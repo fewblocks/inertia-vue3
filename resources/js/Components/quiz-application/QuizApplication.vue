@@ -398,7 +398,7 @@ const checkAnswers = computed(() => {
                         @changeCountDownState="changeCountDownState"
                     />
                     <div>
-                        <Stamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp" />
+                        <TrueFalseStamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp" />
                     </div>
                 </div>
             </div>
@@ -441,7 +441,7 @@ const checkAnswers = computed(() => {
                     />
 
                     <div>
-                        <Stamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp" />
+                        <TrueFalseStamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp" />
                     </div>
                 </div>
             </div>

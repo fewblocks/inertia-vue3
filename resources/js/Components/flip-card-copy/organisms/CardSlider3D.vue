@@ -86,8 +86,6 @@ const cloneCardData = toRaw(props.cardData)
 
 /**  ここにcloneData を入れると reactiveになる */
 const items = ref(generateAscData(pointer.value, maxCounter, cardThreshold.length, cloneCardData))
-console.log(items, 'items 中にisCorrect は')
-
 /**
  * カードを進める
  */
