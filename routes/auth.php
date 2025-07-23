@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\LearnispiritsTopController;
 use App\Http\Controllers\Auth\LearnispiritsAphorismController;
+use App\Http\Controllers\Auth\LearnispiritsDashBoardController;
 use App\Http\Controllers\Auth\LearnispiritsLineQuizController;
 use App\Http\Controllers\Auth\SampleController;
 use App\Http\Controllers\Auth\VerifyEmailController;
@@ -52,6 +53,10 @@ Route::middleware('guest')->group(function () {
 
     // LearnispiritstAphorismページ(名言石碑)
     Route::get('learnispirits/aphorism', [LearnispiritsAphorismController::class, 'create'])
+                ->name('learnispirits.aphorism');
+
+    // LearnispiritstDashBoardページ(ダッシュボード)
+    Route::get('learnispirits/dashboard', [LearnispiritsDashBoardController::class, 'create'])
                 ->name('learnispirits.aphorism');
 
     // LearnispiritstQuizページ(クイズ)
