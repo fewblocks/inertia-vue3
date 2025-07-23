@@ -66,7 +66,8 @@ onUnmounted(() => {
                             <a class="nav-link" href="/learnispirits/aphorism">名言石碑</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">コレクション</a>
+                            <!-- TODO: ログインの分岐を作る -->
+                            <a class="nav-link" href="/learnispirits/dashboard">ダッシュボード</a>
                         </li>
                     </ul>
                 </div>

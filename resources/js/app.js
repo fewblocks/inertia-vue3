@@ -44,7 +44,8 @@ createInertiaApp({
             page.default.layout =
                 name.startsWith('Auth/LearnispiritsTop') ||
                 name.startsWith('Auth/LearnispiritsAphorism') ||
-                name.startsWith('Auth/LearnispiritsLineQuiz')
+                name.startsWith('Auth/LearnispiritsLineQuiz') ||
+                name.startsWith('Auth/LearnispiritsDashBoard')
                     ? NavigationLayout
                     : undefined
             return page
