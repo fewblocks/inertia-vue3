@@ -84,7 +84,7 @@ const changeComponent = () => {
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        height: 400px;
+        height: 600px;
     }
 }
 @media (0px <= width <= 576px) {

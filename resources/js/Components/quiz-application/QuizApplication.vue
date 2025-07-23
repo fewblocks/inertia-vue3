@@ -420,7 +420,7 @@ const checkAnswers = computed(() => {
                         @changeCountDownState="changeCountDownState"
                     />
                 </div>
-                <Stamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp" />
+                <TrueFalseStamp :showAnswer="showAnswer" :answer="checkAnswers" class="stamp" />
             </div>
 
             <div class="line-flex low col-12">

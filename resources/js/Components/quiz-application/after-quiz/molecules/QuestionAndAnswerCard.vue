@@ -130,5 +130,11 @@ const cardClassName = computed(() => {
 // 問題文のスタイル
 .question-text {
     font-size: 1.5rem;
+    @media (max-width: 900px) {
+        font-size: 1.2rem;
+    }
+    @media (max-width: 600px) {
+        font-size: 1rem;
+    }
 }
 </style>

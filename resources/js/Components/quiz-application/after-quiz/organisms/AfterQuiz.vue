@@ -24,6 +24,7 @@
 
 import { ref, computed, reactive, onMounted } from 'vue'
 import HeartIcon from '@/Components/quiz-application/after-quiz/atoms/HeartIcon.vue'
+import GlitchButton from '@/Components/Learnispirits/atoms/GlitchButton.vue'
 import ToBeContinued from '@/Components/quiz-application/after-quiz/atoms/ToBeContinued.vue'
 import RetireAndDoonStamp from '@/Components/quiz-application/after-quiz/atoms/RetireAndDoonStamp.vue'
 import QuestionAndAnswerCard from '@/Components/quiz-application/after-quiz/molecules/QuestionAndAnswerCard.vue'
@@ -64,9 +65,6 @@ const pickUpIndexesSorted = computed(() => {
 
 /** To Be Continued のアニメーション */
 const showToBeContinued = ref(false)
-const changeTest = () => {
-    showToBeContinued.value = !showToBeContinued.value
-}
 
 /** クイズに正解した行の数から算出したカード一覧の高さ */
 const computedOverlapHeight = computed(() => {
@@ -236,7 +234,7 @@ onMounted(() => {
     }
 })
 
-alert('カードのサイズ指定がバグっている 再クイズ誘導のボタンコンポーネント作成')
+alert('メッセージングの分岐の文字列を書く！！！')
 </script>
 <template>
     <div class="w-100 d-flex justify-content-between flex-wrap row py-1 px-1">
@@ -247,23 +245,53 @@ alert('カードのサイズ指定がバグっている 再クイズ誘導のボ
             </div>
         </transition>
         <!-- コレクション前 ログイン催促メッセージ-->
+        <!-- TODO: メッセージング！ -->
+
+        <!-- ■ 未ログインユーザーの場合 -->
+        <!--
+        「ログインするとカードがコレクションできる！！」
+         　　と
+         「カードを裏返すと英語訳が見れるよ！」のメッセージを交互に表示
+        -->
+
+        <!-- ■ 未ログインユーザーの場合 (全問不正解) -->
+        <!--
+        「クイズに正解するとカードがコレクションできる！！」
+        -->
+
+        <!-- ■ ログインユーザーの場合 （コレクション済みのカードが 10枚以内）-->
+        <!--
+        「Tips: 便利な機能 or 英語学習者を励ます一言」
+        　　と
+        「カードを裏返すと英語訳が見れるよ！」のメッセージを交互に表示
+        -->
+
+        <!-- ■ ログインユーザーの場合 （コレクション済みのカードが 10枚以上）-->
+        <!--
+        「Tips: 便利な機能 or 英語学習者を励ます一言」
+        　　と
+        「コレクション済みのカードを見てみよう！」のメッセージを交互に表示
+        -->
+
+        <!-- ■ ログインユーザーの場合 （全問不正解）-->
+        <!--
+        「Tips: 便利な機能 or 英語学習者を励ます一言」
+        　　と
+        「名言！」← ここはランダムで表示される... と思ったが、工数高そうなんでやめよう...
+        -->
+
         <transition name="fade-type-1" mode="out-in">
             <div class="col-12" v-if="afterQuizState === 'duaringDemo'">
-                ログインするとお気に入りのクイズがコレクションできる！！
+                ログインするとカードがコレクションできる！！
             </div>
         </transition>
 
-        <!-- TODO: テスト用ボタン -->
-        <div>
-            <button type="button" class="btn btn-lg" @click="changeTest">a</button>
-        </div>
-
         <!--  再起不能 + ドォーンのスタンプ -->
-        <Transition name="gone-type-1">
+        <transition name="gone-type-1">
             <div v-if="showToBeContinued" class="gone">
                 <RetireAndDoonStamp :showRetireAndDoon="showToBeContinued" class="stamp-sticky" />
             </div>
-        </Transition>
+        </transition>
 
         <!-- #region:クイズ -->
         <!-- コレクション前 クイズカード-->
@@ -342,9 +370,10 @@ alert('カードのサイズ指定がバグっている 再クイズ誘導のボ
         </transition>
 
         <!-- コレクション後 フリップカードデモ-->
-        <!-- 正解数ゼロなら非表示   -->
-        <template v-if="props.collectCounter !== 0">
+        <!-- コレクション対象が0なら非表示   -->
+        <template v-if="pickUpCounter !== 0">
             <transition name="fade-type-3" mode="out-in">
+                <!-- ステータス 「デモ中」　に表示-->
                 <div div v-if="afterQuizState === 'duaringDemo'">
                     <FlipCardDemoCopy :lines="reactiveLines" />
                 </div>
@@ -391,16 +420,6 @@ alert('カードのサイズ指定がバグっている 再クイズ誘導のボ
             </transition>
         </div>
 
-        <!-- ページ遷移要素 -->
-        <div class="w-100 d-flex row justify-content-between g-0">
-            <div class="col-5">
-                <button type="button" class="btn btn-lg" @click="changeBeforeQuizState">クイズに再挑戦</button>
-            </div>
-            <div class="col-5">
-                <button type="button" class="btn btn-lg">トップに戻る</button>
-            </div>
-        </div>
-
         <!-- To Be Continued アニメーション -->
         <div class="col-12 d-flex justify-content-center">
             <transition name="slide-type-1">
@@ -409,6 +428,25 @@ alert('カードのサイズ指定がバグっている 再クイズ誘導のボ
                 </div>
             </transition>
         </div>
+        <!-- 再挑戦 OR 終了ボタン -->
+        <transition name="fade-type-4" mode="out-in">
+            <div v-if="afterQuizState === 'duaringDemo'" class="w-100 d-flex row justify-content-between g-0">
+                <div class="col-5 d-flex justify-content-center">
+                    <GlitchButton
+                        @click="changeBeforeQuizState"
+                        type="positive"
+                        :lines="{ grlitchFrontLine: 'クイズに再挑戦!', grlitchBackLine: 'Try agein!' }"
+                    />
+                </div>
+                <div class="col-5 d-flex justify-content-center">
+                    <GlitchButton
+                        @click="changeBeforeQuizState"
+                        type="negative"
+                        :lines="{ grlitchFrontLine: '終了', grlitchBackLine: 'Walk away!' }"
+                    />
+                </div>
+            </div>
+        </transition>
     </div>
 
     <!-- バックドロップ -->
@@ -553,6 +591,22 @@ alert('カードのサイズ指定がバグっている 再クイズ誘導のボ
     transform: scale(0.9);
 }
 .fade-type-3-leave-to {
+    opacity: 0;
+    transform: scale(1.1);
+}
+
+// トランジションのスタイル4 : 透明度がとスケールがゆっくり変化
+.fade-type-4-enter-active,
+.fade-type-4-leave-active {
+    transition:
+        opacity 20s ease,
+        transform 20s ease;
+}
+.fade-type-4-enter-from {
+    opacity: 0;
+    transform: scale(0.9);
+}
+.fade-type-4-leave-to {
     opacity: 0;
     transform: scale(1.1);
 }
