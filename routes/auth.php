@@ -57,7 +57,7 @@ Route::middleware('guest')->group(function () {
 
     // LearnispiritstDashBoardページ(ダッシュボード)
     Route::get('learnispirits/dashboard', [LearnispiritsDashBoardController::class, 'create'])
-                ->name('learnispirits.aphorism');
+                ->name('learnispirits.dashboard');
 
     // LearnispiritstQuizページ(クイズ)
     Route::get('learnispirits/line-quiz', [LearnispiritsLineQuizController::class, 'index'])

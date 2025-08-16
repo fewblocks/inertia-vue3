@@ -8,6 +8,7 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 import NavigationLayout from '../../resources/js/Layouts/NavigationLayout.vue'
+import LoginUserLayout from '../../resources/js/Layouts/LoginUserLayout.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFile as faFileSolid } from '@fortawesome/free-solid-svg-icons'
 import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
@@ -41,13 +42,20 @@ createInertiaApp({
             //     ? SampleLayout
             //     : undefined;
             console.log(name)
-            page.default.layout =
+            let layout
+            if (
                 name.startsWith('Auth/LearnispiritsTop') ||
                 name.startsWith('Auth/LearnispiritsAphorism') ||
-                name.startsWith('Auth/LearnispiritsLineQuiz') ||
-                name.startsWith('Auth/LearnispiritsDashBoard')
-                    ? NavigationLayout
-                    : undefined
+                name.startsWith('Auth/LearnispiritsLineQuiz')
+            ) {
+                layout = NavigationLayout
+            } else if (name.startsWith('Auth/LearnispiritsDashBoard')) {
+                console.log('LearnispiritsDashBoard ここに着てる？')
+                layout = LoginUserLayout
+            } else {
+                layout = undefined
+            }
+            page.default.layout = layout
             return page
         }),
     setup({ el, App, props, plugin }) {
